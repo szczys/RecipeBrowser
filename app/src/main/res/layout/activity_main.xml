@@ -7,9 +7,11 @@
     tools:context=".MainActivity">
 
     <fragment
+        android:id="@+id/myNavHostFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.jumptuck.recipebrowser.RecipeList"
-        android:id="@+id/main_activity_fragment" />
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/navigation" />
 
 </LinearLayout>

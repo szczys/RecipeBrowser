@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/recipeList">
+
+    <fragment
+        android:id="@+id/recipeList"
+        android:name="com.jumptuck.recipebrowser.RecipeListFragment"
+        android:label="fragment_recipe_list"
+        tools:layout="@layout/fragment_recipe_list" >
+        <action
+            android:id="@+id/action_recipeList_to_singleRecipeFragment"
+            app:destination="@id/singleRecipeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/singleRecipeFragment"
+        android:name="com.jumptuck.recipebrowser.SingleRecipeFragment"
+        android:label="fragment_single_recipe"
+        tools:layout="@layout/fragment_single_recipe" />
+</navigation>
