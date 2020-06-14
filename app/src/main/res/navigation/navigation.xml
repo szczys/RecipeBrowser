@@ -19,4 +19,9 @@
         android:name="com.jumptuck.recipebrowser.SingleRecipeFragment"
         android:label="fragment_single_recipe"
         tools:layout="@layout/fragment_single_recipe" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.jumptuck.recipebrowser.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" />
 </navigation>
