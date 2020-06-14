@@ -1,4 +1,4 @@
-package com.jumptuck.recipebrowser
+package com.jumptuck.recipebrowser2
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import com.jumptuck.recipebrowser.databinding.FragmentSettingsBinding
+import com.jumptuck.recipebrowser2.databinding.FragmentSettingsBinding
 
 /**
  * A simple [Fragment] subclass.
@@ -18,7 +18,8 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var binding: FragmentSettingsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_settings, container, false)
+        var binding: FragmentSettingsBinding = DataBindingUtil.inflate(inflater,
+            R.layout.fragment_settings, container, false)
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }

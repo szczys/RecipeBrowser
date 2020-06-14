@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/recipeList"
-        android:name="com.jumptuck.recipebrowser.RecipeListFragment"
+        android:name="com.jumptuck.recipebrowser2.RecipeListFragment"
         android:label="fragment_recipe_list"
         tools:layout="@layout/fragment_recipe_list" >
         <action
@@ -16,12 +16,12 @@
     </fragment>
     <fragment
         android:id="@+id/singleRecipeFragment"
-        android:name="com.jumptuck.recipebrowser.SingleRecipeFragment"
+        android:name="com.jumptuck.recipebrowser2.SingleRecipeFragment"
         android:label="fragment_single_recipe"
         tools:layout="@layout/fragment_single_recipe" />
     <fragment
         android:id="@+id/aboutFragment"
-        android:name="com.jumptuck.recipebrowser.AboutFragment"
+        android:name="com.jumptuck.recipebrowser2.AboutFragment"
         android:label="fragment_about"
         tools:layout="@layout/fragment_about" />
 </navigation>

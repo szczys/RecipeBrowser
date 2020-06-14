@@ -1,4 +1,4 @@
-package com.jumptuck.recipebrowser
+package com.jumptuck.recipebrowser2
 
 import org.junit.Test
 

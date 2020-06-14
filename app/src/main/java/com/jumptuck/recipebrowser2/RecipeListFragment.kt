@@ -1,4 +1,4 @@
-package com.jumptuck.recipebrowser
+package com.jumptuck.recipebrowser2
 
 import android.os.Bundle
 import android.view.*
@@ -7,7 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
-import com.jumptuck.recipebrowser.databinding.FragmentRecipeListBinding
+import com.jumptuck.recipebrowser2.databinding.FragmentRecipeListBinding
 
 /**
  * A simple [Fragment] subclass.
@@ -19,7 +19,8 @@ class RecipeListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentRecipeListBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_recipe_list, container, false)
+        val binding: FragmentRecipeListBinding = DataBindingUtil.inflate(inflater,
+            R.layout.fragment_recipe_list, container, false)
         binding.button2.setOnClickListener(
             Navigation.createNavigateOnClickListener(R.id.action_recipeList_to_singleRecipeFragment)
         )

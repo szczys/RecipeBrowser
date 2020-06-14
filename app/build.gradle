@@ -9,7 +9,7 @@ android {
         dataBinding = true
     }
     defaultConfig {
-        applicationId "com.jumptuck.recipebrowser"
+        applicationId "com.jumptuck.recipebrowser2"
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 1

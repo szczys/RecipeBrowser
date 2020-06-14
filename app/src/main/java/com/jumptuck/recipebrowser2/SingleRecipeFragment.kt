@@ -1,4 +1,4 @@
-package com.jumptuck.recipebrowser
+package com.jumptuck.recipebrowser2
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import com.jumptuck.recipebrowser.databinding.FragmentSingleRecipeBinding
+import com.jumptuck.recipebrowser2.databinding.FragmentSingleRecipeBinding
 
 /**
  * A simple [Fragment] subclass.
@@ -18,7 +18,8 @@ class SingleRecipeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var binding: FragmentSingleRecipeBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_single_recipe, container, false)
+        var binding: FragmentSingleRecipeBinding = DataBindingUtil.inflate(inflater,
+            R.layout.fragment_single_recipe, container, false)
         return binding.root
     }
 }
