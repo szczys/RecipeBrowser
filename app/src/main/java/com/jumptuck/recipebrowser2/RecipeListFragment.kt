@@ -22,7 +22,8 @@ class RecipeListFragment : Fragment() {
         val binding: FragmentRecipeListBinding = DataBindingUtil.inflate(inflater,
             R.layout.fragment_recipe_list, container, false)
         binding.button2.setOnClickListener(
-            Navigation.createNavigateOnClickListener(R.id.action_recipeList_to_singleRecipeFragment)
+            //Fixme: this should send the ID number from the recipe database as an argument; For testing we simply send 1337
+            Navigation.createNavigateOnClickListener(RecipeListFragmentDirections.actionRecipeListToSingleRecipeFragment(1337))
         )
         setHasOptionsMenu(true)
         return binding.root

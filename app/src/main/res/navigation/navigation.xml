@@ -18,7 +18,11 @@
         android:id="@+id/singleRecipeFragment"
         android:name="com.jumptuck.recipebrowser2.SingleRecipeFragment"
         android:label="fragment_single_recipe"
-        tools:layout="@layout/fragment_single_recipe" />
+        tools:layout="@layout/fragment_single_recipe" >
+        <argument
+            android:name="recipeIndex"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.jumptuck.recipebrowser2.AboutFragment"
