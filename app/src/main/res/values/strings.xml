@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Recipe Browser 2</string>
+    <string name="app_name">com.jumptuck.recipebrowser2.Recipe Browser 2</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="empty_recipe">No Recipe Body Found</string>
+    <string name="empty_recipe">No com.jumptuck.recipebrowser2.Recipe Body Found</string>
     <string name="about">About</string>
     <string name="settings">Settings</string>
     <string name="share_text">This is recipe#%1$d</string>
