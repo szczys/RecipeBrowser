@@ -8,12 +8,17 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <TextView
+
+        <ListView
+            android:id="@+id/recipeNameListview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="@string/hello_blank_fragment"
-            android:textAlignment="center" />
+            android:layout_height="wrap_content" />
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:text="@string/hello_blank_fragment"-->
+<!--            android:textAlignment="center" />-->
 
         <Button
             android:id="@+id/button2"

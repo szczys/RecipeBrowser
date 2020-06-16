@@ -2,12 +2,17 @@ package com.jumptuck.recipebrowser2
 
 import android.os.Bundle
 import android.view.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.ListView
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.jumptuck.recipebrowser2.databinding.FragmentRecipeListBinding
+import timber.log.Timber
 
 /**
  * A simple [Fragment] subclass.
@@ -15,6 +20,7 @@ import com.jumptuck.recipebrowser2.databinding.FragmentRecipeListBinding
  * create an instance of this fragment.
  */
 class RecipeListFragment : Fragment() {
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -26,6 +32,19 @@ class RecipeListFragment : Fragment() {
             Navigation.createNavigateOnClickListener(RecipeListFragmentDirections.actionRecipeListToSingleRecipeFragment(1337))
         )
         setHasOptionsMenu(true)
+
+        val titleArray = arrayOf("Whisky Sour", "Bee's Knees", "Aperol Spritz")
+        val adapter = ArrayAdapter(requireActivity(), R.layout.listview_item, titleArray)
+        val listView:ListView = binding.recipeNameListview
+        listView.setAdapter(adapter)
+
+        listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, id ->
+            Timber.d("onItemClickListener called: %s", adapterView.getItemAtPosition(position) as String)
+            Navigation.createNavigateOnClickListener(
+                RecipeListFragmentDirections
+                    .actionRecipeListToSingleRecipeFragment(position)
+            ).onClick(view)
+        }
         return binding.root
     }
 

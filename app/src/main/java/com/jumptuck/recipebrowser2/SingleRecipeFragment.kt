@@ -21,8 +21,8 @@ class SingleRecipeFragment : Fragment() {
     ): View? {
         var binding: FragmentSingleRecipeBinding = DataBindingUtil.inflate(inflater,
             R.layout.fragment_single_recipe, container, false)
-        //var args = SingleRecipeFragmentArgs.fromBundle(requireArguments())
-        //Toast.makeText(context, "Recipe Number: ${args.recipeIndex}",Toast.LENGTH_LONG).show()
+        var args = SingleRecipeFragmentArgs.fromBundle(requireArguments())
+        Toast.makeText(context, "Recipe Number: ${args.recipeIndex}",Toast.LENGTH_LONG).show()
         setHasOptionsMenu(true)
         return binding.root
     }
