@@ -42,7 +42,7 @@ class RecipeListFragment : Fragment() {
         val adapter = ArrayAdapter(requireActivity(),R.layout.listview_item, livedataRecipeTitles)
         listView.setAdapter(adapter)
 
-        viewModel.titleArray.observe(this, Observer { newTitleList ->
+        viewModel.titleArray.observe(this, Observer {
             adapter.notifyDataSetChanged()
         })
 
