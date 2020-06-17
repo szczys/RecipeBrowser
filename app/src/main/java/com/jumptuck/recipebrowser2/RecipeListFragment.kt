@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -36,9 +37,13 @@ class RecipeListFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(RecipeViewModel::class.java)
 
         val listView:ListView = binding.recipeNameListview
+
+        val livedataRecipeTitles = viewModel.titleArray.value ?: arrayListOf("No Recipes Found")
+        val adapter = ArrayAdapter(requireActivity(),R.layout.listview_item, livedataRecipeTitles)
+        listView.setAdapter(adapter)
+
         viewModel.titleArray.observe(this, Observer { newTitleList ->
-            val adapter = ArrayAdapter(requireActivity(), R.layout.listview_item, newTitleList)
-            listView.setAdapter(adapter)
+            adapter.notifyDataSetChanged()
         })
 
 //        binding.button2.setOnClickListener(
@@ -48,7 +53,6 @@ class RecipeListFragment : Fragment() {
 
         binding.button2.setOnClickListener {
             viewModel.addMenuItem()
-            
         }
 
         setHasOptionsMenu(true)

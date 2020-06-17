@@ -23,6 +23,7 @@ class RecipeViewModel : ViewModel() {
     }
 
     fun addMenuItem() {
-        (titleArray.value)?.add("Success!!")
+        titleArray.value?.add("Success!!")
+        titleArray.value = titleArray.value //Force update for observers
     }
 }
