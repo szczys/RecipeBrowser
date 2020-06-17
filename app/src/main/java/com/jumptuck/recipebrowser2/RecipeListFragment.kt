@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -21,20 +22,25 @@ import timber.log.Timber
  */
 class RecipeListFragment : Fragment() {
 
+    private lateinit var viewModel: RecipeViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val binding: FragmentRecipeListBinding = DataBindingUtil.inflate(inflater,
             R.layout.fragment_recipe_list, container, false)
+
+        Timber.i("Call: ViewModelProvider.get")
+        viewModel = ViewModelProvider(this).get(RecipeViewModel::class.java)
+
         binding.button2.setOnClickListener(
             //Fixme: this should send the ID number from the recipe database as an argument; For testing we simply send 1337
             Navigation.createNavigateOnClickListener(RecipeListFragmentDirections.actionRecipeListToSingleRecipeFragment(1337))
         )
         setHasOptionsMenu(true)
 
-        val titleArray = arrayOf("Whisky Sour", "Bee's Knees", "Aperol Spritz")
-        val adapter = ArrayAdapter(requireActivity(), R.layout.listview_item, titleArray)
+        val adapter = ArrayAdapter(requireActivity(), R.layout.listview_item, viewModel.titleArray)
         val listView:ListView = binding.recipeNameListview
         listView.setAdapter(adapter)
 
