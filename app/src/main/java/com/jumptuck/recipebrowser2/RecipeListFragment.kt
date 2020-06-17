@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -34,15 +35,27 @@ class RecipeListFragment : Fragment() {
         Timber.i("Call: ViewModelProvider.get")
         viewModel = ViewModelProvider(this).get(RecipeViewModel::class.java)
 
-        binding.button2.setOnClickListener(
-            //Fixme: this should send the ID number from the recipe database as an argument; For testing we simply send 1337
-            Navigation.createNavigateOnClickListener(RecipeListFragmentDirections.actionRecipeListToSingleRecipeFragment(1337))
-        )
+        val listView:ListView = binding.recipeNameListview
+        viewModel.titleArray.observe(this, Observer { newTitleList ->
+            val adapter = ArrayAdapter(requireActivity(), R.layout.listview_item, newTitleList)
+            listView.setAdapter(adapter)
+        })
+
+//        binding.button2.setOnClickListener(
+//            //Fixme: this should send the ID number from the recipe database as an argument; For testing we simply send 1337
+//            Navigation.createNavigateOnClickListener(RecipeListFragmentDirections.actionRecipeListToSingleRecipeFragment(1337))
+//        )
+
+        binding.button2.setOnClickListener {
+            viewModel.addMenuItem()
+            
+        }
+
         setHasOptionsMenu(true)
 
-        val adapter = ArrayAdapter(requireActivity(), R.layout.listview_item, viewModel.titleArray)
-        val listView:ListView = binding.recipeNameListview
-        listView.setAdapter(adapter)
+
+
+
 
         listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, id ->
             Timber.d("onItemClickListener called: %s", adapterView.getItemAtPosition(position) as String)
