@@ -20,11 +20,6 @@ class RecipeViewModel : ViewModel() {
         (_titleArray.value)?.add("Aperol Spritz")
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        Timber.i( "RecipeViewModel destroyed")
-    }
-
     fun addMenuItem() {
         _titleArray.value?.add("Success!!")
         _titleArray.value = titleArray.value //Force update for observers
