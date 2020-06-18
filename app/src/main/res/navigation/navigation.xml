@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/singleRecipeFragment"
-        android:name="com.jumptuck.recipebrowser2.SingleRecipeFragment"
+        android:name="com.jumptuck.recipebrowser2.singlerecipe.SingleRecipeFragment"
         android:label="fragment_single_recipe"
         tools:layout="@layout/fragment_single_recipe" >
         <argument

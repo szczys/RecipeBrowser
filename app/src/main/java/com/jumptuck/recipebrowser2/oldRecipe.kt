@@ -1,6 +1,6 @@
 package com.jumptuck.recipebrowser2
 
-class Recipe(
+class oldRecipe(
     var title: String,
     var link: String,
     var directory: String,

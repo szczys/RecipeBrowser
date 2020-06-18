@@ -1,4 +1,4 @@
-package com.jumptuck.recipebrowser2
+package com.jumptuck.recipebrowser2.singlerecipe
 
 import androidx.lifecycle.ViewModel
 import timber.log.Timber

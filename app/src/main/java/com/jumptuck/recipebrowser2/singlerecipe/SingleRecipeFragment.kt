@@ -1,4 +1,4 @@
-package com.jumptuck.recipebrowser2
+package com.jumptuck.recipebrowser2.singlerecipe
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.core.app.ShareCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.jumptuck.recipebrowser2.R
+import com.jumptuck.recipebrowser2.singlerecipe.SingleRecipeFragmentArgs
 import com.jumptuck.recipebrowser2.databinding.FragmentSingleRecipeBinding
 
 /**
@@ -26,9 +28,15 @@ class SingleRecipeFragment : Fragment() {
     ): View? {
         var binding: FragmentSingleRecipeBinding = DataBindingUtil.inflate(inflater,
             R.layout.fragment_single_recipe, container, false)
-        var args = SingleRecipeFragmentArgs.fromBundle(requireArguments())
+        var args =
+            SingleRecipeFragmentArgs.fromBundle(
+                requireArguments()
+            )
 
-        viewModelFactory = SingleRecipeViewModelFactory(args.recipeIndex)
+        viewModelFactory =
+            SingleRecipeViewModelFactory(
+                args.recipeIndex
+            )
         viewModel = ViewModelProvider(this,viewModelFactory)
             .get(SingleRecipeViewModel::class.java)
 
@@ -43,7 +51,10 @@ class SingleRecipeFragment : Fragment() {
     }
 
     private fun getShareIntent(): Intent {
-        var args = SingleRecipeFragmentArgs.fromBundle(requireArguments())
+        var args =
+            SingleRecipeFragmentArgs.fromBundle(
+                requireArguments()
+            )
         return ShareCompat.IntentBuilder.from(this.requireActivity())
             .setText(getString(R.string.share_text, args.recipeIndex))
             .setSubject("Here's a fancy recipe")
