@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.core.app.ShareCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.jumptuck.recipebrowser2.databinding.FragmentSingleRecipeBinding
 
 /**
@@ -15,6 +16,10 @@ import com.jumptuck.recipebrowser2.databinding.FragmentSingleRecipeBinding
  * create an instance of this fragment.
  */
 class SingleRecipeFragment : Fragment() {
+
+    private lateinit var viewModel: SingleRecipeViewModel
+    private lateinit var viewModelFactory: SingleRecipeViewModelFactory
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -22,6 +27,11 @@ class SingleRecipeFragment : Fragment() {
         var binding: FragmentSingleRecipeBinding = DataBindingUtil.inflate(inflater,
             R.layout.fragment_single_recipe, container, false)
         var args = SingleRecipeFragmentArgs.fromBundle(requireArguments())
+
+        viewModelFactory = SingleRecipeViewModelFactory(args.recipeIndex)
+        viewModel = ViewModelProvider(this,viewModelFactory)
+            .get(SingleRecipeViewModel::class.java)
+
         Toast.makeText(context, "Recipe Number: ${args.recipeIndex}",Toast.LENGTH_LONG).show()
         setHasOptionsMenu(true)
         return binding.root
