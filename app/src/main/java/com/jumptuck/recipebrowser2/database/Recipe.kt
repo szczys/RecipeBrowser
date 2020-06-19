@@ -9,15 +9,15 @@ data class Recipe (
     @PrimaryKey(autoGenerate = true)
     var recipeID: Long = 0L,
     @ColumnInfo(name = "title")
-    var title: String = "No Title Found",
+    var title: String = "",
     @ColumnInfo(name = "body")
-    var body: String = "No Body Found",
+    var body: String = "",
     @ColumnInfo(name = "url")
-    var link: String = "No URL Found",
-    @ColumnInfo(name = "dir")
-    var directory: String = "No Directory Found",
-    @ColumnInfo(name = "updated")
-    var date: String = "No Date Found",
+    var link: String = "",
+    @ColumnInfo(name = "cat")
+    var category: String = "",
+    @ColumnInfo(name = "lastUpdate")
+    var date: String = "",
     @ColumnInfo(name = "fav")
     var favorite: Boolean = false
 )
