@@ -1,12 +1,17 @@
-package com.jumptuck.recipebrowser2
+package com.jumptuck.recipebrowser2.recipelist
 
-import android.util.Log
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.jumptuck.recipebrowser2.database.RecipeDatabaseDao
 import timber.log.Timber
 
-class RecipeViewModel : ViewModel() {
+class RecipeListViewModel(
+    val database: RecipeDatabaseDao,
+    application: Application) : AndroidViewModel(application) {
+
+
 
     private val _titleArray = MutableLiveData<ArrayList<String>>()
     val titleArray : LiveData<ArrayList<String>>

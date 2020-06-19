@@ -2,7 +2,13 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.jumptuck.recipebrowser2.RecipeListFragment">
+    tools:context="com.jumptuck.recipebrowser2.recipelist.RecipeListFragment">
+
+    <data>
+        <variable
+            name="recipeListViewModel"
+            type="com.jumptuck.recipebrowser2.recipelist.RecipeListViewModel" />
+    </data>
 
     <LinearLayout
         android:orientation="vertical"

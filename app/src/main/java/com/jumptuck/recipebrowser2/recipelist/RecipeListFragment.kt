@@ -1,4 +1,4 @@
-package com.jumptuck.recipebrowser2
+package com.jumptuck.recipebrowser2.recipelist
 
 import android.os.Bundle
 import android.view.*
@@ -7,13 +7,13 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
+import com.jumptuck.recipebrowser2.R
+import com.jumptuck.recipebrowser2.database.RecipeDatabase
 import com.jumptuck.recipebrowser2.databinding.FragmentRecipeListBinding
 import timber.log.Timber
 
@@ -24,7 +24,7 @@ import timber.log.Timber
  */
 class RecipeListFragment : Fragment() {
 
-    private lateinit var viewModel: RecipeViewModel
+    private lateinit var recipeListViewModel: RecipeListViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,16 +33,28 @@ class RecipeListFragment : Fragment() {
         val binding: FragmentRecipeListBinding = DataBindingUtil.inflate(inflater,
             R.layout.fragment_recipe_list, container, false)
 
-        Timber.i("Call: ViewModelProvider.get")
-        viewModel = ViewModelProvider(this).get(RecipeViewModel::class.java)
+        val application = requireNotNull(this.activity).application
+
+        val datasource = RecipeDatabase.getInstance(application).recipeDatabaseDao
+
+        val viewModelFactory = RecipeListViewModelFactory(datasource, application)
+
+        //viewModel = ViewModelProvider(this).get(RecipeListViewModel::class.java)
+        recipeListViewModel = ViewModelProvider(this, viewModelFactory).get(RecipeListViewModel::class.java)
+
+        binding.recipeListViewModel = recipeListViewModel
+        binding.setLifecycleOwner(this)
+
+
 
         val listView:ListView = binding.recipeNameListview
 
-        val livedataRecipeTitles = viewModel.titleArray.value ?: arrayListOf("No Recipes Found")
-        val adapter = ArrayAdapter(requireActivity(),R.layout.listview_item, livedataRecipeTitles)
+        val livedataRecipeTitles = recipeListViewModel.titleArray.value ?: arrayListOf("No Recipes Found")
+        val adapter = ArrayAdapter(requireActivity(),
+            R.layout.listview_item, livedataRecipeTitles)
         listView.setAdapter(adapter)
 
-        viewModel.titleArray.observe(this, Observer {
+        recipeListViewModel.titleArray.observe(this, Observer {
             adapter.notifyDataSetChanged()
         })
 
@@ -52,7 +64,7 @@ class RecipeListFragment : Fragment() {
 //        )
 
         binding.button2.setOnClickListener {
-            viewModel.addMenuItem()
+            recipeListViewModel.addMenuItem()
         }
 
         setHasOptionsMenu(true)
@@ -64,8 +76,9 @@ class RecipeListFragment : Fragment() {
         listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, id ->
             Timber.d("onItemClickListener called: %s", adapterView.getItemAtPosition(position) as String)
             Navigation.createNavigateOnClickListener(
-                RecipeListFragmentDirections
-                    .actionRecipeListToSingleRecipeFragment(position)
+                RecipeListFragmentDirections.actionRecipeListToSingleRecipeFragment(
+                    position
+                )
             ).onClick(view)
         }
         return binding.root
