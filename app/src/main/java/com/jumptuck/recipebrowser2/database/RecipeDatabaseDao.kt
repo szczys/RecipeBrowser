@@ -18,6 +18,9 @@ interface RecipeDatabaseDao {
     @Query("UPDATE recipe_table SET fav=:fav WHERE recipeID = :key")
     fun setFavorite(key: Long, fav: Boolean)
 
+    @Query("SELECT count() from recipe_table")
+    fun recipeCount(): Int
+
     @Query("SELECT count() FROM recipe_table WHERE fav=1")
     fun favoriteCount(): Int
 
