@@ -1,15 +1,15 @@
 package com.jumptuck.recipebrowser2.recipelist
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.TextItemViewHolder
 import com.jumptuck.recipebrowser2.database.Recipe
-import timber.log.Timber
 
-class RecipeTitleAdapter: RecyclerView.Adapter<TextItemViewHolder>(){
+class RecipeTitleAdapter/*(val clickListener: RecipeTitleListener)*/: RecyclerView.Adapter<RecipeTitleAdapter.ViewHolder>(){
     var data = listOf<Recipe>()
         set(value) {
             field = value
@@ -18,15 +18,27 @@ class RecipeTitleAdapter: RecyclerView.Adapter<TextItemViewHolder>(){
 
     override fun getItemCount()= data.size
 
-    override fun onBindViewHolder(holder: TextItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data[position]
-        Timber.i("holder.textView.text = %s", item.title)
-        holder.textView.text = item.title
+        val res = holder.itemView.resources
+        holder.receipTitle.text = item.title
+        //holder.bind(item)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextItemViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.listview_item, parent, false) as TextView
-        return TextItemViewHolder(view)
+    //private fun TextItemViewHolder.
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.listview_item, parent, false)
+        return ViewHolder(view)
+    }
+
+    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        val receipTitle: TextView = itemView.findViewById(R.id.recipe_list_title)
     }
 }
+
+/*
+class RecipeTitleListener(val clickListener: (recipeID: Int) -> Unit) {
+    fun onClick(recipe: Recipe) = clickListener(recipe.recipeID)
+}*/

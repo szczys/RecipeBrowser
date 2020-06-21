@@ -1,11 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Each List Item is displayed as TextView defined below -->
+<?xml version="1.0" encoding="utf-8"?><!-- Each List Item is displayed as TextView defined below -->
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/label"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:padding="10sp"
-    android:textSize="20dp"
-    android:textStyle="bold" >
-</TextView>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/recipe_list_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10sp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        tools:text="List Item" />
+</layout>
