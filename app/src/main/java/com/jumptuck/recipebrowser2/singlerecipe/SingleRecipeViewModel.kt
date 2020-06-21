@@ -1,5 +1,6 @@
 package com.jumptuck.recipebrowser2.singlerecipe
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
