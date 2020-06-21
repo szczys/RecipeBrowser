@@ -2,7 +2,8 @@
     <string name="app_name">Recipe Browser 2</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="empty_recipe">No Recipe Body Found</string>
+    <string name="empty_recipe_title">No Recipe Title Found</string>
+    <string name="empty_recipe_body">No Recipe Body Found</string>
     <string name="about">About</string>
     <string name="settings">Settings</string>
     <string name="share_text">This is recipe#%1$d</string>

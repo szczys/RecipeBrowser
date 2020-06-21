@@ -74,13 +74,9 @@ class SingleRecipeFragment : Fragment() {
     }
 
     private fun getShareIntent(): Intent {
-        var args =
-            SingleRecipeFragmentArgs.fromBundle(
-                requireArguments()
-            )
         return ShareCompat.IntentBuilder.from(this.requireActivity())
-            .setText(getString(R.string.share_text, args.recipeIndex))
-            .setSubject("Here's a fancy recipe")
+            .setText(viewModel.curRecipe.value?.body ?: getString(R.string.empty_recipe_body))
+            .setSubject("Recipe: " + (viewModel.curRecipe.value?.title ?: getString(R.string.empty_recipe_title)))
             .setType("text/plain")
             .createChooserIntent()
     }
@@ -93,8 +89,6 @@ class SingleRecipeFragment : Fragment() {
         when (item.itemId) {
             R.id.share -> shareSuccess()
             R.id.favorite -> {
-                //item.setIcon(R.drawable.ic_baseline_star_filled_24)
-                Toast.makeText(context, "Favorite icon clicked", Toast.LENGTH_LONG).show()
                 viewModel.toggleFavorite()
             }
         }
