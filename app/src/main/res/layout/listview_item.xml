@@ -5,9 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="recipe"
             type="com.jumptuck.recipebrowser2.database.Recipe" />
+
+        <variable
+            name="clickListener"
+            type="com.jumptuck.recipebrowser2.recipelist.RecipeTitleListener" />
     </data>
 
     <TextView
@@ -17,5 +22,7 @@
         android:padding="10sp"
         android:textSize="20dp"
         android:textStyle="bold"
+        app:recipeListTitle="@{recipe}"
+        android:onClick="@{() -> clickListener.onClick(recipe)}"
         tools:text="List Item" />
 </layout>

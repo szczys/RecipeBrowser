@@ -8,11 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jumptuck.recipebrowser2.database.Recipe
 import com.jumptuck.recipebrowser2.databinding.ListviewItemBinding
 
-class RecipeTitleAdapter: ListAdapter<Recipe, RecipeTitleAdapter.ViewHolder>(RecipeListDiffCallback()){
+class RecipeTitleAdapter(val clickListener: RecipeTitleListener): ListAdapter<Recipe, RecipeTitleAdapter.ViewHolder>(RecipeListDiffCallback()){
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.bind(item)
+        holder.bind(getItem(position)!!, clickListener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -21,9 +20,13 @@ class RecipeTitleAdapter: ListAdapter<Recipe, RecipeTitleAdapter.ViewHolder>(Rec
 
     class ViewHolder private constructor(val binding: ListviewItemBinding): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Recipe) {
-            val res = itemView.context.resources
-            binding.recipeListTitle.text = item.title
+        fun bind(
+            item: Recipe,
+            clickListener: RecipeTitleListener
+        ) {
+            binding.recipe = item
+            binding.clickListener = clickListener
+            binding.executePendingBindings()
         }
 
         companion object {
@@ -45,7 +48,7 @@ class RecipeListDiffCallback : DiffUtil.ItemCallback<Recipe>() {
         return oldItem == newItem
     }
 }
-/*
-class RecipeTitleListener(val clickListener: (recipeID: Int) -> Unit) {
+
+class RecipeTitleListener(val clickListener: (recipeID: Long) -> Unit) {
     fun onClick(recipe: Recipe) = clickListener(recipe.recipeID)
-}*/
+}

@@ -2,6 +2,7 @@ package com.jumptuck.recipebrowser2.recipelist
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -31,7 +32,9 @@ class RecipeListFragment : Fragment() {
 
         binding.recipeListViewModel = recipeListViewModel
 
-        val adapter = RecipeTitleAdapter()
+        val adapter = RecipeTitleAdapter(RecipeTitleListener {
+            recipeID ->  Toast.makeText(context, "${recipeID}",Toast.LENGTH_LONG).show()
+        })
         binding.recipeList.adapter = adapter
 
         recipeListViewModel.allRecipes.observe(viewLifecycleOwner, Observer {

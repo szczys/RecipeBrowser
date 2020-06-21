@@ -28,7 +28,7 @@ interface RecipeDatabaseDao {
     fun isIn(title: String, date: String): Int
 
     @Query("SELECT * from recipe_table WHERE recipeID = :id")
-    fun getRecipe(id: Int): Recipe
+    fun getRecipe(id: Long): Recipe
 
     @Query("SELECT * from recipe_table ORDER BY title ASC")
     fun getAll(): LiveData<List<Recipe>>
