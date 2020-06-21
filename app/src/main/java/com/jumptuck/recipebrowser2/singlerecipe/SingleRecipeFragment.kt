@@ -9,6 +9,7 @@ import androidx.core.app.ShareCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.jumptuck.recipebrowser2.R
+import com.jumptuck.recipebrowser2.database.RecipeDatabase
 import com.jumptuck.recipebrowser2.databinding.FragmentSingleRecipeBinding
 
 /**
@@ -32,13 +33,20 @@ class SingleRecipeFragment : Fragment() {
                 requireArguments()
             )
 
+        val application = requireNotNull(this.activity).application
+
+        val datasource = RecipeDatabase.getInstance(application).recipeDatabaseDao
+
         viewModelFactory =
             SingleRecipeViewModelFactory(
-                args.recipeIndex
+                args.recipeIndex, datasource
             )
-        viewModel = ViewModelProvider(this,viewModelFactory)
+        var viewModel = ViewModelProvider(this,viewModelFactory)
             .get(SingleRecipeViewModel::class.java)
 
+        binding.singleRecipeViewModel = viewModel
+        binding.setLifecycleOwner(this)
+        
         Toast.makeText(context, "Recipe Number: ${args.recipeIndex}",Toast.LENGTH_LONG).show()
         setHasOptionsMenu(true)
         return binding.root

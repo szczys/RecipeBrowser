@@ -24,8 +24,6 @@ class RecipeListViewModel(
 
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private var curRecipe = MutableLiveData<Recipe?>()
-
     var allRecipes = database.getAll()
 
     /** Define a main thread funciton that will update the UI **/
