@@ -44,7 +44,7 @@ class SingleRecipeFragment : Fragment() {
             SingleRecipeViewModelFactory(
                 args.recipeIndex, datasource
             )
-        var viewModel = ViewModelProvider(this,viewModelFactory)
+        viewModel = ViewModelProvider(this,viewModelFactory)
             .get(SingleRecipeViewModel::class.java)
 
         binding.singleRecipeViewModel = viewModel
@@ -53,8 +53,9 @@ class SingleRecipeFragment : Fragment() {
         var actionBar = (activity as AppCompatActivity?)!!.supportActionBar
         viewModel.curRecipe.observe(viewLifecycleOwner, Observer {
             actionBar?.setTitle(it?.title)
+
         })
-        
+
         //Toast.makeText(context, "Recipe Number: ${args.recipeIndex}",Toast.LENGTH_LONG).show()
         setHasOptionsMenu(true)
         return binding.root
@@ -62,7 +63,14 @@ class SingleRecipeFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.recipe_share_menu, menu)
+        inflater.inflate(R.menu.single_recipe_menu, menu)
+
+        viewModel.curRecipe.observe(viewLifecycleOwner, Observer {
+            val favIconDrawable: Int
+            if (it!!.favorite) favIconDrawable = R.drawable.ic_baseline_star_filled_24
+            else favIconDrawable = R.drawable.ic_baseline_star_border_24
+            menu.findItem(R.id.favorite).setIcon(favIconDrawable)
+        })
     }
 
     private fun getShareIntent(): Intent {
@@ -84,6 +92,11 @@ class SingleRecipeFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.share -> shareSuccess()
+            R.id.favorite -> {
+                //item.setIcon(R.drawable.ic_baseline_star_filled_24)
+                Toast.makeText(context, "Favorite icon clicked", Toast.LENGTH_LONG).show()
+                viewModel.toggleFavorite()
+            }
         }
         return super.onOptionsItemSelected(item)
     }

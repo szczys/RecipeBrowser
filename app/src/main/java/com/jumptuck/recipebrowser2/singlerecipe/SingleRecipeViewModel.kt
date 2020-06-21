@@ -39,6 +39,21 @@ class SingleRecipeViewModel(recipeID: Long, val database: RecipeDatabaseDao) : V
         }
     }
 
+    fun toggleFavorite() {
+        uiScope.launch {
+            recordFavoriteInDb()
+        }
+    }
+
+    private suspend fun recordFavoriteInDb() {
+        withContext(Dispatchers.IO) {
+            /** Call a suspend function to query database on a different thread **/
+            Timber.i("Setting favorite to %s", (!curRecipe.value!!.favorite).toString())
+            database.setFavorite(curRecipe.value!!.recipeID, !curRecipe.value!!.favorite)
+            initializeRecipe(curRecipe.value!!.recipeID) //Force update for LiveData observers
+        }
+    }
+
     init {
         Timber.i("Recipe Index is $recipeID")
         initializeRecipe(recipeID)
