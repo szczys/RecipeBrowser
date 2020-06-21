@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.jumptuck.recipebrowser2.R
-import com.jumptuck.recipebrowser2.TextItemViewHolder
 import com.jumptuck.recipebrowser2.database.Recipe
 
 class RecipeTitleAdapter/*(val clickListener: RecipeTitleListener)*/: RecyclerView.Adapter<RecipeTitleAdapter.ViewHolder>(){
@@ -20,21 +19,28 @@ class RecipeTitleAdapter/*(val clickListener: RecipeTitleListener)*/: RecyclerVi
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data[position]
-        val res = holder.itemView.resources
-        holder.receipTitle.text = item.title
-        //holder.bind(item)
+        holder.bind(item)
     }
-
-    //private fun TextItemViewHolder.
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.listview_item, parent, false)
-        return ViewHolder(view)
+        return ViewHolder.from(parent)
     }
 
-    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    class ViewHolder private constructor(itemView: View): RecyclerView.ViewHolder(itemView) {
         val receipTitle: TextView = itemView.findViewById(R.id.recipe_list_title)
+
+        fun bind(item: Recipe) {
+            val res = itemView.context.resources
+            receipTitle.text = item.title
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): ViewHolder {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.listview_item, parent, false)
+                return ViewHolder(view)
+            }
+        }
     }
 }
 
