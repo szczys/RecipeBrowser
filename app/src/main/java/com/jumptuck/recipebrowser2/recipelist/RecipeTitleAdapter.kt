@@ -4,21 +4,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.Recipe
 
-class RecipeTitleAdapter/*(val clickListener: RecipeTitleListener)*/: RecyclerView.Adapter<RecipeTitleAdapter.ViewHolder>(){
-    var data = listOf<Recipe>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
-    override fun getItemCount()= data.size
+class RecipeTitleAdapter: ListAdapter<Recipe, RecipeTitleAdapter.ViewHolder>(RecipeListDiffCallback()){
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = data[position]
+        val item = getItem(position)
         holder.bind(item)
     }
 
@@ -44,6 +39,15 @@ class RecipeTitleAdapter/*(val clickListener: RecipeTitleListener)*/: RecyclerVi
     }
 }
 
+class RecipeListDiffCallback : DiffUtil.ItemCallback<Recipe>() {
+    override fun areItemsTheSame(oldItem: Recipe, newItem: Recipe): Boolean {
+        return oldItem.recipeID == newItem.recipeID
+    }
+
+    override fun areContentsTheSame(oldItem: Recipe, newItem: Recipe): Boolean {
+        return oldItem == newItem
+    }
+}
 /*
 class RecipeTitleListener(val clickListener: (recipeID: Int) -> Unit) {
     fun onClick(recipe: Recipe) = clickListener(recipe.recipeID)

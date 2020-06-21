@@ -36,7 +36,7 @@ class RecipeListFragment : Fragment() {
 
         recipeListViewModel.allRecipes.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.data = it
+                adapter.submitList(it)
             }
         })
 
