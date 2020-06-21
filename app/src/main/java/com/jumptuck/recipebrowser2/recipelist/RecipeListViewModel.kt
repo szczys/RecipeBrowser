@@ -73,10 +73,23 @@ class RecipeListViewModel(
         }
     }
 
+    // onClick navigation
+    fun onRecipeClicked(id: Long) {
+        _navigateToSingleRecipe.value = id
+    }
+
+    fun onRecipeClickedNavigated() {
+        _navigateToSingleRecipe.value = null
+    }
+
     //Protected liveData
     private val _titleArray = MutableLiveData<ArrayList<String>>()
     val titleArray : LiveData<ArrayList<String>>
         get() = _titleArray
+
+    private val _navigateToSingleRecipe = MutableLiveData<Long>()
+    val navigateToSingleRecipe
+        get() = _navigateToSingleRecipe
 
     init {
         Timber.i("RecipeViewModel created")

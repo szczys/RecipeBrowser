@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeDatabase
@@ -33,9 +34,19 @@ class RecipeListFragment : Fragment() {
         binding.recipeListViewModel = recipeListViewModel
 
         val adapter = RecipeTitleAdapter(RecipeTitleListener {
-            recipeID ->  Toast.makeText(context, "${recipeID}",Toast.LENGTH_LONG).show()
+            recipeID ->  recipeListViewModel.onRecipeClicked(recipeID)
         })
         binding.recipeList.adapter = adapter
+
+        recipeListViewModel.navigateToSingleRecipe.observe(viewLifecycleOwner, Observer {recipe ->
+            recipe?.let {
+
+                this.findNavController().navigate(
+                    RecipeListFragmentDirections
+                        .actionRecipeListToSingleRecipeFragment(recipe))
+                recipeListViewModel.onRecipeClickedNavigated()
+            }
+        })
 
         recipeListViewModel.allRecipes.observe(viewLifecycleOwner, Observer {
             it?.let {

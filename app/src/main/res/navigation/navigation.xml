@@ -25,7 +25,7 @@
         tools:layout="@layout/fragment_single_recipe" >
         <argument
             android:name="recipeIndex"
-            app:argType="integer" />
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"

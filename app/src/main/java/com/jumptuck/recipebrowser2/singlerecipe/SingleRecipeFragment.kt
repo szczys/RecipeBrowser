@@ -9,7 +9,6 @@ import androidx.core.app.ShareCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.jumptuck.recipebrowser2.R
-import com.jumptuck.recipebrowser2.singlerecipe.SingleRecipeFragmentArgs
 import com.jumptuck.recipebrowser2.databinding.FragmentSingleRecipeBinding
 
 /**
