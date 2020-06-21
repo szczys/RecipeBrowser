@@ -1,14 +1,12 @@
 package com.jumptuck.recipebrowser2.recipelist
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.Recipe
+import com.jumptuck.recipebrowser2.databinding.ListviewItemBinding
 
 class RecipeTitleAdapter: ListAdapter<Recipe, RecipeTitleAdapter.ViewHolder>(RecipeListDiffCallback()){
 
@@ -21,19 +19,18 @@ class RecipeTitleAdapter: ListAdapter<Recipe, RecipeTitleAdapter.ViewHolder>(Rec
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder private constructor(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val receipTitle: TextView = itemView.findViewById(R.id.recipe_list_title)
+    class ViewHolder private constructor(val binding: ListviewItemBinding): RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Recipe) {
             val res = itemView.context.resources
-            receipTitle.text = item.title
+            binding.recipeListTitle.text = item.title
         }
 
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.listview_item, parent, false)
-                return ViewHolder(view)
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ListviewItemBinding.inflate(layoutInflater, parent, false)
+                return ViewHolder(binding)
             }
         }
     }

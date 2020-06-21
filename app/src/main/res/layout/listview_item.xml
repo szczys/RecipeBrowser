@@ -4,6 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="recipe"
+            type="com.jumptuck.recipebrowser2.database.Recipe" />
+    </data>
+
     <TextView
         android:id="@+id/recipe_list_title"
         android:layout_width="fill_parent"
