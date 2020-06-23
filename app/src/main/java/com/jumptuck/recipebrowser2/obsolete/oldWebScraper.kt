@@ -1,4 +1,4 @@
-//package com.jumptuck.recipebrowser2.network
+//package com.jumptuck.recipebrowser2.obsolete
 //
 //import android.app.IntentService
 //import android.content.Intent
@@ -7,7 +7,6 @@
 //import android.support.p000v4.content.LocalBroadcastManager
 //import android.util.Log
 //import com.jumptuck.recipebrowser2.database.Recipe
-//import com.jumptuck.recipebrowser2.network.WebScraper
 //import org.apache.http.auth.AuthScope
 //import org.apache.http.auth.UsernamePasswordCredentials
 //import org.apache.http.client.ClientProtocolException
@@ -22,7 +21,7 @@
 //import java.io.IOException
 //import java.util.*
 //
-//class WebScraper : IntentService(TAG) {
+//class oldWebScraper : IntentService(TAG) {
 //    /* access modifiers changed from: private */
 //    var dir_depth = 0
 //
@@ -39,7 +38,10 @@
 //            val hostname = params[0]
 //            val username = params[1]
 //            val password = params[2]
-//            val scraped = ParsedPage(null)
+//            val scraped =
+//                ParsedPage(
+//                    null
+//                )
 //            val dir_list = ArrayList<String>()
 //            dir_list.add("")
 //            while (dir_list.size > 0) {
@@ -57,7 +59,7 @@
 //                }
 //                dir_list.removeAt(0)
 //                if (dir_depth < 1 && scraped.sub_directories.size > 0) {
-//                    val webScraper = this@WebScraper
+//                    val webScraper = this@oldWebScraper
 //                    webScraper.dir_depth = webScraper.dir_depth + 1
 //                    val it2: Iterator<*> = scraped.sub_directories.iterator()
 //                    while (it2.hasNext()) {
@@ -66,7 +68,7 @@
 //                }
 //            }
 //            val recipeData: RecipeData =
-//                (this@WebScraper.application as RecipeBrowserApp).getRecipeData()
+//                (this@oldWebScraper.application as RecipeBrowserApp).getRecipeData()
 //            val iterator: MutableIterator<Recipe> =
 //                recipe_objects.iterator()
 //            while (iterator.hasNext()) {
@@ -93,7 +95,7 @@
 //        public override fun onPostExecute(result: String) {
 //            super.onPostExecute(result)
 //            val ed: SharedPreferences.Editor =
-//                (this@WebScraper.application as RecipeBrowserApp).prefs.edit()
+//                (this@oldWebScraper.application as RecipeBrowserApp).prefs.edit()
 //            ed.putLong("last_download", System.currentTimeMillis())
 //            ed.commit()
 //            if (recipe_objects.size > 0) {
@@ -101,18 +103,18 @@
 //                intent.putExtra("rescan_categories", true)
 //                intent.putExtra(
 //                    "message",
-//                    this@WebScraper.resources.getQuantityString(
+//                    this@oldWebScraper.resources.getQuantityString(
 //                        C0045R.plurals.toast_new_recipes,
 //                        recipe_objects.size,
 //                        arrayOf<Any>(Integer.valueOf(recipe_objects.size))
 //                    )
 //                )
-//                LocalBroadcastManager.getInstance(this@WebScraper.applicationContext)
+//                LocalBroadcastManager.getInstance(this@oldWebScraper.applicationContext)
 //                    .sendBroadcast(intent)
 //            }
 //            val intent2 = Intent("database-update")
 //            intent2.putExtra("service_complete", true)
-//            LocalBroadcastManager.getInstance(this@WebScraper.applicationContext)
+//            LocalBroadcastManager.getInstance(this@oldWebScraper.applicationContext)
 //                .sendBroadcast(intent2)
 //            Log.d(TAG, "OnPostExecute: CrawlDirectory")
 //        }

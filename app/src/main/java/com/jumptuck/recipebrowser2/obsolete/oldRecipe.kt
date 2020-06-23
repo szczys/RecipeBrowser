@@ -1,4 +1,4 @@
-package com.jumptuck.recipebrowser2
+package com.jumptuck.recipebrowser2.obsolete
 
 class oldRecipe(
     var title: String,
@@ -6,7 +6,8 @@ class oldRecipe(
     var directory: String,
     var date: String
 ) {
-    var body = BODY_DEFAULT
+    var body =
+        BODY_DEFAULT
     var favorite = 0
 
     /* renamed from: id */

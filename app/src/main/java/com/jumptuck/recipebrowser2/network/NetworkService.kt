@@ -15,8 +15,8 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface NetworkService {
-    @GET(BASE_URL)
-    fun getProperties():
+    @GET
+    fun getHtml(@Url url: String):
             Call<String>
 }
 

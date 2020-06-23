@@ -96,7 +96,7 @@ class RecipeListViewModel(
     private val _response = MutableLiveData<String>()
 
     private fun getHTML() {
-        Network.retrofitService.getProperties().enqueue( object: Callback<String> {
+        Network.retrofitService.getHtml("http://192.168.1.105/recipes/") .enqueue( object: Callback<String> {
             override fun onFailure(call: Call<String>, t: Throwable) {
                 _response.value = "Failure: " + t.message
                 Timber.i(_response.value)
