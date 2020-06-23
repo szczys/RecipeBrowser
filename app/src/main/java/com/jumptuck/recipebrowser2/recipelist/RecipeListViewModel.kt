@@ -6,7 +6,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.jumptuck.recipebrowser2.database.Recipe
 import com.jumptuck.recipebrowser2.database.RecipeDatabaseDao
+import com.jumptuck.recipebrowser2.network.Network
 import kotlinx.coroutines.*
+import retrofit2.*
+import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.http.GET
 import timber.log.Timber
 
 class RecipeListViewModel(
@@ -89,8 +93,25 @@ class RecipeListViewModel(
     val navigateToSingleRecipe
         get() = _navigateToSingleRecipe
 
+    private val _response = MutableLiveData<String>()
+
+    private fun getHTML() {
+        Network.retrofitService.getProperties().enqueue( object: Callback<String> {
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                _response.value = "Failure: " + t.message
+                Timber.i(_response.value)
+            }
+
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                _response.value = response.body()
+                Timber.i(_response.value)
+            }
+        })
+    }
+
     init {
         Timber.i("RecipeViewModel created")
         resetCounter()
+        getHTML()
     }
 }
