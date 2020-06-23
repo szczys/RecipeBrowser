@@ -8,6 +8,9 @@ import com.jumptuck.recipebrowser2.database.Recipe
 import com.jumptuck.recipebrowser2.database.RecipeDatabaseDao
 import com.jumptuck.recipebrowser2.network.Network
 import kotlinx.coroutines.*
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.jsoup.select.Elements
 import retrofit2.*
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
@@ -15,9 +18,11 @@ import timber.log.Timber
 
 class RecipeListViewModel(
     val database: RecipeDatabaseDao,
-    application: Application) : AndroidViewModel(application) {
+    application: Application
+) : AndroidViewModel(application) {
 
     private var fakeItemCounter: Int = 0
+
     //Coroutines setup
     private var viewModelJob = Job()
 
@@ -43,8 +48,9 @@ class RecipeListViewModel(
         Timber.i("Adding new menu item")
         withContext(Dispatchers.IO) {
             var newRecipe = Recipe()
-            newRecipe.title = "Recipe Number " + fakeItemCounter.toString().padStart(2,'0')
-            newRecipe.body = "Recipe Body for Number: " + (fakeItemCounter++).toString().padStart(2,'0')
+            newRecipe.title = "Recipe Number " + fakeItemCounter.toString().padStart(2, '0')
+            newRecipe.body =
+                "Recipe Body for Number: " + (fakeItemCounter++).toString().padStart(2, '0')
             Timber.i("New menu item: %s", newRecipe.title)
             database.insert(newRecipe)
         }
@@ -55,6 +61,7 @@ class RecipeListViewModel(
             onClear()
         }
     }
+
     /** Clear button clicked to remove all rows from db **/
     private suspend fun onClear() {
         withContext(Dispatchers.IO) {
@@ -86,7 +93,7 @@ class RecipeListViewModel(
 
     //Protected liveData
     private val _titleArray = MutableLiveData<ArrayList<String>>()
-    val titleArray : LiveData<ArrayList<String>>
+    val titleArray: LiveData<ArrayList<String>>
         get() = _titleArray
 
     private val _navigateToSingleRecipe = MutableLiveData<Long>()
@@ -96,17 +103,19 @@ class RecipeListViewModel(
     private val _response = MutableLiveData<String>()
 
     private fun getHTML() {
-        Network.retrofitService.getHtml("http://192.168.1.105/recipes/") .enqueue( object: Callback<String> {
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                _response.value = "Failure: " + t.message
-                Timber.i(_response.value)
+        uiScope.launch {
+            var getPropertiesDeferred =
+                Network.retrofitService.getHtml("http://192.168.1.105/recipes/")
+            try {
+                var listResult = getPropertiesDeferred.await()
+                Timber.i(listResult)
+                val doc: Document = Jsoup.parse(listResult)
+                val headers: Elements = doc.select("th")
+                Timber.i("Number of tr elements on this page: %s", headers.size)
+            } catch (t: Throwable) {
+                Timber.i(t.message)
             }
-
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                _response.value = response.body()
-                Timber.i(_response.value)
-            }
-        })
+        }
     }
 
     init {

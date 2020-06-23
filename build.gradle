@@ -7,6 +7,7 @@ buildscript {
         lifecycle_version = "2.2.0"
         room_version = "2.2.5"
         retrofit_version = "2.9.0"
+        jsoup_version = "1.13.1"
     }
     repositories {
         google()
