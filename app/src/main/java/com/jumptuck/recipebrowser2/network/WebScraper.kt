@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.jumptuck.recipebrowser2.database.Recipe
+import com.jumptuck.recipebrowser2.database.RecipeDatabase
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -81,6 +82,12 @@ class WebScraper(appContext: Context, params: WorkerParameters) :
                     dir_list.add(subdirs.next() as String)
                 }
             }
+        }
+
+        val database = RecipeDatabase.getInstance(applicationContext).recipeDatabaseDao
+        var recipeIterator = recipe_objects.iterator()
+        while (recipeIterator.hasNext()) {
+            database.insert(recipeIterator.next())
         }
         /*
         val workingRecipe = Recipe()
