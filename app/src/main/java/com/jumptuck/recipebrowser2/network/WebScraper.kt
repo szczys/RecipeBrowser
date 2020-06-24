@@ -1,7 +1,6 @@
 package com.jumptuck.recipebrowser2.network
 
 import android.content.Context
-import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.jumptuck.recipebrowser2.database.Recipe
@@ -31,10 +30,6 @@ class WebScraper(appContext: Context, params: WorkerParameters) :
             Network.retrofitService.getHtml(getUrl)
         try {
             var listResult = getPropertiesDeferred.await()
-            Timber.i(listResult)
-            //val doc: Document = Jsoup.parse(listResult)
-            //val headers: Elements = doc.select("th")
-            //Timber.i("Number of tr elements on this page: %s", headers.size)
             return listResult
         } catch (t: Throwable) {
             Timber.i(t)
@@ -44,13 +39,75 @@ class WebScraper(appContext: Context, params: WorkerParameters) :
 
     override suspend fun doWork(): Result {
         return try {
-            var pp = ParsedPage()
-            pp.parse(getHTML(host),"/")
+            crawlDirectory(host)
             Result.success()
         } catch (exception: HttpException) {
             Result.retry()
         }
     }
+
+    private suspend fun crawlDirectory(startingUrl: String) {
+
+        val hostname = startingUrl
+        //val username = params[1]
+        //val password = params[2]
+        var recipe_objects = ArrayList<Recipe>()
+        val scraped = ParsedPage()
+        var dir_list = ArrayList<String>()
+        dir_list.add("")
+        var dir_depth = 0
+
+        while (dir_list.size > 0) {
+            var scrapeDir = StringBuilder(startingUrl)
+                .append(dir_list[0]).toString()
+            Timber.i("Dir to scrape: %s", scrapeDir)
+            scraped.parse(getHTML(scrapeDir
+                ),
+                dir_list[0]
+            )
+            val foundRecipes: Iterator<*> = scraped.scraped_recipes.iterator()
+            while (foundRecipes.hasNext()) {
+                recipe_objects.add(foundRecipes.next() as Recipe)
+            }
+            dir_list.removeAt(0)
+            Timber.i(dir_list.toString())
+
+            /** Limit directory crawling to just one level **/
+            if (dir_depth < 1 && scraped.sub_directories.size > 0) {
+                ++dir_depth
+                Timber.i("Scraped subdirs list: %s", scraped.sub_directories.toString())
+                val subdirs: Iterator<*> = scraped.sub_directories.iterator()
+                while (subdirs.hasNext()) {
+                    dir_list.add(subdirs.next() as String)
+                }
+            }
+        }
+        /*
+        val workingRecipe = Recipe()
+            (this@oldWebScraper.application as RecipeBrowserApp).getRecipeData()
+        val iterator: MutableIterator<Recipe> =
+            recipe_objects.iterator()
+        while (iterator.hasNext()) {
+            val r: Recipe = iterator.next() as Recipe
+            if (recipeData.isIn(r.title, r.date)) {
+                iterator.remove()
+            }
+        }
+        if (recipe_objects.size > 0) {
+            val it3: Iterator<*> = recipe_objects.iterator()
+            while (it3.hasNext()) {
+                val r2: Recipe = it3.next() as Recipe
+                r2.body = getHtmlSource(
+                    StringBuilder(hostname).append(r2.directory)
+                        .append(r2.link).toString(), username, password
+                )
+            }
+        }
+        addToDb(recipe_objects)
+        return "Done"
+         */
+    }
+
 
     private class ParsedPage {
         var scraped_recipes = ArrayList<Recipe>()
@@ -88,7 +145,7 @@ class WebScraper(appContext: Context, params: WorkerParameters) :
                 while (rows.hasNext()) {
                     val row: Element = rows.next() as Element
                     val title: String = row.getElementsByIndexEquals(title_index!!).text()
-                    val link: String = row.getElementsByIndexEquals(title_index!!).attr("href")
+                    val link: String = row.getElementsByIndexEquals(title_index).select("a").attr("href")
                     val date: String = row.getElementsByIndexEquals(date_index!!).text()
                     if (title.length >= 1) {
                         if (title.substring(title.length - 1) == "/") {
@@ -98,7 +155,8 @@ class WebScraper(appContext: Context, params: WorkerParameters) :
                         if (title.length >= 5 && title.substring(title.length - 4)
                                 .equals(".txt", ignoreCase = true)
                         ) {
-                            Timber.d("Text file: $title | $link | $date"
+                            Timber.d(
+                                "Text file: $title | $link | $date"
                             )
                             workingRecipe = Recipe()
                             workingRecipe.title = title.substring(0, title.length - 4)
@@ -134,6 +192,7 @@ class WebScraper(appContext: Context, params: WorkerParameters) :
                 }
             }
             Timber.d("ParsedPage.parse() completed")
+            Timber.d("Subdirectories: %s", sub_directories.toString())
         }
     }
 }
