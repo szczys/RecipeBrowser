@@ -4,17 +4,21 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.jumptuck.recipebrowser2.database.Recipe
 import com.jumptuck.recipebrowser2.database.RecipeDatabaseDao
 import com.jumptuck.recipebrowser2.network.Network
+import com.jumptuck.recipebrowser2.network.WebScraper
+import kotlinx.android.synthetic.main.fragment_recipe_list.view.*
 import kotlinx.coroutines.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
-import retrofit2.*
-import retrofit2.converter.scalars.ScalarsConverterFactory
-import retrofit2.http.GET
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 class RecipeListViewModel(
     val database: RecipeDatabaseDao,
@@ -100,22 +104,15 @@ class RecipeListViewModel(
     val navigateToSingleRecipe
         get() = _navigateToSingleRecipe
 
-    private val _response = MutableLiveData<String>()
-
-    private fun getHTML() {
+    fun getHTML() {
         uiScope.launch {
-            var getPropertiesDeferred =
-                Network.retrofitService.getHtml("http://192.168.1.105/recipes/")
-            try {
-                var listResult = getPropertiesDeferred.await()
-                Timber.i(listResult)
-                val doc: Document = Jsoup.parse(listResult)
-                val headers: Elements = doc.select("th")
-                Timber.i("Number of tr elements on this page: %s", headers.size)
-            } catch (t: Throwable) {
-                Timber.i(t.message)
-            }
+            setupRecipeRefreshWork()
         }
+    }
+
+    private fun setupRecipeRefreshWork() {
+        val recipeRefresh = OneTimeWorkRequestBuilder<WebScraper>().build()
+        WorkManager.getInstance(getApplication()).enqueue(recipeRefresh)
     }
 
     init {
