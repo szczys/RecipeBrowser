@@ -62,8 +62,9 @@ class WebScraper(appContext: Context, params: WorkerParameters) :
             var scrapeDir = StringBuilder(startingUrl)
                 .append(dir_list[0]).toString()
             Timber.i("Dir to scrape: %s", scrapeDir)
-            scraped.parse(getHTML(scrapeDir
-                ),
+            scraped.parse(
+                getHTML(scrapeDir),
+                scrapeDir,
                 dir_list[0]
             )
             val foundRecipes: Iterator<*> = scraped.scraped_recipes.iterator()
@@ -86,8 +87,15 @@ class WebScraper(appContext: Context, params: WorkerParameters) :
 
         val database = RecipeDatabase.getInstance(applicationContext).recipeDatabaseDao
         var recipeIterator = recipe_objects.iterator()
-        while (recipeIterator.hasNext()) {
-            database.insert(recipeIterator.next())
+        recipeIterator.forEach { current_recipe ->
+            //Check for existing
+            //Update body if necessary
+            current_recipe.body = getHTML(
+                StringBuilder(startingUrl)
+                    .append(current_recipe.category)
+                    .append(current_recipe.link).toString()
+            )
+            database.insert(current_recipe)
         }
         /*
         val workingRecipe = Recipe()
@@ -120,11 +128,11 @@ class WebScraper(appContext: Context, params: WorkerParameters) :
         var scraped_recipes = ArrayList<Recipe>()
         var sub_directories = ArrayList<String>()
 
-        fun parse(url: String, current_directory: String) {
+        fun parse(html: String, baseUrl: String, current_directory: String) {
             scraped_recipes.clear()
             sub_directories.clear()
             var workingRecipe = Recipe()
-            val doc: Document = Jsoup.parse(url)
+            val doc: Document = Jsoup.parse(html)
             var title_index: Int? = null
             var date_index: Int? = null
             val headers: Elements = doc.select("th")
@@ -190,7 +198,7 @@ class WebScraper(appContext: Context, params: WorkerParameters) :
                             Timber.d("Text File: %s", curTitle)
                             workingRecipe = Recipe()
                             workingRecipe.title = curTitle.substring(0, curTitle.length - 4)
-                            workingRecipe.link = l.attr("href")
+                            workingRecipe.link = l.select("a").attr("href")
                             workingRecipe.category = current_directory
                             workingRecipe.date = ""
                             scraped_recipes.add(workingRecipe)
@@ -199,7 +207,6 @@ class WebScraper(appContext: Context, params: WorkerParameters) :
                 }
             }
             Timber.d("ParsedPage.parse() completed")
-            Timber.d("Subdirectories: %s", sub_directories.toString())
         }
     }
 }
