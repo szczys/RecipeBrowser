@@ -69,6 +69,8 @@ class RecipeListViewModel(
         }
     }
 
+    var category_list = arrayOf("One","Two","Three")
+
     /** Clear button clicked to remove all rows from db **/
     private suspend fun onClear() {
         withContext(Dispatchers.IO) {

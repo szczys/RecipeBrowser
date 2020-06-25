@@ -2,6 +2,7 @@ package com.jumptuck.recipebrowser2.recipelist
 
 import android.os.Bundle
 import android.view.*
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
@@ -38,6 +39,11 @@ class RecipeListFragment : Fragment() {
             recipeID ->  recipeListViewModel.onRecipeClicked(recipeID)
         })
         binding.recipeList.adapter = adapter
+
+
+        val catNames = arrayOf("Drinks", "Meat", "Dessert")
+        val spinnerAdapter = ArrayAdapter(application, R.layout.spinner_item, catNames)
+        binding.spinner.adapter = spinnerAdapter
 
         recipeListViewModel.navigateToSingleRecipe.observe(viewLifecycleOwner, Observer {recipe ->
             recipe?.let {
