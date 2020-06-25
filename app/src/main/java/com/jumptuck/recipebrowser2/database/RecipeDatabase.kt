@@ -29,14 +29,12 @@ abstract class RecipeDatabase : RoomDatabase() {
     companion object{
 
         @Volatile
-        private var INSTANCE: RecipeDatabase? = null
+        private lateinit var INSTANCE: RecipeDatabase
 
         fun getInstance(context: Context): RecipeDatabase {
-            synchronized (this) {
-                var instance = INSTANCE
-
-                if (instance == null) {
-                    instance = Room.databaseBuilder(
+            synchronized (RecipeDatabase::class.java) {
+                if (!::INSTANCE.isInitialized) {
+                    INSTANCE = Room.databaseBuilder(
                             context.applicationContext,
                             RecipeDatabase::class.java,
                             "recipe_database"
@@ -44,7 +42,7 @@ abstract class RecipeDatabase : RoomDatabase() {
                             .fallbackToDestructiveMigration()
                             .build()
                 }
-                return instance
+                return INSTANCE
             }
 
         }

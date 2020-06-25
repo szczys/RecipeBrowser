@@ -10,7 +10,7 @@ import androidx.room.Update
 @Dao
 interface RecipeDatabaseDao {
     @Insert
-    fun insert(recipe: Recipe)
+    fun insert(recipe: Recipe): Long
 
     @Update
     fun update(recipe: Recipe)
@@ -28,7 +28,7 @@ interface RecipeDatabaseDao {
     fun isIn(title: String, date: String): Int
 
     @Query("SELECT * from recipe_table WHERE recipeID = :id")
-    fun getRecipe(id: Long): Recipe
+    fun getRecipe(id: Long): LiveData<Recipe>
 
     @Query("SELECT * from recipe_table ORDER BY title ASC")
     fun getAll(): LiveData<List<Recipe>>

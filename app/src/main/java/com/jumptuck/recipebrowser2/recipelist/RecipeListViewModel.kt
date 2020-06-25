@@ -1,10 +1,12 @@
 package com.jumptuck.recipebrowser2.recipelist
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.room.Query
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -56,7 +58,8 @@ class RecipeListViewModel(
             newRecipe.body =
                 "Recipe Body for Number: " + (fakeItemCounter++).toString().padStart(2, '0')
             Timber.i("New menu item: %s", newRecipe.title)
-            database.insert(newRecipe)
+            var newID = database.insert(newRecipe)
+            Timber.i("InsertID: %s", newID)
         }
     }
 
