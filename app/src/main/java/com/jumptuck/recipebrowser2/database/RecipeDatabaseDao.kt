@@ -1,6 +1,5 @@
 package com.jumptuck.recipebrowser2.database
 
-import android.database.Cursor
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert

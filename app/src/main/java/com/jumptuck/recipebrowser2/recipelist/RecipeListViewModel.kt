@@ -1,26 +1,16 @@
 package com.jumptuck.recipebrowser2.recipelist
 
 import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import androidx.room.Query
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.jumptuck.recipebrowser2.database.Recipe
 import com.jumptuck.recipebrowser2.database.RecipeDatabaseDao
-import com.jumptuck.recipebrowser2.network.Network
 import com.jumptuck.recipebrowser2.network.WebScraper
-import kotlinx.android.synthetic.main.fragment_recipe_list.view.*
 import kotlinx.coroutines.*
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
-import org.jsoup.select.Elements
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 class RecipeListViewModel(
     val database: RecipeDatabaseDao,

@@ -3,6 +3,7 @@ package com.jumptuck.recipebrowser2.network
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.Recipe
 import com.jumptuck.recipebrowser2.database.RecipeDatabase
 
@@ -85,16 +86,24 @@ class WebScraper(appContext: Context, params: WorkerParameters) :
             }
         }
 
+        //Post-process the recipes
         val database = RecipeDatabase.getInstance(applicationContext).recipeDatabaseDao
         var recipeIterator = recipe_objects.iterator()
         recipeIterator.forEach { current_recipe ->
-            //Check for existing
+            //TODO: Check for existing
             //Update body if necessary
-            current_recipe.body = getHTML(
-                StringBuilder(startingUrl)
+            val curUrl = StringBuilder(startingUrl)
                     .append(current_recipe.category)
                     .append(current_recipe.link).toString()
-            )
+            current_recipe.link = curUrl
+            current_recipe.body = getHTML(curUrl).toString()
+
+            if (current_recipe.category == "") {
+                current_recipe.category = applicationContext.getString(R.string.category_uncategorized)
+            }
+            else if (current_recipe.category.last() == '/') {
+                current_recipe.category = current_recipe.category.dropLast(1)
+            }
             database.insert(current_recipe)
         }
         /*
