@@ -16,7 +16,7 @@ data class Recipe (
     var link: String = "",
     @ColumnInfo(name = "cat")
     var category: String = "",
-    @ColumnInfo(name = "lastUpdate")
+    @ColumnInfo(name = "date")
     var date: String = "",
     @ColumnInfo(name = "fav")
     var favorite: Boolean = false

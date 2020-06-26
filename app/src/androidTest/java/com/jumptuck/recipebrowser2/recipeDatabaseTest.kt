@@ -26,7 +26,6 @@ import com.jumptuck.recipebrowser2.database.RecipeDatabase
 import com.jumptuck.recipebrowser2.database.RecipeDatabaseDao
 import org.junit.Assert.assertEquals
 import org.junit.After
-import org.junit.Assert.assertNotEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -71,7 +70,6 @@ class recipeDatabaseTest {
     @Throws(Exception::class)
     fun testDatabase() {
         var recipe = Recipe()
-        var retrievedRecipe = Recipe()
 
         //Test insert and getRecipe
         recipe.title = "Marmite"
@@ -80,18 +78,20 @@ class recipeDatabaseTest {
         recipe.category = "Poison"
         recipe.date = "2020-06-19"
         recipeDao.insert(recipe)
-        retrievedRecipe = recipeDao.getRecipe(1)
-        assertEquals(retrievedRecipe.title, "Marmite")
-        assertEquals(retrievedRecipe.body,"Body")
-        assertEquals(retrievedRecipe.link,"recipe.com")
-        assertEquals(retrievedRecipe.category,"Poison")
-        assertEquals(retrievedRecipe.date,"2020-06-19")
-        assertEquals(retrievedRecipe.favorite,false)
+        recipeDao.getRecipe(1).observeOnce {
+            assertEquals(it.title, "Marmite")
+            assertEquals(it.body, "Body")
+            assertEquals(it.link, "recipe.com")
+            assertEquals(it.category, "Poison")
+            assertEquals(it.date, "2020-06-19")
+            assertEquals(it.favorite, false)
+        }
 
         //Test setFavorite
         recipeDao.setFavorite(1,true)
-        retrievedRecipe = recipeDao.getRecipe(1)
-        assertEquals(retrievedRecipe.favorite, true)
+        recipeDao.getRecipe(1).observeOnce {
+            assertEquals(it.favorite, true)
+        }
 
         //Test favoriteCount
         recipe = Recipe()
@@ -102,9 +102,8 @@ class recipeDatabaseTest {
         assertEquals(recipeDao.favoriteCount(),2)
 
         //Test isIn
-        assertEquals(recipeDao.isIn("Motor Oil", ""),0)
-        retrievedRecipe = recipeDao.getRecipe(1)
-        assertNotEquals(recipeDao.isIn("Marmite","2020-06-19"),0)
+        assertEquals(recipeDao.isIn("Some Weird Recipe"),false)
+        assertEquals(recipeDao.isIn("Marmite"),true)
 
         //Test getAll
         recipe = Recipe()
@@ -120,8 +119,7 @@ class recipeDatabaseTest {
         }
 
         //Test getCategory
-        recipeDao.update(retrievedRecipe)
-        recipeDao.getCategory("Food").observeOnce {
+        recipeDao.getRecipesFromCategory("Food").observeOnce {
             assertEquals(it.size, 2)
             assertEquals(it[0].title, "Apple Pie")
             assertEquals(it[1].title, "Chowder")
@@ -133,6 +131,12 @@ class recipeDatabaseTest {
             assertEquals(it[0].title, "Apple Pie")
             assertEquals(it[1].title, "Marmite")
         }
+
+        //Test search by title
+        var foundRecipe = recipeDao.findRecipeByTitle("Marmite")
+        assertEquals(foundRecipe?.recipeID, 1)
+        foundRecipe = recipeDao.findRecipeByTitle("Some non-existant title")
+        assertEquals(foundRecipe, null)
 
         //Test deleteAllRecipes
         recipeDao.getAll().observeOnce {

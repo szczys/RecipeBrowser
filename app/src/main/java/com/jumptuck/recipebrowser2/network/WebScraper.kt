@@ -91,20 +91,32 @@ class WebScraper(appContext: Context, params: WorkerParameters) :
         var recipeIterator = recipe_objects.iterator()
         recipeIterator.forEach { current_recipe ->
             //TODO: Check for existing
-            //Update body if necessary
-            val curUrl = StringBuilder(startingUrl)
+            var existingRecipe = database.findRecipeByTitle(current_recipe.title)
+            if (existingRecipe?.date == current_recipe.date) {
+                Timber.i("Recipe date same as already in db: %s", current_recipe.title)
+            }
+            else {
+                //Format recipe for insert or update to DB
+                val curUrl = StringBuilder(startingUrl)
                     .append(current_recipe.category)
                     .append(current_recipe.link).toString()
-            current_recipe.link = curUrl
-            current_recipe.body = getHTML(curUrl).toString()
+                current_recipe.link = curUrl
+                current_recipe.body = getHTML(curUrl).toString()
 
-            if (current_recipe.category == "") {
-                current_recipe.category = applicationContext.getString(R.string.category_uncategorized)
+                if (current_recipe.category == "") {
+                    current_recipe.category =
+                        applicationContext.getString(R.string.category_uncategorized)
+                } else if (current_recipe.category.last() == '/') {
+                    current_recipe.category = current_recipe.category.dropLast(1)
+                }
+                if (existingRecipe == null) {
+                    database.insert(current_recipe)
+                }
+                else {
+                    current_recipe.recipeID = existingRecipe.recipeID
+                    database.update(current_recipe)
+                }
             }
-            else if (current_recipe.category.last() == '/') {
-                current_recipe.category = current_recipe.category.dropLast(1)
-            }
-            database.insert(current_recipe)
         }
         /*
         val workingRecipe = Recipe()
