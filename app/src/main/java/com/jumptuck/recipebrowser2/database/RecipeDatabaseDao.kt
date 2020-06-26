@@ -35,12 +35,13 @@ interface RecipeDatabaseDao {
     //OLD CODE: fun getAll(): Cursor
 
     @Query("SELECT * from recipe_table WHERE cat = :cat ORDER BY title ASC")
-    fun getCategory(cat: String): LiveData<List<Recipe>>
-    //OLD CODE: fun getCategory(dir: String): Cursor
+    fun getRecipesFromCategory(cat: String): LiveData<List<Recipe>>
+
+    @Query("SELECT distinct(cat) from recipe_table ORDER BY cat ASC")
+    fun getCategoryList(): LiveData<List<String>>
 
     @Query("SELECT * from recipe_table WHERE fav = 1 ORDER BY title ASC")
     fun getFavorites(): LiveData<List<Recipe>>
-    //OLD CODE: val favorites: Cursor
 
     @Query("DELETE from recipe_table")
     fun deleteAllRecipes()

@@ -40,11 +40,6 @@ class RecipeListFragment : Fragment() {
         })
         binding.recipeList.adapter = adapter
 
-
-        val catNames = arrayOf("Drinks", "Meat", "Dessert")
-        val spinnerAdapter = ArrayAdapter(application, R.layout.spinner_item, catNames)
-        binding.spinner.adapter = spinnerAdapter
-
         recipeListViewModel.navigateToSingleRecipe.observe(viewLifecycleOwner, Observer {recipe ->
             recipe?.let {
 

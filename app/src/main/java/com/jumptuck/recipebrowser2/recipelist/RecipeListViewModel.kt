@@ -69,7 +69,7 @@ class RecipeListViewModel(
         }
     }
 
-    var category_list = arrayOf("One","Two","Three")
+    val category_list = database.getCategoryList()
 
     /** Clear button clicked to remove all rows from db **/
     private suspend fun onClear() {
