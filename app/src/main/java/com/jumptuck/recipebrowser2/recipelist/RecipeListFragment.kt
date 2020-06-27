@@ -45,8 +45,8 @@ class RecipeListFragment : Fragment() {
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                Timber.d("Spinner Item Selcected: %s", p2)
-
+                Timber.d("Spinner Item Selected: %s", p2)
+                recipeListViewModel.updateRecipeView(p2)
             }
 
         }

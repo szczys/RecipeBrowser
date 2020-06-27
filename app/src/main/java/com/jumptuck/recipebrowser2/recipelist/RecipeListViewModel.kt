@@ -35,7 +35,17 @@ class RecipeListViewModel(
     var allRecipes = database.getAll()
     
     fun updateRecipeView(index: Int) {
-        
+        var cat = category_list_with_headers.value?.get(index)
+
+        if ((cat == null) || (index == 0)) {
+            allRecipes = database.getAll()
+        }
+        else if (cat == resources.getString(R.string.spinner_category_favorite)) {
+            allRecipes = database.getFavorites()
+        }
+        else {
+            allRecipes = database.getRecipesFromCategory(cat)
+        }
     }
 
     /** Define a main thread funciton that will update the UI **/
