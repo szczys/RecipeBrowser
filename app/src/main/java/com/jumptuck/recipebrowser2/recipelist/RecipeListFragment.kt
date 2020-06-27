@@ -2,6 +2,7 @@ package com.jumptuck.recipebrowser2.recipelist
 
 import android.os.Bundle
 import android.view.*
+import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -12,6 +13,7 @@ import androidx.navigation.ui.NavigationUI
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeDatabase
 import com.jumptuck.recipebrowser2.databinding.FragmentRecipeListBinding
+import timber.log.Timber
 
 class RecipeListFragment : Fragment() {
 
@@ -36,6 +38,18 @@ class RecipeListFragment : Fragment() {
             recipeID ->  recipeListViewModel.onRecipeClicked(recipeID)
         })
         binding.recipeList.adapter = adapter
+
+        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                Timber.d("Spinner Item Selcected: %s", p2)
+
+            }
+
+        }
 
         recipeListViewModel.navigateToSingleRecipe.observe(viewLifecycleOwner, Observer {recipe ->
             recipe?.let {
@@ -71,6 +85,8 @@ class RecipeListFragment : Fragment() {
         }
 
         setHasOptionsMenu(true)
+
+
 
         /*
         listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, id ->

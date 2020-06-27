@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.jumptuck.recipebrowser2.R
+import com.jumptuck.recipebrowser2.RecipeBrowserApplication
 import com.jumptuck.recipebrowser2.database.Recipe
 import com.jumptuck.recipebrowser2.database.RecipeDatabaseDao
 import com.jumptuck.recipebrowser2.network.WebScraper
@@ -17,6 +19,7 @@ class RecipeListViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
+    private var resources = getApplication<RecipeBrowserApplication>().resources
     private var fakeItemCounter: Int = 0
 
     //Coroutines setup
@@ -30,6 +33,10 @@ class RecipeListViewModel(
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     var allRecipes = database.getAll()
+    
+    fun updateRecipeView(index: Int) {
+        
+    }
 
     /** Define a main thread funciton that will update the UI **/
     fun addMenuItem() {
@@ -80,11 +87,12 @@ class RecipeListViewModel(
       */
     fun parseCategoryList() {
         var buildStringList: ArrayList<String> = ArrayList()
-        buildStringList.add("All Recipes")
+
+        buildStringList.add(resources.getString(R.string.spinner_category_all))
         refreshFavCount()
         Timber.i("Favorites: %s", favorites_count.toString())
         if (favorites_count> 0) {
-            buildStringList.add("Favorites")
+            buildStringList.add(resources.getString(R.string.spinner_category_favorite))
         }
         category_list.value?.iterator()?.forEach {
             buildStringList.add(it)
@@ -136,6 +144,7 @@ class RecipeListViewModel(
         }
     }
 
+    /** Run the recipe web scraper **/
     private fun setupRecipeRefreshWork() {
         val recipeRefresh = OneTimeWorkRequestBuilder<WebScraper>().build()
         WorkManager.getInstance(getApplication()).enqueue(recipeRefresh)

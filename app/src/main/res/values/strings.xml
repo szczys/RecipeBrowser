@@ -8,4 +8,6 @@
     <string name="settings">Settings</string>
     <string name="share_text">This is recipe#%1$d</string>
     <string name="category_uncategorized">Uncategorized</string>
+    <string name="spinner_category_all">All Recipes</string>
+    <string name="spinner_category_favorite">Favorites</string>
 </resources>
