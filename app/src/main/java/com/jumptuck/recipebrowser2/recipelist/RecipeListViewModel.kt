@@ -60,6 +60,37 @@ class RecipeListViewModel(
     }
 
     val category_list = database.getCategoryList()
+    val category_list_with_headers = MutableLiveData<ArrayList<String>>()
+    var favorites_count = 0
+
+    fun refreshFavCount() {
+        uiScope.launch {
+            getFavCount()
+        }
+    }
+    private suspend fun getFavCount() {
+        withContext(Dispatchers.IO) {
+            favorites_count = database.favoriteCount()
+        }
+    }
+
+    /**
+     * Add custom headers to spinner
+     * Clicks lookup by string so this can be caught in the listener
+      */
+    fun parseCategoryList() {
+        var buildStringList: ArrayList<String> = ArrayList()
+        buildStringList.add("All Recipes")
+        refreshFavCount()
+        Timber.i("Favorites: %s", favorites_count.toString())
+        if (favorites_count> 0) {
+            buildStringList.add("Favorites")
+        }
+        category_list.value?.iterator()?.forEach {
+            buildStringList.add(it)
+        }
+        category_list_with_headers.value = buildStringList
+    }
 
     /** Clear button clicked to remove all rows from db **/
     private suspend fun onClear() {
@@ -113,6 +144,7 @@ class RecipeListViewModel(
     init {
         Timber.i("RecipeViewModel created")
         resetCounter()
+        refreshFavCount()
         getHTML()
     }
 }
