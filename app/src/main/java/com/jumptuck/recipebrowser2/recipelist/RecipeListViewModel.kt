@@ -157,22 +157,17 @@ class RecipeListViewModel(
     val navigateToSingleRecipe
         get() = _navigateToSingleRecipe
 
-    fun getHTML() {
+    fun scrapeRecipes() {
         uiScope.launch {
-            setupRecipeRefreshWork()
-        }
-    }
+            Timber.i("Scraping for recipes...")
+            repository.scrapeRecipes()
 
-    /** Run the recipe web scraper **/
-    private fun setupRecipeRefreshWork() {
-        val recipeRefresh = OneTimeWorkRequestBuilder<WebScraper>().build()
-        WorkManager.getInstance(getApplication()).enqueue(recipeRefresh)
+        }
     }
 
     init {
         Timber.i("RecipeViewModel created")
         resetCounter()
         refreshFavCount()
-        getHTML()
     }
 }

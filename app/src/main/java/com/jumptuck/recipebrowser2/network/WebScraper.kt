@@ -1,5 +1,6 @@
 package com.jumptuck.recipebrowser2.network
 
+import android.app.Application
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -15,17 +16,8 @@ import retrofit2.HttpException
 import timber.log.Timber
 import java.util.ArrayList
 
-class WebScraper(appContext: Context, params: WorkerParameters) :
-    CoroutineWorker(appContext, params) {
-    private var host: String
-
-    companion object {
-        const val WORK_NAME = "DownloadRecipes"
-    }
-
-    init {
-        host = "http://192.168.1.105/recipes/"
-    }
+class WebScraper(database: RecipeDatabase) {
+    private val databaseDao = database.recipeDatabaseDao
 
     private suspend fun getHTML(getUrl: String): String {
         var getPropertiesDeferred =
@@ -39,16 +31,7 @@ class WebScraper(appContext: Context, params: WorkerParameters) :
         }
     }
 
-    override suspend fun doWork(): Result {
-        return try {
-            crawlDirectory(host)
-            Result.success()
-        } catch (exception: HttpException) {
-            Result.retry()
-        }
-    }
-
-    private suspend fun crawlDirectory(startingUrl: String) {
+    suspend fun crawlDirectory(startingUrl: String) {
 
         val hostname = startingUrl
         //val username = params[1]
@@ -87,10 +70,9 @@ class WebScraper(appContext: Context, params: WorkerParameters) :
         }
 
         //Post-process the recipes
-        val databaseDao = RecipeDatabase.getInstance(applicationContext).recipeDatabaseDao
         var recipeIterator = recipe_objects.iterator()
         recipeIterator.forEach { current_recipe ->
-            //TODO: Check for existing
+            //Check for existing
             var existingRecipe = databaseDao.findRecipeByTitle(current_recipe.title)
             if (existingRecipe?.date == current_recipe.date) {
                 Timber.i("Recipe date same as already in db: %s", current_recipe.title)
@@ -104,8 +86,7 @@ class WebScraper(appContext: Context, params: WorkerParameters) :
                 current_recipe.body = getHTML(curUrl).toString()
 
                 if (current_recipe.category == "") {
-                    current_recipe.category =
-                        applicationContext.getString(R.string.category_uncategorized)
+                    current_recipe.category = "Uncategorized"
                 } else if (current_recipe.category.last() == '/') {
                     current_recipe.category = current_recipe.category.dropLast(1)
                 }
