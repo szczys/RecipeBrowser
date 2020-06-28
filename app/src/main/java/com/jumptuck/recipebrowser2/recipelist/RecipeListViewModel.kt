@@ -32,10 +32,12 @@ class RecipeListViewModel(
 
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    var allRecipes = database.getAll()
+    val allRecipes = database.getAll()
     
     fun updateRecipeView(index: Int) {
+        /*
         var cat = category_list_with_headers.value?.get(index)
+        Timber.i("Obserservers: %s", allRecipes.hasActiveObservers().toString())
 
         if ((cat == null) || (index == 0)) {
             allRecipes = database.getAll()
@@ -46,6 +48,8 @@ class RecipeListViewModel(
         else {
             allRecipes = database.getRecipesFromCategory(cat)
         }
+        Timber.i("Obserservers: %s", allRecipes.hasActiveObservers().toString())
+         */
     }
 
     /** Define a main thread funciton that will update the UI **/
