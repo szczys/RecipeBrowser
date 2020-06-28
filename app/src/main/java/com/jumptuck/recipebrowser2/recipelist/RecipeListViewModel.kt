@@ -27,7 +27,7 @@ class RecipeListViewModel(
     private var fakeItemCounter: Int = 0
 
     val allRecipes = databaseDao.getAll()
-    val recipesToDisplay = repository.recipesToDisplay
+    val recipesToDisplay = repository.recipesToDisplay()
 
     //Coroutines setup
     private var viewModelJob = Job()
