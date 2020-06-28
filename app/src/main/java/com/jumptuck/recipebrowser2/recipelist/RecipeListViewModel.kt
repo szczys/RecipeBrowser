@@ -62,6 +62,7 @@ class RecipeListViewModel(
         uiScope.launch {
             /** Call a suspend function to query database on a different thread **/
             insertItem()
+            repository.setStatus(1)
         }
     }
 
