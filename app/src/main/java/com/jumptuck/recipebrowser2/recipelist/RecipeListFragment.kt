@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeDatabase
+import com.jumptuck.recipebrowser2.database.RecipeRepository
 import com.jumptuck.recipebrowser2.databinding.FragmentRecipeListBinding
 import timber.log.Timber
 
@@ -61,7 +62,7 @@ class RecipeListFragment : Fragment() {
             }
         })
 
-        recipeListViewModel.allRecipes.observe(viewLifecycleOwner, Observer {
+        recipeListViewModel.recipesToDisplay.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it)
             }

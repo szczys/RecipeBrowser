@@ -87,11 +87,11 @@ class WebScraper(appContext: Context, params: WorkerParameters) :
         }
 
         //Post-process the recipes
-        val database = RecipeDatabase.getInstance(applicationContext).recipeDatabaseDao
+        val databaseDao = RecipeDatabase.getInstance(applicationContext).recipeDatabaseDao
         var recipeIterator = recipe_objects.iterator()
         recipeIterator.forEach { current_recipe ->
             //TODO: Check for existing
-            var existingRecipe = database.findRecipeByTitle(current_recipe.title)
+            var existingRecipe = databaseDao.findRecipeByTitle(current_recipe.title)
             if (existingRecipe?.date == current_recipe.date) {
                 Timber.i("Recipe date same as already in db: %s", current_recipe.title)
             }
@@ -110,11 +110,11 @@ class WebScraper(appContext: Context, params: WorkerParameters) :
                     current_recipe.category = current_recipe.category.dropLast(1)
                 }
                 if (existingRecipe == null) {
-                    database.insert(current_recipe)
+                    databaseDao.insert(current_recipe)
                 }
                 else {
                     current_recipe.recipeID = existingRecipe.recipeID
-                    database.update(current_recipe)
+                    databaseDao.update(current_recipe)
                 }
             }
         }

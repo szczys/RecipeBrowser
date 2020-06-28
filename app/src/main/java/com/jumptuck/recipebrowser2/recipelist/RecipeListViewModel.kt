@@ -9,18 +9,25 @@ import androidx.work.WorkManager
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.RecipeBrowserApplication
 import com.jumptuck.recipebrowser2.database.Recipe
+import com.jumptuck.recipebrowser2.database.RecipeDatabase
 import com.jumptuck.recipebrowser2.database.RecipeDatabaseDao
+import com.jumptuck.recipebrowser2.database.RecipeRepository
 import com.jumptuck.recipebrowser2.network.WebScraper
 import kotlinx.coroutines.*
 import timber.log.Timber
 
 class RecipeListViewModel(
-    val database: RecipeDatabaseDao,
+    val databaseDao: RecipeDatabaseDao,
     application: Application
 ) : AndroidViewModel(application) {
 
+    private val database = RecipeDatabase.getInstance(application)
+    private val repository = RecipeRepository(database)
     private var resources = getApplication<RecipeBrowserApplication>().resources
     private var fakeItemCounter: Int = 0
+
+    val allRecipes = databaseDao.getAll()
+    val recipesToDisplay = repository.recipesToDisplay
 
     //Coroutines setup
     private var viewModelJob = Job()
@@ -31,8 +38,6 @@ class RecipeListViewModel(
     }
 
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-
-    val allRecipes = database.getAll()
     
     fun updateRecipeView(index: Int) {
         /*
@@ -69,7 +74,7 @@ class RecipeListViewModel(
             newRecipe.body =
                 "Recipe Body for Number: " + (fakeItemCounter++).toString().padStart(2, '0')
             Timber.i("New menu item: %s", newRecipe.title)
-            var newID = database.insert(newRecipe)
+            var newID = databaseDao.insert(newRecipe)
             Timber.i("InsertID: %s", newID)
         }
     }
@@ -80,7 +85,7 @@ class RecipeListViewModel(
         }
     }
 
-    val category_list = database.getCategoryList()
+    val category_list = databaseDao.getCategoryList()
     val category_list_with_headers = MutableLiveData<ArrayList<String>>()
     var favorites_count = 0
 
@@ -91,7 +96,7 @@ class RecipeListViewModel(
     }
     private suspend fun getFavCount() {
         withContext(Dispatchers.IO) {
-            favorites_count = database.favoriteCount()
+            favorites_count = databaseDao.favoriteCount()
         }
     }
 
@@ -117,7 +122,7 @@ class RecipeListViewModel(
     /** Clear button clicked to remove all rows from db **/
     private suspend fun onClear() {
         withContext(Dispatchers.IO) {
-            database.deleteAllRecipes()
+            databaseDao.deleteAllRecipes()
         }
         resetCounter()
     }
@@ -130,7 +135,7 @@ class RecipeListViewModel(
 
     private suspend fun resetCounterFromDb() {
         withContext(Dispatchers.IO) {
-            fakeItemCounter = database.recipeCount() + 1
+            fakeItemCounter = databaseDao.recipeCount() + 1
         }
     }
 
