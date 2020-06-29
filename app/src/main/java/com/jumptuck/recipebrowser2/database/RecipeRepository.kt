@@ -7,42 +7,44 @@ import androidx.lifecycle.Observer
 import com.jumptuck.recipebrowser2.network.WebScraper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class RecipeRepository(private val database: RecipeDatabase) {
 
     //Livedata sources for recipe list
     val allRecipes = database.recipeDatabaseDao.getAll()
-    val status = MutableLiveData<Int>()
+    val status = MutableLiveData<String>()
     val favorites = database.recipeDatabaseDao.getFavorites()
 
     init {
-        status.value = 0
+        status.value = ""
     }
 
-    fun setStatus(value: Int) {
+    fun setStatus(value: String) {
         status.value = value
     }
 
     fun recipesToDisplay(): LiveData<List<Recipe>> {
         val recipeListMediator = MediatorLiveData<List<Recipe>>()
-        recipeListMediator.addSource(status, object : Observer<Int> {
-            override fun onChanged(t: Int?) {
+        recipeListMediator.addSource(status, object : Observer<String> {
+            override fun onChanged(t: String?) {
                 recipeListMediator.removeSource(allRecipes)
                 recipeListMediator.removeSource(favorites)
                 when (t) {
-                    0 -> {
+                    "All Recipes" -> {
                         recipeListMediator.addSource(allRecipes) { value ->
                             recipeListMediator.value = value
                         }
                     }
-                    1 -> {
+                    "Favorites" -> {
                         recipeListMediator.addSource(favorites) { value ->
                             recipeListMediator.value = value
                         }
                     }
                     else -> {
+                        Timber.i("LookupString: %s", t)
                         recipeListMediator.addSource(
-                            database.recipeDatabaseDao.getRecipesFromCategory("Soup")
+                            database.recipeDatabaseDao.getRecipesFromCategory(t!!)
                         ) { value ->
                             recipeListMediator.value = value
                         }
@@ -83,7 +85,7 @@ class RecipeRepository(private val database: RecipeDatabase) {
         var buildStringList: ArrayList<String> = ArrayList()
         buildStringList.add("All Recipes")
 
-        if (favorite_count.value!! > 0) {
+        if ((favorite_count.value != null) && (favorite_count.value!! > 0)) {
             buildStringList.add("Favorites")
         }
         category_list.value?.iterator()?.forEach {

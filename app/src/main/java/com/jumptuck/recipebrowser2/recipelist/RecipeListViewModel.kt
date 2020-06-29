@@ -35,7 +35,7 @@ class RecipeListViewModel(
 
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
     
-    fun updateRecipeView(index: Int) {
+    fun updateRecipeView(selectedCategory: String) {
         /*
         var cat = category_list_with_headers.value?.get(index)
         Timber.i("Obserservers: %s", allRecipes.hasActiveObservers().toString())
@@ -51,7 +51,7 @@ class RecipeListViewModel(
         }
         Timber.i("Obserservers: %s", allRecipes.hasActiveObservers().toString())
          */
-        repository.setStatus(index)
+        repository.setStatus(selectedCategory)
     }
 
     /** Define a main thread funciton that will update the UI **/
@@ -59,7 +59,6 @@ class RecipeListViewModel(
         uiScope.launch {
             /** Call a suspend function to query database on a different thread **/
             insertItem()
-            repository.setStatus(repository.status.value!!.plus(1))
         }
     }
 
