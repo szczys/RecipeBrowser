@@ -13,10 +13,6 @@ class RecipeRepository(private val database: RecipeDatabase) {
     val allRecipes = database.recipeDatabaseDao.getAll()
     val status = MutableLiveData<Int>()
     val favorites = database.recipeDatabaseDao.getFavorites()
-    fun listFromOneCategory(categoryName: String): LiveData<List<Recipe>> {
-        return database.recipeDatabaseDao.getRecipesFromCategory(categoryName)
-    }
-
 
     init {
         status.value = 0
@@ -30,24 +26,23 @@ class RecipeRepository(private val database: RecipeDatabase) {
         val recipeListMediator = MediatorLiveData<List<Recipe>>()
         recipeListMediator.addSource(status, object : Observer<Int> {
             override fun onChanged(t: Int?) {
+                recipeListMediator.removeSource(allRecipes)
+                recipeListMediator.removeSource(favorites)
                 when (t) {
-
                     0 -> {
-                        recipeListMediator.removeSource(favorites)
                         recipeListMediator.addSource(allRecipes) { value ->
                             recipeListMediator.value = value
                         }
                     }
                     1 -> {
-                        recipeListMediator.removeSource(allRecipes)
                         recipeListMediator.addSource(favorites) { value ->
                             recipeListMediator.value = value
                         }
                     }
                     else -> {
-                        recipeListMediator.removeSource(allRecipes)
-                        recipeListMediator.removeSource(favorites)
-                        recipeListMediator.addSource(listFromOneCategory("Soup")) { value ->
+                        recipeListMediator.addSource(
+                            database.recipeDatabaseDao.getRecipesFromCategory("Soup")
+                        ) { value ->
                             recipeListMediator.value = value
                         }
                     }

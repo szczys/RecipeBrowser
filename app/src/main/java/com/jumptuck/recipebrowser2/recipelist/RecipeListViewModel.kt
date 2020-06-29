@@ -55,6 +55,7 @@ class RecipeListViewModel(
         }
         Timber.i("Obserservers: %s", allRecipes.hasActiveObservers().toString())
          */
+        repository.setStatus(index)
     }
 
     /** Define a main thread funciton that will update the UI **/
