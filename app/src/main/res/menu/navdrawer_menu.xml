@@ -6,5 +6,8 @@
         android:title="@string/settings" />
     <item
         android:id="@+id/singleRecipeFragment"
-        android:title='"Single com.jumptuck.recipebrowser2.Recipe"' />
+        android:title="Single Recipe" />
+    <item
+        android:id="@+id/startScrape"
+        android:title="Scrape from Web" />
 </menu>

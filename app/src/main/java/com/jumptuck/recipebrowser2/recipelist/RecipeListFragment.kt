@@ -3,9 +3,11 @@ package com.jumptuck.recipebrowser2.recipelist
 import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -17,13 +19,15 @@ import com.jumptuck.recipebrowser2.databinding.FragmentRecipeListBinding
 import timber.log.Timber
 
 class RecipeListFragment : Fragment() {
-
+    lateinit var recipeListViewModel: RecipeListViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentRecipeListBinding = DataBindingUtil.inflate(inflater,
-            R.layout.fragment_recipe_list, container, false)
+        val binding: FragmentRecipeListBinding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_recipe_list, container, false
+        )
 
         val application = requireNotNull(this.activity).application
 
@@ -31,12 +35,13 @@ class RecipeListFragment : Fragment() {
 
         val viewModelFactory = RecipeListViewModelFactory(datasource, application)
 
-        var recipeListViewModel = ViewModelProvider(this, viewModelFactory).get(RecipeListViewModel::class.java)
+        recipeListViewModel =
+            ViewModelProvider(this, viewModelFactory).get(RecipeListViewModel::class.java)
 
         binding.recipeListViewModel = recipeListViewModel
 
-        val adapter = RecipeTitleAdapter(RecipeTitleListener {
-            recipeID ->  recipeListViewModel.onRecipeClicked(recipeID)
+        val adapter = RecipeTitleAdapter(RecipeTitleListener { recipeID ->
+            recipeListViewModel.onRecipeClicked(recipeID)
         })
         binding.recipeList.adapter = adapter
 
@@ -52,12 +57,13 @@ class RecipeListFragment : Fragment() {
 
         }
 
-        recipeListViewModel.navigateToSingleRecipe.observe(viewLifecycleOwner, Observer {recipe ->
+        recipeListViewModel.navigateToSingleRecipe.observe(viewLifecycleOwner, Observer { recipe ->
             recipe?.let {
 
                 this.findNavController().navigate(
                     RecipeListFragmentDirections
-                        .actionRecipeListToSingleRecipeFragment(recipe))
+                        .actionRecipeListToSingleRecipeFragment(recipe)
+                )
                 recipeListViewModel.onRecipeClickedNavigated()
             }
         })
@@ -88,7 +94,6 @@ class RecipeListFragment : Fragment() {
         setHasOptionsMenu(true)
 
 
-
         /*
         listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, id ->
             Timber.d("onItemClickListener called: %s", adapterView.getItemAtPosition(position) as String)
@@ -108,6 +113,12 @@ class RecipeListFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Timber.i("Menuitem: %s", item.toString())
+        when (item.itemId) {
+            R.id.refreshRecipes -> {
+                recipeListViewModel.scrapeRecipes()
+            }
+        }
         return NavigationUI.onNavDestinationSelected(item, requireView().findNavController())
                 || super.onOptionsItemSelected(item)
     }
