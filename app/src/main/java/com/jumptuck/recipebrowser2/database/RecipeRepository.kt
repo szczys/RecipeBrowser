@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class RecipeRepository(private val database: RecipeDatabase) {
+
     //Livedata sources for recipe list
     val allRecipes = database.recipeDatabaseDao.getAll()
     val status = MutableLiveData<Int>()
@@ -57,5 +58,37 @@ class RecipeRepository(private val database: RecipeDatabase) {
             val scraper = WebScraper(database)
             scraper.crawlDirectory("http://192.168.1.105/recipes/")
         }
+    }
+
+    val category_list = database.recipeDatabaseDao.getCategoryList()
+    var favorite_count = database.recipeDatabaseDao.favoriteCount()
+
+    fun categoryListWithHeaders(): LiveData<List<String>> {
+        val categoryListMediator = MediatorLiveData<List<String>>()
+        categoryListMediator.addSource(favorite_count, object : Observer<Int> {
+            override fun onChanged(t: Int?) {
+                categoryListMediator.value = updateCategoryList()
+            }
+        })
+        categoryListMediator.addSource(category_list, object : Observer<List<String>> {
+            override fun onChanged(t: List<String>?) {
+                categoryListMediator.value = updateCategoryList()
+            }
+        })
+        return categoryListMediator
+    }
+
+    fun updateCategoryList(): List<String> {
+
+        var buildStringList: ArrayList<String> = ArrayList()
+        buildStringList.add("All Recipes")
+
+        if (favorite_count.value!! > 0) {
+            buildStringList.add("Favorites")
+        }
+        category_list.value?.iterator()?.forEach {
+            buildStringList.add(it)
+        }
+        return buildStringList
     }
 }

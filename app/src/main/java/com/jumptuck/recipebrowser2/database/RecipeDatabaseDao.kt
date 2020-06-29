@@ -21,7 +21,7 @@ interface RecipeDatabaseDao {
     fun recipeCount(): Int
 
     @Query("SELECT count() FROM recipe_table WHERE fav=1")
-    fun favoriteCount(): Int
+    fun favoriteCount(): LiveData<Int>
 
     @Query("SELECT EXISTS(SELECT * FROM recipe_table WHERE title = :title)")
     fun isIn(title: String): Boolean

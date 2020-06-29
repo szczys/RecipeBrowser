@@ -4,15 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.RecipeBrowserApplication
 import com.jumptuck.recipebrowser2.database.Recipe
 import com.jumptuck.recipebrowser2.database.RecipeDatabase
 import com.jumptuck.recipebrowser2.database.RecipeDatabaseDao
 import com.jumptuck.recipebrowser2.database.RecipeRepository
-import com.jumptuck.recipebrowser2.network.WebScraper
 import kotlinx.coroutines.*
 import timber.log.Timber
 
@@ -87,39 +83,7 @@ class RecipeListViewModel(
         }
     }
 
-    val category_list = databaseDao.getCategoryList()
-    val category_list_with_headers = MutableLiveData<ArrayList<String>>()
-    var favorites_count = 0
-
-    fun refreshFavCount() {
-        uiScope.launch {
-            getFavCount()
-        }
-    }
-    private suspend fun getFavCount() {
-        withContext(Dispatchers.IO) {
-            favorites_count = databaseDao.favoriteCount()
-        }
-    }
-
-    /**
-     * Add custom headers to spinner
-     * Clicks lookup by string so this can be caught in the listener
-      */
-    fun parseCategoryList() {
-        var buildStringList: ArrayList<String> = ArrayList()
-
-        buildStringList.add(resources.getString(R.string.spinner_category_all))
-        refreshFavCount()
-        Timber.i("Favorites: %s", favorites_count.toString())
-        if (favorites_count> 0) {
-            buildStringList.add(resources.getString(R.string.spinner_category_favorite))
-        }
-        category_list.value?.iterator()?.forEach {
-            buildStringList.add(it)
-        }
-        category_list_with_headers.value = buildStringList
-    }
+    val category_list_with_headers = repository.categoryListWithHeaders()
 
     /** Clear button clicked to remove all rows from db **/
     private suspend fun onClear() {
@@ -170,6 +134,6 @@ class RecipeListViewModel(
     init {
         Timber.i("RecipeViewModel created")
         resetCounter()
-        refreshFavCount()
+        //refreshFavCount()
     }
 }

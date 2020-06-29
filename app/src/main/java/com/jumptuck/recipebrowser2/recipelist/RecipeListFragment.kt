@@ -74,12 +74,6 @@ class RecipeListFragment : Fragment() {
             }
         })
 
-        recipeListViewModel.category_list.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                recipeListViewModel.parseCategoryList()
-            }
-        })
-
         binding.setLifecycleOwner(this)
 
 //        binding.button2.setOnClickListener(
