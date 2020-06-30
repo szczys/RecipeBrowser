@@ -28,11 +28,6 @@ class RecipeListFragment : Fragment() {
             R.layout.fragment_recipe_list, container, false
         )
 
-        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
-        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayShowCustomEnabled(true)
-        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
-        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setCustomView(R.layout.custom_action_bar_layout)
-
         val application = requireNotNull(this.activity).application
 
         val datasource = RecipeDatabase.getInstance(application).recipeDatabaseDao
@@ -116,9 +111,19 @@ class RecipeListFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
+        /** Restore default ActionBar view for next frament **/
+        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE)
         (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayShowCustomEnabled(false)
         (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayShowTitleEnabled(true)
-        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE)
+        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        /** Setup custom ActionBar view for this fragment **/
+        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
+        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setCustomView(R.layout.custom_action_bar_layout)
+        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayShowCustomEnabled(true)
         (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
     }
 
