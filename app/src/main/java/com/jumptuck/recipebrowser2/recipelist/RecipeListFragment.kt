@@ -29,8 +29,9 @@ class RecipeListFragment : Fragment() {
             R.layout.fragment_recipe_list, container, false
         )
 
-        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayShowCustomEnabled(true);
+        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
+        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayShowCustomEnabled(true)
+        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
         (activity as AppCompatActivity?)!!.getSupportActionBar()?.setCustomView(R.layout.custom_action_bar_layout)
 
         val application = requireNotNull(this.activity).application
