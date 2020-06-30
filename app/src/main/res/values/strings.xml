@@ -10,4 +10,10 @@
     <string name="category_uncategorized">Uncategorized</string>
     <string name="spinner_category_all">All Recipes</string>
     <string name="spinner_category_favorite">Favorites</string>
+
+    <string-array name="Weight">
+        <item>Kg</item>
+        <item>Gram</item>
+        <item>Tons</item>
+    </string-array>
 </resources>

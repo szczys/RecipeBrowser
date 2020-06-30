@@ -3,18 +3,18 @@ package com.jumptuck.recipebrowser2.recipelist
 import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
-import android.widget.Toast
-import androidx.fragment.app.Fragment
+import android.widget.Toolbar
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeDatabase
-import com.jumptuck.recipebrowser2.database.RecipeRepository
 import com.jumptuck.recipebrowser2.databinding.FragmentRecipeListBinding
 import timber.log.Timber
 
@@ -28,6 +28,10 @@ class RecipeListFragment : Fragment() {
             inflater,
             R.layout.fragment_recipe_list, container, false
         )
+
+        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayShowCustomEnabled(true);
+        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setCustomView(R.layout.custom_action_bar_layout)
 
         val application = requireNotNull(this.activity).application
 
