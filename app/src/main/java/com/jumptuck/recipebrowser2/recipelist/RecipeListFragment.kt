@@ -118,6 +118,8 @@ class RecipeListFragment : Fragment() {
         super.onStop()
         (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayShowCustomEnabled(false)
         (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayShowTitleEnabled(true)
+        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE)
+        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
