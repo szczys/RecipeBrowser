@@ -3,7 +3,6 @@ package com.jumptuck.recipebrowser2.recipelist
 import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
-import android.widget.Toolbar
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -113,6 +112,12 @@ class RecipeListFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.overflow_menu, menu)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayShowCustomEnabled(false)
+        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayShowTitleEnabled(true)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
