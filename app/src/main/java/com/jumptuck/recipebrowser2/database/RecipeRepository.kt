@@ -1,20 +1,23 @@
 package com.jumptuck.recipebrowser2.database
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.network.WebScraper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-class RecipeRepository(private val database: RecipeDatabase) {
+class RecipeRepository(private val database: RecipeDatabase, context: Context) {
 
     //Livedata sources for recipe list
     val allRecipes = database.recipeDatabaseDao.getAll()
     val status = MutableLiveData<String>()
     val favorites = database.recipeDatabaseDao.getFavorites()
+    val resources = context.resources
 
     init {
         status.value = ""
@@ -31,12 +34,12 @@ class RecipeRepository(private val database: RecipeDatabase) {
                 recipeListMediator.removeSource(allRecipes)
                 recipeListMediator.removeSource(favorites)
                 when (t) {
-                    "All Recipes" -> {
+                     resources.getString(R.string.spinner_category_all) -> {
                         recipeListMediator.addSource(allRecipes) { value ->
                             recipeListMediator.value = value
                         }
                     }
-                    "Favorites" -> {
+                    resources.getString(R.string.spinner_category_favorite) -> {
                         recipeListMediator.addSource(favorites) { value ->
                             recipeListMediator.value = value
                         }

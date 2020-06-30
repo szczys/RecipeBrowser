@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.jumptuck.recipebrowser2.RecipeBrowserApplication
 import com.jumptuck.recipebrowser2.database.Recipe
 import com.jumptuck.recipebrowser2.database.RecipeDatabase
 import com.jumptuck.recipebrowser2.database.RecipeDatabaseDao
@@ -18,8 +17,7 @@ class RecipeListViewModel(
 ) : AndroidViewModel(application) {
 
     private val database = RecipeDatabase.getInstance(application)
-    private val repository = RecipeRepository(database)
-    private var resources = getApplication<RecipeBrowserApplication>().resources
+    private val repository = RecipeRepository(database, application)
     private var fakeItemCounter: Int = 0
 
     val allRecipes = databaseDao.getAll()
