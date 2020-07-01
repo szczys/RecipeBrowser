@@ -19,7 +19,8 @@
             android:id="@+id/spinner2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:spinnerMode="dropdown"
+            android:backgroundTint="@color/cardview_light_background"
             android:entries="@{cat_list.cat_list}" />
     </LinearLayout>
 </layout>

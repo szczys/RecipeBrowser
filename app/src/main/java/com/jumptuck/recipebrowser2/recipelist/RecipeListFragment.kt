@@ -111,6 +111,17 @@ class RecipeListFragment : Fragment() {
         var spinner2 = sView.spinner2
         Timber.i("Spinner2: %s", spinner2.toString())
 
+        spinner2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                Timber.i("Spinner 2 selection: %d", p2)
+            }
+
+        }
+
         var spinnerArrayAdapter = ArrayAdapter(application, R.layout.spinner_item, cat_list)
         spinner2.adapter = spinnerArrayAdapter
         Timber.i("Spinner2 databinding test: %s", spinner2.getItemAtPosition(1))
