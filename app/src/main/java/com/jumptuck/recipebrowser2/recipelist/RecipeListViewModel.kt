@@ -2,8 +2,9 @@ package com.jumptuck.recipebrowser2.recipelist
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.jumptuck.recipebrowser2.R
+import com.jumptuck.recipebrowser2.RecipeBrowserApplication
 import com.jumptuck.recipebrowser2.database.Recipe
 import com.jumptuck.recipebrowser2.database.RecipeDatabase
 import com.jumptuck.recipebrowser2.database.RecipeDatabaseDao
@@ -34,28 +35,11 @@ class RecipeListViewModel(
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
     
     fun updateRecipeView(selectedCategory: String) {
-        /*
-        var cat = category_list_with_headers.value?.get(index)
-        Timber.i("Obserservers: %s", allRecipes.hasActiveObservers().toString())
-
-        if ((cat == null) || (index == 0)) {
-            allRecipes = database.getAll()
-        }
-        else if (cat == resources.getString(R.string.spinner_category_favorite)) {
-            allRecipes = database.getFavorites()
-        }
-        else {
-            allRecipes = database.getRecipesFromCategory(cat)
-        }
-        Timber.i("Obserservers: %s", allRecipes.hasActiveObservers().toString())
-         */
         repository.setStatus(selectedCategory)
     }
 
-    /** Define a main thread funciton that will update the UI **/
     fun addMenuItem() {
         uiScope.launch {
-            /** Call a suspend function to query database on a different thread **/
             insertItem()
         }
     }
@@ -68,6 +52,7 @@ class RecipeListViewModel(
             newRecipe.title = "Recipe Number " + fakeItemCounter.toString().padStart(2, '0')
             newRecipe.body =
                 "Recipe Body for Number: " + (fakeItemCounter++).toString().padStart(2, '0')
+            newRecipe.category = getApplication<RecipeBrowserApplication>().resources.getString(R.string.category_uncategorized)
             Timber.i("New menu item: %s", newRecipe.title)
             var newID = databaseDao.insert(newRecipe)
             Timber.i("InsertID: %s", newID)
@@ -111,11 +96,6 @@ class RecipeListViewModel(
         _navigateToSingleRecipe.value = null
     }
 
-    //Protected liveData
-    private val _titleArray = MutableLiveData<ArrayList<String>>()
-    val titleArray: LiveData<ArrayList<String>>
-        get() = _titleArray
-
     private val _navigateToSingleRecipe = MutableLiveData<Long>()
     val navigateToSingleRecipe
         get() = _navigateToSingleRecipe
@@ -131,6 +111,5 @@ class RecipeListViewModel(
     init {
         Timber.i("RecipeViewModel created")
         resetCounter()
-        //refreshFavCount()
     }
 }

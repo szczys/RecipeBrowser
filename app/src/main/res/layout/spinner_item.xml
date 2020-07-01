@@ -3,6 +3,5 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/spinner_entry"
     style="@android:style/TextAppearance.Material.Widget.ActionBar.Title.Inverse"
-
     android:layout_height="wrap_content"
     android:layout_width="match_parent"/>

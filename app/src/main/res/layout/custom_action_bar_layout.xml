@@ -5,12 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.jumptuck.recipebrowser2.recipelist.RecipeListFragment">
 
-    <data>
-        <variable
-            name="cat_list"
-            type="com.jumptuck.recipebrowser2.recipelist.RecipeListFragment" />
-    </data>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -20,8 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:spinnerMode="dropdown"
-            android:backgroundTint="@color/cardview_light_background"
-            android:entries="@{cat_list.cat_list}" />
+            android:backgroundTint="@color/cardview_light_background" />
     </LinearLayout>
 </layout>
 
