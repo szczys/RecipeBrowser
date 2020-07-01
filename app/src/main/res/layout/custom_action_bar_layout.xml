@@ -7,8 +7,8 @@
 
     <data>
         <variable
-            name="recipeListViewModel"
-            type="com.jumptuck.recipebrowser2.recipelist.RecipeListViewModel" />
+            name="cat_list"
+            type="com.jumptuck.recipebrowser2.recipelist.RecipeListFragment" />
     </data>
 
     <LinearLayout
@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:entries="@array/Weight" />
+            android:entries="@{cat_list.cat_list}" />
     </LinearLayout>
 </layout>
 

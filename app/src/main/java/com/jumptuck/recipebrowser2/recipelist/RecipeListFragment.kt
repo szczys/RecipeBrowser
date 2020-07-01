@@ -22,10 +22,13 @@ import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeDatabase
 import com.jumptuck.recipebrowser2.databinding.CustomActionBarLayoutBinding
 import com.jumptuck.recipebrowser2.databinding.FragmentRecipeListBinding
+import kotlinx.android.synthetic.main.custom_action_bar_layout.view.*
 import timber.log.Timber
 
 class RecipeListFragment : Fragment() {
     lateinit var recipeListViewModel: RecipeListViewModel
+    var cat_list: ArrayList<String>
+    private lateinit var sView: View
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,7 +58,7 @@ class RecipeListFragment : Fragment() {
         })
         binding.recipeList.adapter = adapter
 
-        sbinding.recipeListViewModel = recipeListViewModel
+        //sbinding.cat_list = cat_list
 
         binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -91,6 +94,7 @@ class RecipeListFragment : Fragment() {
         })
 
         binding.setLifecycleOwner(this)
+        sbinding.setLifecycleOwner(this)
 
 //        binding.button2.setOnClickListener(
 //            //Fixme: this should send the ID number from the recipe database as an argument; For testing we simply send 1337
@@ -103,13 +107,18 @@ class RecipeListFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        var sView = layoutInflater.inflate(R.layout.custom_action_bar_layout, null)
-        var spinner2 = sbinding.spinner2
+        sView = layoutInflater.inflate(R.layout.custom_action_bar_layout, null)
+        var spinner2 = sView.spinner2
         Timber.i("Spinner2: %s", spinner2.toString())
-        var cat_list = arrayOf("One","Two","Three")
+
         var spinnerArrayAdapter = ArrayAdapter(application, R.layout.spinner_item, cat_list)
         spinner2.adapter = spinnerArrayAdapter
         Timber.i("Spinner2 databinding test: %s", spinner2.getItemAtPosition(1))
+
+//        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
+//        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setCustomView(sView)
+//        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayShowCustomEnabled(true)
+//        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
         /*
         listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, id ->
             Timber.d("onItemClickListener called: %s", adapterView.getItemAtPosition(position) as String)
@@ -123,9 +132,14 @@ class RecipeListFragment : Fragment() {
         return binding.root
     }
 
+    init {
+        cat_list = ArrayList()
+        cat_list.addAll(listOf("One","Two","Three"))
+    }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.overflow_menu, menu)
+
     }
 
     override fun onStop() {
@@ -142,7 +156,8 @@ class RecipeListFragment : Fragment() {
         super.onResume()
         /** Setup custom ActionBar view for this fragment **/
         (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
-        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setCustomView(R.layout.custom_action_bar_layout)
+//        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setCustomView(R.layout.custom_action_bar_layout)
+        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setCustomView(sView)
         (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayShowCustomEnabled(true)
         (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
     }
