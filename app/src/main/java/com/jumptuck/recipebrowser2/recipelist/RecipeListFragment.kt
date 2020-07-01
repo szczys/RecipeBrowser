@@ -126,6 +126,14 @@ class RecipeListFragment : Fragment() {
         spinner2.adapter = spinnerArrayAdapter
         Timber.i("Spinner2 databinding test: %s", spinner2.getItemAtPosition(1))
 
+        recipeListViewModel.category_list_with_headers.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                spinnerArrayAdapter.clear()
+                spinnerArrayAdapter.addAll(it)
+                spinnerArrayAdapter.notifyDataSetChanged()
+            }
+        })
+
 //        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
 //        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setCustomView(sView)
 //        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayShowCustomEnabled(true)
