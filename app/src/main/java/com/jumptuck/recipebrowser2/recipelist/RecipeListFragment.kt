@@ -81,6 +81,7 @@ class RecipeListFragment : Fragment() {
 
         // Adapter to load spinner with categories
         var spinnerArrayAdapter = ArrayAdapter(application, R.layout.spinner_item, cat_list)
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner2.adapter = spinnerArrayAdapter
         Timber.i("Spinner2 databinding test: %s", spinner2.getItemAtPosition(1))
 
