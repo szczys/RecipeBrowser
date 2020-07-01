@@ -15,6 +15,12 @@
             type="com.jumptuck.recipebrowser2.recipelist.RecipeTitleListener" />
     </data>
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        app:cardElevation="2dp">
+
     <TextView
         android:id="@+id/recipe_list_title"
         android:layout_width="fill_parent"
@@ -25,4 +31,5 @@
         app:recipeListTitle="@{recipe}"
         android:onClick="@{() -> clickListener.onClick(recipe)}"
         tools:text="List Item" />
+    </androidx.cardview.widget.CardView>
 </layout>
