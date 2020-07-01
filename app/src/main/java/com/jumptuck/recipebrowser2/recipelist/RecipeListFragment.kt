@@ -46,22 +46,6 @@ class RecipeListFragment : Fragment() {
         })
         binding.recipeList.adapter = adapter
 
-//        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onNothingSelected(p0: AdapterView<*>?) {
-//                TODO("Not yet implemented")
-//            }
-//
-//            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-//                Timber.d("Spinner Item Selected: %s", p2)
-//                if (p0 != null) {
-//                    var selectedText = p0.getItemAtPosition(p2).toString()
-//                    Timber.d("Spinner text: %s", selectedText)
-//                    recipeListViewModel.updateRecipeView(selectedText)
-//                }
-//            }
-//
-//        }
-
         recipeListViewModel.navigateToSingleRecipe.observe(viewLifecycleOwner, Observer { recipe ->
             recipe?.let {
 
@@ -78,23 +62,6 @@ class RecipeListFragment : Fragment() {
                 adapter.submitList(it)
             }
         })
-
-        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                Timber.d("Spinner Item Selected: %s", p2)
-                if (p0 != null) {
-                    var selectedText = p0.getItemAtPosition(p2).toString()
-                    Timber.d("Spinner text: %s", selectedText)
-                    recipeListViewModel.updateRecipeView(selectedText)
-                }
-            }
-
-        }
-
 
         binding.setLifecycleOwner(this)
 
@@ -133,7 +100,12 @@ class RecipeListFragment : Fragment() {
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                Timber.i("Spinner 2 selection: %d", p2)
+                Timber.d("Spinner Item Selected: %s", p2)
+                if (p0 != null) {
+                    var selectedText = p0.getItemAtPosition(p2).toString()
+                    Timber.d("Spinner text: %s", selectedText)
+                    recipeListViewModel.updateRecipeView(selectedText)
+                }
             }
 
         }
