@@ -20,10 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:entries="@{recipeListViewModel.category_list_with_headers}"
-            app:layout_constraintBottom_toTopOf="@+id/button"
-            app:layout_constraintEnd_toEndOf="@+id/recipe_list"
-            app:layout_constraintStart_toStartOf="@+id/recipe_list" />
+            android:entries="@array/Weight" />
     </LinearLayout>
 </layout>
 

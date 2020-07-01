@@ -1,10 +1,15 @@
 package com.jumptuck.recipebrowser2.recipelist
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
+import android.widget.AdapterViewAnimator
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuItemCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -12,8 +17,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
+import androidx.recyclerview.widget.RecyclerView
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeDatabase
+import com.jumptuck.recipebrowser2.databinding.CustomActionBarLayoutBinding
 import com.jumptuck.recipebrowser2.databinding.FragmentRecipeListBinding
 import timber.log.Timber
 
@@ -27,6 +34,10 @@ class RecipeListFragment : Fragment() {
             inflater,
             R.layout.fragment_recipe_list, container, false
         )
+
+        val sbinding: CustomActionBarLayoutBinding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.custom_action_bar_layout, container, false)
 
         val application = requireNotNull(this.activity).application
 
@@ -43,6 +54,8 @@ class RecipeListFragment : Fragment() {
             recipeListViewModel.onRecipeClicked(recipeID)
         })
         binding.recipeList.adapter = adapter
+
+        sbinding.recipeListViewModel = recipeListViewModel
 
         binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -90,7 +103,13 @@ class RecipeListFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-
+        var sView = layoutInflater.inflate(R.layout.custom_action_bar_layout, null)
+        var spinner2 = sbinding.spinner2
+        Timber.i("Spinner2: %s", spinner2.toString())
+        var cat_list = arrayOf("One","Two","Three")
+        var spinnerArrayAdapter = ArrayAdapter(application, R.layout.spinner_item, cat_list)
+        spinner2.adapter = spinnerArrayAdapter
+        Timber.i("Spinner2 databinding test: %s", spinner2.getItemAtPosition(1))
         /*
         listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, id ->
             Timber.d("onItemClickListener called: %s", adapterView.getItemAtPosition(position) as String)
@@ -112,10 +131,11 @@ class RecipeListFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         /** Restore default ActionBar view for next frament **/
-        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE)
-        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayShowCustomEnabled(false)
-        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayShowTitleEnabled(true)
-        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
+        var ab = (activity as AppCompatActivity?)!!.getSupportActionBar()
+        ab?.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE)
+        ab?.setDisplayShowCustomEnabled(false)
+        ab?.setDisplayShowTitleEnabled(true)
+        ab?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onResume() {
