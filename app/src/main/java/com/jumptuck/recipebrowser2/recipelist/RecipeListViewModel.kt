@@ -65,8 +65,6 @@ class RecipeListViewModel(
         }
     }
 
-    val category_list_with_headers = repository.categoryListWithHeaders()
-
     /** Clear button clicked to remove all rows from db **/
     private suspend fun onClear() {
         withContext(Dispatchers.IO) {
@@ -108,8 +106,13 @@ class RecipeListViewModel(
         }
     }
 
+    val category_list_with_headers = repository.categoryListWithHeaders()
+    val categoryIdItemPosition = MutableLiveData<Int>()
+    val test_categories = ArrayList<String>()
+
     init {
         Timber.i("RecipeViewModel created")
         resetCounter()
+        test_categories.addAll(arrayOf("One","Two","Three"))
     }
 }

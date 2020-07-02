@@ -66,11 +66,6 @@ class RecipeListFragment : Fragment() {
 
         binding.setLifecycleOwner(this)
 
-//        val sbinding: CustomActionBarLayoutBinding = DataBindingUtil.inflate(
-//            inflater,
-//            R.layout.custom_action_bar_layout, container, false)
-//        sbinding.setLifecycleOwner(this)
-
         /** Buttons used only for testing **/
         binding.button2.setOnClickListener {
             recipeListViewModel.addMenuItem()
@@ -112,9 +107,8 @@ class RecipeListFragment : Fragment() {
         }
 
         ab = (activity as AppCompatActivity?)!!.getSupportActionBar()!!
-        (activity as AppCompatActivity?)!!.getSupportActionBar()
-            ?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
-        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setCustomView(sView)
+        ab?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
+        ab?.setCustomView(sView)
 
 
         setHasOptionsMenu(true)
