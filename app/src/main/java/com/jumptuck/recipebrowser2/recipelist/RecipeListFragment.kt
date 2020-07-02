@@ -21,7 +21,8 @@ import timber.log.Timber
 
 class RecipeListFragment : Fragment() {
     lateinit var recipeListViewModel: RecipeListViewModel
-    var cat_list: ArrayList<String>
+    lateinit var ab: ActionBar
+    private lateinit var categories: ArrayList<String>
     private lateinit var sView: View
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,14 +77,15 @@ class RecipeListFragment : Fragment() {
         }
 
         /** ActionBar spinner used to select categories **/
+        categories = ArrayList<String>()
+        categories.add(resources.getString(R.string.spinner_category_all))
         sView = layoutInflater.inflate(R.layout.custom_action_bar_layout, null)
         var spinner2 = sView.spinner2
 
         // Adapter to load spinner with categories
-        var spinnerArrayAdapter = ArrayAdapter(application, R.layout.spinner_item, cat_list)
+        var spinnerArrayAdapter = ArrayAdapter(application, R.layout.spinner_item, categories)
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner2.adapter = spinnerArrayAdapter
-        Timber.i("Spinner2 databinding test: %s", spinner2.getItemAtPosition(1))
 
         // Update category list as needed
         recipeListViewModel.category_list_with_headers.observe(viewLifecycleOwner, Observer {
@@ -111,14 +113,15 @@ class RecipeListFragment : Fragment() {
 
         }
 
+        ab = (activity as AppCompatActivity?)!!.getSupportActionBar()!!
+        (activity as AppCompatActivity?)!!.getSupportActionBar()
+            ?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
+        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setCustomView(sView)
+
+
         setHasOptionsMenu(true)
 
         return binding.root
-    }
-
-    init {
-        cat_list = ArrayList()
-        cat_list.addAll(listOf("One", "Two", "Three"))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -130,8 +133,8 @@ class RecipeListFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         /** Restore default ActionBar view for next frament **/
-        var ab = (activity as AppCompatActivity?)!!.getSupportActionBar()
-        ab?.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE)
+        //var ab = (activity as AppCompatActivity?)!!.getSupportActionBar()
+        //ab?.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE)
         ab?.setDisplayShowCustomEnabled(false)
         ab?.setDisplayShowTitleEnabled(true)
         ab?.setDisplayHomeAsUpEnabled(true)
@@ -140,12 +143,9 @@ class RecipeListFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         /** Setup custom ActionBar view for this fragment **/
-        (activity as AppCompatActivity?)!!.getSupportActionBar()
-            ?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
-//        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setCustomView(R.layout.custom_action_bar_layout)
-        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setCustomView(sView)
-        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayShowCustomEnabled(true)
-        (activity as AppCompatActivity?)!!.getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
+        ab?.setDisplayShowCustomEnabled(true)
+        ab?.setDisplayShowTitleEnabled(false)
+        ab?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
