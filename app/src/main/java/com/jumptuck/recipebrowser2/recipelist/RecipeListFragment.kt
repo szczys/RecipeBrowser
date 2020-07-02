@@ -77,13 +77,11 @@ class RecipeListFragment : Fragment() {
         }
 
         /** ActionBar spinner used to select categories **/
-        categories = ArrayList<String>()
-        categories.add(resources.getString(R.string.spinner_category_all))
         sView = layoutInflater.inflate(R.layout.custom_action_bar_layout, null)
         var spinner2 = sView.spinner2
 
         // Adapter to load spinner with categories
-        var spinnerArrayAdapter = ArrayAdapter(application, R.layout.spinner_item, categories)
+        var spinnerArrayAdapter = ArrayAdapter(application, R.layout.spinner_item, ArrayList<String>())
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner2.adapter = spinnerArrayAdapter
 
