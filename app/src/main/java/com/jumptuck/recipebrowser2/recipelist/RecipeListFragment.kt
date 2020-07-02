@@ -76,16 +76,16 @@ class RecipeListFragment : Fragment() {
         var spinner2 = sView.spinner2
 
         // Adapter to load spinner with categories
-        var spinnerArrayAdapter = ArrayAdapter(application, R.layout.spinner_item, ArrayList<String>())
+        var spinnerArrayAdapter = ArrayAdapter(application, R.layout.spinner_item, recipeListViewModel.test_categories)
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner2.adapter = spinnerArrayAdapter
 
         // Update category list as needed
         recipeListViewModel.category_list_with_headers.observe(viewLifecycleOwner, Observer {
             it?.let {
-                spinnerArrayAdapter.clear()
-                spinnerArrayAdapter.addAll(it)
-                spinnerArrayAdapter.notifyDataSetChanged()
+//                spinnerArrayAdapter.clear()
+//                spinnerArrayAdapter.addAll(it)
+//                spinnerArrayAdapter.notifyDataSetChanged()
             }
         })
 
