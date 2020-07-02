@@ -5,6 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.jumptuck.recipebrowser2.recipelist.RecipeListFragment">
 
+    <data>
+        <variable
+            name="recipeViewModel"
+            type="com.jumptuck.recipebrowser2.recipelist.RecipeListViewModel" />
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -13,6 +19,7 @@
             android:id="@+id/spinner2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:entries="@{recipeViewModel.test_categories}"
             android:backgroundTint="@color/cardview_light_background" />
     </LinearLayout>
 </layout>

@@ -73,38 +73,38 @@ class RecipeListFragment : Fragment() {
 
         /** ActionBar spinner used to select categories **/
         sView = layoutInflater.inflate(R.layout.custom_action_bar_layout, null)
-        var spinner2 = sView.spinner2
-
-        // Adapter to load spinner with categories
-        var spinnerArrayAdapter = ArrayAdapter(application, R.layout.spinner_item, recipeListViewModel.test_categories)
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner2.adapter = spinnerArrayAdapter
-
-        // Update category list as needed
-        recipeListViewModel.category_list_with_headers.observe(viewLifecycleOwner, Observer {
-            it?.let {
+//        var spinner2 = sView.spinner2
+//
+//        // Adapter to load spinner with categories
+//        var spinnerArrayAdapter = ArrayAdapter(application, R.layout.spinner_item, ArrayList<String>())
+//        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        spinner2.adapter = spinnerArrayAdapter
+//
+//        // Update category list as needed
+//        recipeListViewModel.category_list_with_headers.observe(viewLifecycleOwner, Observer {
+//            it?.let {
 //                spinnerArrayAdapter.clear()
 //                spinnerArrayAdapter.addAll(it)
 //                spinnerArrayAdapter.notifyDataSetChanged()
-            }
-        })
-
-        // Handle clicks on the spinner
-        spinner2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                Timber.d("Spinner Item Selected: %s", p2)
-                if (p0 != null) {
-                    var selectedText = p0.getItemAtPosition(p2).toString()
-                    Timber.d("Spinner text: %s", selectedText)
-                    recipeListViewModel.updateRecipeView(selectedText)
-                }
-            }
-
-        }
+//            }
+//        })
+//
+//        // Handle clicks on the spinner
+//        spinner2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onNothingSelected(p0: AdapterView<*>?) {
+//                TODO("Not yet implemented")
+//            }
+//
+//            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+//                Timber.d("Spinner Item Selected: %s", p2)
+//                if (p0 != null) {
+//                    var selectedText = p0.getItemAtPosition(p2).toString()
+//                    Timber.d("Spinner text: %s", selectedText)
+//                    recipeListViewModel.updateRecipeView(selectedText)
+//                }
+//            }
+//
+//        }
 
         ab = (activity as AppCompatActivity?)!!.getSupportActionBar()!!
         ab?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
