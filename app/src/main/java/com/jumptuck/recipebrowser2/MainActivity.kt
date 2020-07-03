@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         val navController = this.findNavController(R.id.myNavHostFragment)
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         toolbar = binding.toolbar
-        NavigationUI.setupWithNavController(binding.toolbar,navController,appBarConfiguration)
+        NavigationUI.setupWithNavController(binding.toolbar,navController,drawerLayout)
 
         navController.addOnDestinationChangedListener { nc: NavController, nd: NavDestination, _: Bundle? ->
             if (nd.id == nc.graph.startDestination) {

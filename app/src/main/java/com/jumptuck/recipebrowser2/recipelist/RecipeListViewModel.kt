@@ -109,7 +109,6 @@ class RecipeListViewModel(
 
     val category_list_with_headers = repository.categoryListWithHeaders()
     val category_selected_tracker = MutableLiveData<Int>()
-    var
 
     init {
         Timber.i("RecipeViewModel created")
