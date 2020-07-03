@@ -19,7 +19,6 @@
             android:id="@+id/spinner2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@{recipeViewModel.test_categories}"
             android:backgroundTint="@color/cardview_light_background" />
     </LinearLayout>
 </layout>
