@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -22,6 +23,7 @@ import timber.log.Timber
 class RecipeListFragment : Fragment() {
     lateinit var recipeListViewModel: RecipeListViewModel
     lateinit var ab: ActionBar
+    lateinit var spinner2: Spinner
     private lateinit var sView: View
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,7 +74,7 @@ class RecipeListFragment : Fragment() {
 
         /** ActionBar spinner used to select categories **/
         sView = layoutInflater.inflate(R.layout.custom_action_bar_layout, null)
-        var spinner2 = sView.spinner2
+        spinner2 = sView.spinner2
 
         // Adapter to load spinner with categories
         var spinnerArrayAdapter = ArrayAdapter(application, R.layout.spinner_item, ArrayList<String>())
@@ -88,6 +90,12 @@ class RecipeListFragment : Fragment() {
             }
         })
 
+        recipeListViewModel.category_selected_tracker.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                spinner2.setSelection(it)
+            }
+        })
+
         // Handle clicks on the spinner
         spinner2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -100,6 +108,7 @@ class RecipeListFragment : Fragment() {
                     var selectedText = p0.getItemAtPosition(p2).toString()
                     Timber.d("Spinner text: %s", selectedText)
                     recipeListViewModel.updateRecipeView(selectedText)
+                    recipeListViewModel.category_selected_tracker.value = p2
                 }
             }
 
@@ -132,6 +141,7 @@ class RecipeListFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         /** Setup custom ActionBar view for this fragment **/
+
         ab?.setDisplayShowCustomEnabled(true)
         ab?.setDisplayShowTitleEnabled(false)
         ab?.setDisplayHomeAsUpEnabled(true)

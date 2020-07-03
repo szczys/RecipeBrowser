@@ -2,6 +2,7 @@ package com.jumptuck.recipebrowser2.recipelist
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.RecipeBrowserApplication
@@ -107,12 +108,11 @@ class RecipeListViewModel(
     }
 
     val category_list_with_headers = repository.categoryListWithHeaders()
-    val categoryIdItemPosition = MutableLiveData<Int>()
-    val test_categories = ArrayList<String>()
+    val category_selected_tracker = MutableLiveData<Int>()
 
     init {
         Timber.i("RecipeViewModel created")
         resetCounter()
-        test_categories.addAll(arrayOf("One","Two","Three"))
+        category_selected_tracker.value = 0
     }
 }
