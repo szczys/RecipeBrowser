@@ -121,7 +121,7 @@ class RecipeListFragment : Fragment() {
         ab?.setCustomView(sView)
 
 
-//        setHasOptionsMenu(true)
+        setHasOptionsMenu(true)
 
         return binding.root
     }
