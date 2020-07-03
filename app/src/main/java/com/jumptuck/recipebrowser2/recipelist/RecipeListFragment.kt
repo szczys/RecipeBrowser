@@ -17,6 +17,7 @@ import androidx.navigation.ui.NavigationUI
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeDatabase
 import com.jumptuck.recipebrowser2.databinding.FragmentRecipeListBinding
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.custom_action_bar_layout.view.*
 import timber.log.Timber
 
@@ -114,12 +115,13 @@ class RecipeListFragment : Fragment() {
 
         }
 
+        (activity as AppCompatActivity?)!!.setSupportActionBar((activity as AppCompatActivity?)!!.toolbar)
         ab = (activity as AppCompatActivity?)!!.getSupportActionBar()!!
         ab?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
         ab?.setCustomView(sView)
 
 
-        setHasOptionsMenu(true)
+//        setHasOptionsMenu(true)
 
         return binding.root
     }
@@ -127,7 +129,6 @@ class RecipeListFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.overflow_menu, menu)
-
     }
 
     override fun onStop() {
