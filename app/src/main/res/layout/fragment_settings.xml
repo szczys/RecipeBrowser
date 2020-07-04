@@ -1,45 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.jumptuck.recipebrowser2.SettingsFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/dialog_hostname_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/dialog_hint_uri" />
+    <data>
 
-    <EditText
-        android:id="@+id/host"
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textUri" />
+        android:layout_height="match_parent"
+        tools:context="com.jumptuck.recipebrowser2.SettingsFragment"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/dialog_username_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/dialog_hint_user" />
+        <TextView
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_fragment_title" />
 
-    <EditText
-        android:id="@+id/username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text" />
+        <ListView
+            android:id="@+id/settings_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
 
-    <TextView
-        android:id="@+id/dialog_password_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/dialog_hint_password" />
-
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:inputType="textPassword" />
-</LinearLayout>
+    </LinearLayout>
+</layout>
