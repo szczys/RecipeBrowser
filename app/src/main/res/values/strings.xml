@@ -36,6 +36,7 @@
     <string name="prefs_wifi_only_title">WiFi Only:</string>
     <string name="prefs_wifi_only_summary">Do not refresh over cell network</string>
     <string name="about_button_dismiss">Close About Window</string>
-    <string name="delete_all_recipes">Remove All Recipes</string>
+    <string name="delete_all_recipes_confirm">Remove All Recipes</string>
+    <string name="delete_all_recipes_details">Are you sure you want to remove all recipes from your device\'s local database?</string>
     <string name="about_body"> Recipe Browser\n\nCopyright 2020 Mike Szczys\n MIT License\n\nPumpkin Pie icon adapted from photo By Evan-Amos CC-BY-SA-3.0</string>
 </resources>

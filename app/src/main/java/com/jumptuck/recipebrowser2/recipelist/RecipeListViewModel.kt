@@ -2,7 +2,6 @@ package com.jumptuck.recipebrowser2.recipelist
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.RecipeBrowserApplication
@@ -60,14 +59,14 @@ class RecipeListViewModel(
         }
     }
 
-    fun clear() {
+    fun removeAllRecipesFromDb() {
         uiScope.launch {
-            onClear()
+            onRemoveAllFromDb()
         }
     }
 
     /** Clear button clicked to remove all rows from db **/
-    private suspend fun onClear() {
+    private suspend fun onRemoveAllFromDb() {
         withContext(Dispatchers.IO) {
             databaseDao.deleteAllRecipes()
         }

@@ -1,13 +1,11 @@
 package com.jumptuck.recipebrowser2.recipelist
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -19,6 +17,7 @@ import androidx.navigation.ui.NavigationUI
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeDatabase
 import com.jumptuck.recipebrowser2.databinding.FragmentRecipeListBinding
+import com.jumptuck.recipebrowser2.settings.RecipeDeleteAllDialogBuilder
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.custom_action_bar_layout.view.*
 import timber.log.Timber
@@ -71,6 +70,13 @@ class RecipeListFragment : Fragment() {
         binding.setLifecycleOwner(this)
 
         /** Buttons used only for testing **/
+        binding.button.setOnClickListener {
+            RecipeDeleteAllDialogBuilder(
+                requireActivity(),
+                resources,
+                recipeListViewModel
+            ).show()
+        }
         binding.button2.setOnClickListener {
             recipeListViewModel.addMenuItem()
         }
@@ -128,23 +134,6 @@ class RecipeListFragment : Fragment() {
         return binding.root
     }
 
-    fun dialogTest() {
-        val dialogBuilder = AlertDialog.Builder(requireActivity())
-        dialogBuilder.setMessage(resources.getString(R.string.delete_all_recipes))
-            .setCancelable(false)
-            .setPositiveButton(
-                resources.getString(R.string.yes),
-                DialogInterface.OnClickListener{ dialog, id -> Timber.i("Nope")}
-            )
-            .setNegativeButton(
-                resources.getString(R.string.no),
-                DialogInterface.OnClickListener{ dialog, id -> Timber.i("Yep")}
-            )
-        val alert = dialogBuilder.create()
-        alert.setTitle("Test Test Test")
-        alert.show()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.overflow_menu, menu)
@@ -170,8 +159,7 @@ class RecipeListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
                 R.id.refreshRecipes -> {
-                //recipeListViewModel.scrapeRecipes()
-                dialogTest()
+                recipeListViewModel.scrapeRecipes()
             }
         }
         return NavigationUI.onNavDestinationSelected(item, requireView().findNavController())
