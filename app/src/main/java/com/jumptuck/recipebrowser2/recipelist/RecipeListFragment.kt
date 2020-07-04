@@ -149,9 +149,8 @@ class RecipeListFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Timber.i("Menuitem: %s", item.toString())
         when (item.itemId) {
-            R.id.refreshRecipes -> {
+                R.id.refreshRecipes -> {
                 recipeListViewModel.scrapeRecipes()
             }
         }

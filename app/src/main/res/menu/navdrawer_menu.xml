@@ -3,11 +3,11 @@
 
     <item
         android:id="@+id/settingsFragment"
-        android:title="@string/settings" />
+        android:title="@string/settings_fragment_title" />
     <item
-        android:id="@+id/singleRecipeFragment"
-        android:title="Single Recipe" />
+        android:id="@+id/aboutFragment"
+        android:title="@string/about_fragment_title" />
     <item
-        android:id="@+id/startScrape"
-        android:title="Scrape from Web" />
+        android:id="@+id/refreshRecipes"
+        android:title="@string/refresh_action_title" />
 </menu>

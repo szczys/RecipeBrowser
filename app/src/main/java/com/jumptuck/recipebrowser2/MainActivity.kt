@@ -1,10 +1,8 @@
 package com.jumptuck.recipebrowser2
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.widget.Toolbar
-import androidx.appcompat.app.ActionBar
+import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -13,11 +11,11 @@ import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupActionBarWithNavController
+import com.google.android.material.navigation.NavigationView
 import com.jumptuck.recipebrowser2.databinding.ActivityMainBinding
 import timber.log.Timber
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
     lateinit var toolbar: androidx.appcompat.widget.Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         toolbar = binding.toolbar
         NavigationUI.setupWithNavController(binding.toolbar,navController,drawerLayout)
 
+
+        /** Only allow the Nav Drawer in Recipe List View **/
         navController.addOnDestinationChangedListener { nc: NavController, nd: NavDestination, _: Bundle? ->
             if (nd.id == nc.graph.startDestination) {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
@@ -44,12 +44,27 @@ class MainActivity : AppCompatActivity() {
 
         NavigationUI.setupWithNavController(binding.navView, navController)
 
-    }
+        /** Handle clicks in Nav Drawer **/
+        val navigationView = findViewById<NavigationView>(R.id.navView)
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            Timber.i("Nav Drawer Item Clicked: %s", menuItem.title)
+            when (menuItem.itemId) {
+                R.id.settingsFragment -> {
+                    navController.navigate(R.id.settingsFragment)
+                }
+                R.id.aboutFragment -> {
+                    Timber.i("About fragment clicked")
+                    navController.navigate(R.id.aboutFragment)
+                }
+                R.id.refreshRecipes -> {
+                    Timber.i("TODO: Implement repository refresh method call")
+                }
+            }
 
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater.inflate(R.menu.overflow_menu, menu)
-//        return super.onCreateOptionsMenu(menu)
-//    }
+            true
+        }
+
+    }
 
     override fun onBackPressed() {
         if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -62,5 +77,9 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = this.findNavController(R.id.myNavHostFragment)
         return NavigationUI.navigateUp(navController, drawerLayout)
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        TODO("Not yet implemented")
     }
 }

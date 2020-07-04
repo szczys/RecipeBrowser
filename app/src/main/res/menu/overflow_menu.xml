@@ -4,10 +4,10 @@
 
     <item
         android:id="@+id/settingsFragment"
-        android:title="@string/settings" />
+        android:title="@string/settings_fragment_title" />
     <item
         android:id="@+id/aboutFragment"
-        android:title="@string/about" />
+        android:title="@string/about_fragment_title" />
     <item
         android:id="@+id/refreshRecipes"
         android:title="Refresh DB" />
