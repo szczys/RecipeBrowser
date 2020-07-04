@@ -39,7 +39,7 @@ class RecipeRepository(private val database: RecipeDatabase, context: Context) {
                             recipeListMediator.value = value
                         }
                     }
-                    resources.getString(R.string.spinner_category_favorite) -> {
+                    resources.getString(R.string.spinner_category_favorites) -> {
                         recipeListMediator.addSource(favorites) { value ->
                             recipeListMediator.value = value
                         }

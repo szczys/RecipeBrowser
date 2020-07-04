@@ -1,11 +1,13 @@
 package com.jumptuck.recipebrowser2.recipelist
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -126,6 +128,23 @@ class RecipeListFragment : Fragment() {
         return binding.root
     }
 
+    fun dialogTest() {
+        val dialogBuilder = AlertDialog.Builder(requireActivity())
+        dialogBuilder.setMessage(resources.getString(R.string.delete_all_recipes))
+            .setCancelable(false)
+            .setPositiveButton(
+                resources.getString(R.string.yes),
+                DialogInterface.OnClickListener{ dialog, id -> Timber.i("Nope")}
+            )
+            .setNegativeButton(
+                resources.getString(R.string.no),
+                DialogInterface.OnClickListener{ dialog, id -> Timber.i("Yep")}
+            )
+        val alert = dialogBuilder.create()
+        alert.setTitle("Test Test Test")
+        alert.show()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.overflow_menu, menu)
@@ -151,7 +170,8 @@ class RecipeListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
                 R.id.refreshRecipes -> {
-                recipeListViewModel.scrapeRecipes()
+                //recipeListViewModel.scrapeRecipes()
+                dialogTest()
             }
         }
         return NavigationUI.onNavDestinationSelected(item, requireView().findNavController())

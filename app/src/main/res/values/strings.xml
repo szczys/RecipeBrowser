@@ -10,11 +10,32 @@
     <string name="share_text">This is recipe#%1$d</string>
     <string name="category_uncategorized">Uncategorized</string>
     <string name="spinner_category_all">All Recipes</string>
-    <string name="spinner_category_favorite">Favorites</string>
+    <string name="spinner_category_favorites">Favorites</string>
 
-    <string-array name="Weight">
-        <item>Kg</item>
-        <item>Gram</item>
-        <item>Tons</item>
-    </string-array>
+    <string name="dialog_hint_uri">Web Address</string>
+    <string name="dialog_hint_user">Username</string>
+    <string name="dialog_hint_password">Password</string>
+    <string name="dialog_button_save">Save</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="dialog_title">Server Address and Login</string>
+    <string name="dialog_summary">Set Host, Username and Password</string>
+    <string name="favorite_icon_title">Mark as a Favorite Recipe</string>
+    <string name="share_icon_title">Share This Recipe</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <string name="toast_empty_host_url">Web Host address cannot be blank\10\10 (Click cancel to exit this dialog)</string>
+    <string name="toast_empty_host_during_refresh">Web Host address must be set in the Preferences</string>
+    <string name="toast_internet_not_connected">No Internet Connection Available</string>
+    <string name="toast_wifi_not_connected">Cannot Refresh Because There\10Is No WiFi Connection Available</string>
+    <string name="web_error_401">Incorrect username or password for:\10</string>
+    <string name="web_error_404">Webpage not found (error 404)\10</string>
+    <string name="web_error_default">Problem loading webpage. Error</string>
+    <string name="prefs_frequency_option_title">Frequency</string>
+    <string name="prefs_frequency_option_summary">How often to check for recipe updates</string>
+    <string name="prefs_wifi_only_title">WiFi Only:</string>
+    <string name="prefs_wifi_only_summary">Do not refresh over cell network</string>
+    <string name="about_button_dismiss">Close About Window</string>
+    <string name="delete_all_recipes">Remove All Recipes</string>
+    <string name="about_body"> Recipe Browser\n\nCopyright 2020 Mike Szczys\n MIT License\n\nPumpkin Pie icon adapted from photo By Evan-Amos CC-BY-SA-3.0</string>
 </resources>

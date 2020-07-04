@@ -47,13 +47,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         /** Handle clicks in Nav Drawer **/
         val navigationView = findViewById<NavigationView>(R.id.navView)
         navigationView.setNavigationItemSelectedListener { menuItem ->
-            Timber.i("Nav Drawer Item Clicked: %s", menuItem.title)
+            Timber.d("Nav Drawer Item Clicked: %s", menuItem.title)
             when (menuItem.itemId) {
                 R.id.settingsFragment -> {
                     navController.navigate(R.id.settingsFragment)
                 }
                 R.id.aboutFragment -> {
-                    Timber.i("About fragment clicked")
                     navController.navigate(R.id.aboutFragment)
                 }
                 R.id.refreshRecipes -> {
