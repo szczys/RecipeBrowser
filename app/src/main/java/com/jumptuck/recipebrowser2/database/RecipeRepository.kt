@@ -124,4 +124,14 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
     fun insert(recipe: Recipe): Long {
         return database.recipeDatabaseDao.insert(recipe)
     }
+
+    companion object UserPrefs {
+        private var wifiOnly = true
+        fun getWifiOnlyPref(): Boolean {
+            return wifiOnly
+        }
+        fun setWifiOnlyPref(state: Boolean) {
+            wifiOnly = state
+        }
+    }
 }
