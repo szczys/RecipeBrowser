@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import com.jumptuck.recipebrowser2.database.RecipeDatabase
 import com.jumptuck.recipebrowser2.database.RecipeRepository
 import com.jumptuck.recipebrowser2.databinding.FragmentSettingsBinding
 import com.jumptuck.recipebrowser2.settings.RecipeDeleteAllDialogBuilder
@@ -16,67 +15,52 @@ import kotlinx.android.synthetic.main.fragment_settings.view.*
 import kotlinx.android.synthetic.main.listview_two_lines.view.*
 import timber.log.Timber
 
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SettingsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SettingsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var binding: FragmentSettingsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_settings, container, false)
+        val binding: FragmentSettingsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_settings, container, false)
 
         val application = requireNotNull(this.activity).application
-        val view: View = inflater.inflate(R.layout.fragment_settings, container, false)
+        //val fragmentView: View = inflater.inflate(R.layout.fragment_settings, container, false)
 
-        val listView = view.settings_list
-        var test_data = ArrayList<List<Int>>()
-        test_data.add(listOf(R.string.dialog_credentials_title, R.string.dialog_credentials_summary))
-        test_data.add(listOf(R.string.prefs_frequency_option_title, R.string.prefs_frequency_option_summary))
-        test_data.add(listOf(R.string.prefs_wifi_only_title, R.string.prefs_wifi_only_summary))
-        test_data.add(listOf(R.string.delete_all_recipes_confirm, R.string.delete_all_recipes_summary))
-//        val adapter = ArrayAdapter<String>(application, android.R.layout.simple_list_item_2, android.R.id.text1, test_data) {
-//            override fun getView(): View? {
-//                return super.getView()
-//            }
-//        }
+        val listView = binding.settingsList.settings_list
+        val settingsActionLabels = ArrayList<List<Int>>()
+        settingsActionLabels.add(listOf(R.string.dialog_credentials_title, R.string.dialog_credentials_summary))
+        settingsActionLabels.add(listOf(R.string.prefs_frequency_option_title, R.string.prefs_frequency_option_summary))
+        settingsActionLabels.add(listOf(R.string.prefs_wifi_only_title, R.string.prefs_wifi_only_summary))
+        settingsActionLabels.add(listOf(R.string.delete_all_recipes_confirm, R.string.delete_all_recipes_summary))
 
         val adapter: ArrayAdapter<*> = object : ArrayAdapter<Any?>(
             application,
             R.layout.listview_two_lines,
             R.id.text1,
-            test_data as List<Any>
+            settingsActionLabels as List<Any>
         ) {
             override fun getView(
                 position: Int,
                 convertView: View?,
                 parent: ViewGroup
             ): View {
-                val view = super.getView(position, convertView, parent)
+                val adapterView = super.getView(position, convertView, parent)
                 val text1 =
-                    view.findViewById<View>(R.id.text1) as TextView
+                    adapterView.findViewById<View>(R.id.text1) as TextView
                 val text2 =
-                    view.findViewById<View>(R.id.text2) as TextView
+                    adapterView.findViewById<View>(R.id.text2) as TextView
 
                 /** Use tag to lookup in onItemClick Listener **/
-                text1.setTag(Integer.valueOf(test_data[position][0]))
-                text1.setText(
-                    resources.getString(test_data[position][0])
-                )
-                text2.setText(
-                    resources.getString(test_data[position][1])
-                )
-                return view
+                text1.tag = Integer.valueOf(settingsActionLabels[position][0])
+                text1.text = resources.getString(settingsActionLabels[position][0])
+                text2.text = resources.getString(settingsActionLabels[position][1])
+                return adapterView
             }
         }
         listView.adapter = adapter
 
-        listView.setOnItemClickListener { parent, view, position, id ->
-            Timber.i("OnClicked: %s", view.text1.getTag())
-            when (view.text1.getTag()) {
+        listView.setOnItemClickListener { _, itemView, _, _ ->
+            Timber.i("OnClicked: %s", itemView.text1.tag)
+            when (itemView.text1.tag) {
                 R.string.dialog_credentials_title -> {
 
                 }
@@ -95,7 +79,6 @@ class SettingsFragment : Fragment() {
                 }
             }
         }
-
-        return view
+        return binding.root
     }
 }
