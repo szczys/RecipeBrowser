@@ -90,7 +90,7 @@ class SettingsFragment : Fragment() {
                     RecipeDeleteAllDialogBuilder(
                         requireActivity(),
                         resources,
-                        RecipeRepository(RecipeDatabase.getInstance(application), application)
+                        RecipeRepository(application)
                     ).show()
                 }
             }

@@ -75,7 +75,7 @@ class RecipeListFragment : Fragment() {
             RecipeDeleteAllDialogBuilder(
                 requireActivity(),
                 resources,
-                RecipeRepository(RecipeDatabase.getInstance(application), application)
+                RecipeRepository(application)
             ).show()
         }
         binding.button2.setOnClickListener {

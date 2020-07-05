@@ -1,22 +1,21 @@
 package com.jumptuck.recipebrowser2.database
 
+import android.app.Application
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
+import androidx.lifecycle.*
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.network.WebScraper
 import kotlinx.coroutines.*
 import timber.log.Timber
 
-class RecipeRepository(private val database: RecipeDatabase, context: Context) {
+class RecipeRepository(application: Application): AndroidViewModel(application) {
 
+    val database = RecipeDatabase.getInstance(application)
     //Livedata sources for recipe list
     val allRecipes = database.recipeDatabaseDao.getAll()
     val status = MutableLiveData<String>()
     val favorites = database.recipeDatabaseDao.getFavorites()
-    val resources = context.resources
+    val resources = application.resources
 
     //Coroutines setup
     private var repositoryJob = Job()
@@ -74,10 +73,11 @@ class RecipeRepository(private val database: RecipeDatabase, context: Context) {
         }
     }
 
-    override fun onClear() {
+    override fun onCleared() {
+        super.onCleared()
         repositoryJob.cancel()
     }
-    
+
 
     private suspend fun deleteAllRecipesFromDb() {
         withContext(Dispatchers.IO) {

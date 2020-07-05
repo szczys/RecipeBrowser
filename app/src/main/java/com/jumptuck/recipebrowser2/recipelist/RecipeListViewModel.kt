@@ -17,8 +17,7 @@ class RecipeListViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
-    private val database = RecipeDatabase.getInstance(application)
-    private val repository = RecipeRepository(database, application)
+    private val repository = RecipeRepository(application)
     private var fakeItemCounter: Int = 0
 
     val allRecipes = databaseDao.getAll()
