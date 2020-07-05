@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.jumptuck.recipebrowser2.R
@@ -26,9 +25,6 @@ class SettingsFragment : Fragment() {
             R.layout.fragment_settings, container, false)
 
         val application = requireNotNull(this.activity).application
-
-        val actionBar = (activity as AppCompatActivity?)!!.supportActionBar
-        actionBar?.title = resources.getString(R.string.settings_fragment_title)
 
         val listView = binding.settingsList.settings_list
         val settingsActionLabels = ArrayList<List<Int>>()

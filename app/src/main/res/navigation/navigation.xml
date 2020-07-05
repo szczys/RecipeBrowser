@@ -21,7 +21,6 @@
     <fragment
         android:id="@+id/singleRecipeFragment"
         android:name="com.jumptuck.recipebrowser2.singlerecipe.SingleRecipeFragment"
-        android:label="fragment_single_recipe"
         tools:layout="@layout/fragment_single_recipe" >
         <argument
             android:name="recipeIndex"
@@ -30,11 +29,9 @@
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.jumptuck.recipebrowser2.AboutFragment"
-        android:label="fragment_about"
         tools:layout="@layout/fragment_about" />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.jumptuck.recipebrowser2.settings.SettingsFragment"
-        android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>

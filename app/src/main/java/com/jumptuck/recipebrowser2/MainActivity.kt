@@ -20,24 +20,38 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.i("onCreate called")
-        val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this,
+        val binding = DataBindingUtil.setContentView<ActivityMainBinding>(
+            this,
             R.layout.activity_main
         )
         drawerLayout = binding.drawerLayout
 
         val navController = this.findNavController(R.id.myNavHostFragment)
         toolbar = binding.toolbar
-        NavigationUI.setupWithNavController(binding.toolbar,navController,drawerLayout)
+        NavigationUI.setupWithNavController(binding.toolbar, navController, drawerLayout)
 
 
         /** Only allow the Nav Drawer in Recipe List View **/
         navController.addOnDestinationChangedListener { nc: NavController, nd: NavDestination, _: Bundle? ->
+
+            /** Lock Nav Drawer **/
             if (nd.id == nc.graph.startDestination) {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-            }
-            else {
+            } else {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
+
+            /**
+             *  Use nice titles for fragments
+             *    android:label must be removed from these framents in navigation.xml for this to work
+             *  **/
+            title = when (nd.id) {
+                R.id.settingsFragment -> getString(R.string.settings_fragment_title)
+                R.id.aboutFragment -> getString(R.string.about_fragment_title)
+                /** Recipe List and Single Recipe will take care of themselves **/
+                else -> null
+            }
+            supportActionBar?.title = title
         }
 
         NavigationUI.setupWithNavController(binding.navView, navController)
