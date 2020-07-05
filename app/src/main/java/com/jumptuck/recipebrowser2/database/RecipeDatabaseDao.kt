@@ -27,7 +27,7 @@ interface RecipeDatabaseDao {
     fun isIn(title: String): Boolean
 
     @Query("SELECT * from recipe_table WHERE title = :title LIMIT 1")
-    fun findRecipeByTitle(title: String): Recipe
+    fun findRecipeByTitle(title: String): Recipe?
 
     @Query("SELECT * from recipe_table WHERE recipeID = :id")
     fun getRecipe(id: Long): LiveData<Recipe>

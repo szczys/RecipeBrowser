@@ -2,7 +2,6 @@ package com.jumptuck.recipebrowser2.network
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
@@ -19,7 +18,7 @@ private val retrofit = Retrofit.Builder()
 
 interface NetworkService {
     @GET
-    fun getHtml(@Url url: String):
+    fun getHtmlAsync(@Url url: String):
             Deferred<String>
 }
 
