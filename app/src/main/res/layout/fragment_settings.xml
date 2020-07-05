@@ -13,16 +13,12 @@
         tools:context="com.jumptuck.recipebrowser2.SettingsFragment"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:gravity="center_horizontal"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_fragment_title" />
-
         <ListView
             android:id="@+id/settings_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
 
     </LinearLayout>
 </layout>
