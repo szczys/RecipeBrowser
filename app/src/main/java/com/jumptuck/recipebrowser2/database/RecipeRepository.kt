@@ -7,8 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.network.WebScraper
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import timber.log.Timber
 
 class RecipeRepository(private val database: RecipeDatabase, context: Context) {
@@ -18,6 +17,10 @@ class RecipeRepository(private val database: RecipeDatabase, context: Context) {
     val status = MutableLiveData<String>()
     val favorites = database.recipeDatabaseDao.getFavorites()
     val resources = context.resources
+
+    //Coroutines setup
+    private var repositoryJob = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + repositoryJob)
 
     init {
         status.value = ""
@@ -62,6 +65,23 @@ class RecipeRepository(private val database: RecipeDatabase, context: Context) {
         withContext(Dispatchers.IO) {
             val scraper = WebScraper(database)
             scraper.crawlDirectory("http://192.168.1.105/recipes/")
+        }
+    }
+
+    fun deleteAllRecipes() {
+        uiScope.launch {
+            deleteAllRecipesFromDb()
+        }
+    }
+
+    override fun onClear() {
+        repositoryJob.cancel()
+    }
+    
+
+    private suspend fun deleteAllRecipesFromDb() {
+        withContext(Dispatchers.IO) {
+            database.recipeDatabaseDao.deleteAllRecipes()
         }
     }
 

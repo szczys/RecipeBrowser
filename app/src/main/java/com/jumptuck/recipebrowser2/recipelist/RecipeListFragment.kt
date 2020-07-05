@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeDatabase
+import com.jumptuck.recipebrowser2.database.RecipeRepository
 import com.jumptuck.recipebrowser2.databinding.FragmentRecipeListBinding
 import com.jumptuck.recipebrowser2.settings.RecipeDeleteAllDialogBuilder
 import kotlinx.android.synthetic.main.activity_main.*
@@ -74,7 +75,7 @@ class RecipeListFragment : Fragment() {
             RecipeDeleteAllDialogBuilder(
                 requireActivity(),
                 resources,
-                recipeListViewModel
+                RecipeRepository(RecipeDatabase.getInstance(application), application)
             ).show()
         }
         binding.button2.setOnClickListener {

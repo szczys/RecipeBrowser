@@ -5,13 +5,14 @@ import android.content.DialogInterface
 import android.content.res.Resources
 import androidx.appcompat.app.AlertDialog
 import com.jumptuck.recipebrowser2.R
+import com.jumptuck.recipebrowser2.database.RecipeRepository
 import com.jumptuck.recipebrowser2.recipelist.RecipeListViewModel
 import timber.log.Timber
 
 class RecipeDeleteAllDialogBuilder(
     context: Context,
     resources: Resources,
-    recipeListViewModel: RecipeListViewModel
+    repository: RecipeRepository
 ) : AlertDialog.Builder(context) {
     private val appResources = resources
     init {
@@ -22,7 +23,7 @@ class RecipeDeleteAllDialogBuilder(
                 DialogInterface.OnClickListener
                 { dialog, id ->
                     Timber.i("Yep")
-                    recipeListViewModel.removeAllRecipesFromDb()
+                    repository.deleteAllRecipes()
                 }
             )
             .setNegativeButton(

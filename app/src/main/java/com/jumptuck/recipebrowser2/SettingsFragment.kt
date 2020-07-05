@@ -8,8 +8,13 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import com.jumptuck.recipebrowser2.database.RecipeDatabase
+import com.jumptuck.recipebrowser2.database.RecipeRepository
 import com.jumptuck.recipebrowser2.databinding.FragmentSettingsBinding
+import com.jumptuck.recipebrowser2.settings.RecipeDeleteAllDialogBuilder
 import kotlinx.android.synthetic.main.fragment_settings.view.*
+import kotlinx.android.synthetic.main.listview_two_lines.view.*
+import timber.log.Timber
 
 
 /**
@@ -55,6 +60,9 @@ class SettingsFragment : Fragment() {
                     view.findViewById<View>(R.id.text1) as TextView
                 val text2 =
                     view.findViewById<View>(R.id.text2) as TextView
+
+                /** Use tag to lookup in onItemClick Listener **/
+                text1.setTag(Integer.valueOf(test_data[position][0]))
                 text1.setText(
                     resources.getString(test_data[position][0])
                 )
@@ -66,6 +74,27 @@ class SettingsFragment : Fragment() {
         }
         listView.adapter = adapter
 
+        listView.setOnItemClickListener { parent, view, position, id ->
+            Timber.i("OnClicked: %s", view.text1.getTag())
+            when (view.text1.getTag()) {
+                R.string.dialog_credentials_title -> {
+
+                }
+                R.string.prefs_frequency_option_title -> {
+
+                }
+                R.string.prefs_wifi_only_title -> {
+
+                }
+                R.string.delete_all_recipes_confirm -> {
+                    RecipeDeleteAllDialogBuilder(
+                        requireActivity(),
+                        resources,
+                        RecipeRepository(RecipeDatabase.getInstance(application), application)
+                    ).show()
+                }
+            }
+        }
 
         return view
     }
