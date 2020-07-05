@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.RecipeBrowserApplication
 import com.jumptuck.recipebrowser2.database.Recipe
-import com.jumptuck.recipebrowser2.database.RecipeDatabase
 import com.jumptuck.recipebrowser2.database.RecipeDatabaseDao
 import com.jumptuck.recipebrowser2.database.RecipeRepository
 import kotlinx.coroutines.*
@@ -20,7 +19,6 @@ class RecipeListViewModel(
     private val repository = RecipeRepository(application)
     private var fakeItemCounter: Int = 0
 
-    val allRecipes = databaseDao.getAll()
     val recipesToDisplay = repository.recipesToDisplay()
 
     //Coroutines setup
@@ -47,32 +45,19 @@ class RecipeListViewModel(
     private suspend fun insertItem() {
         Timber.i("Adding new menu item")
         withContext(Dispatchers.IO) {
-            var newRecipe = Recipe()
+            val newRecipe = Recipe()
             newRecipe.title = "Recipe Number " + fakeItemCounter.toString().padStart(2, '0')
             newRecipe.body =
                 "Recipe Body for Number: " + (fakeItemCounter++).toString().padStart(2, '0')
             newRecipe.category = getApplication<RecipeBrowserApplication>().resources.getString(R.string.category_uncategorized)
             Timber.i("New menu item: %s", newRecipe.title)
-            var newID = databaseDao.insert(newRecipe)
+            val newID = databaseDao.insert(newRecipe)
             Timber.i("InsertID: %s", newID)
         }
     }
 
-    fun removeAllRecipesFromDb() {
-        uiScope.launch {
-            onRemoveAllFromDb()
-        }
-    }
-
-    /** Clear button clicked to remove all rows from db **/
-    private suspend fun onRemoveAllFromDb() {
-        withContext(Dispatchers.IO) {
-            databaseDao.deleteAllRecipes()
-        }
-        resetCounter()
-    }
-
-    fun resetCounter() {
+    /** Counter is used by test routines during development only **/
+    private fun resetCounter() {
         uiScope.launch {
             resetCounterFromDb()
         }
@@ -105,12 +90,12 @@ class RecipeListViewModel(
         }
     }
 
-    val category_list_with_headers = repository.categoryListWithHeaders()
-    val category_selected_tracker = MutableLiveData<Int>()
+    val categoryListWithHeaders = repository.categoryListWithHeaders()
+    val categorySelectedTracker = MutableLiveData<Int>()
 
     init {
         Timber.i("RecipeViewModel created")
         resetCounter()
-        category_selected_tracker.value = 0
+        categorySelectedTracker.value = 0
     }
 }

@@ -92,7 +92,7 @@ class RecipeListFragment : Fragment() {
         spinner2.adapter = spinnerArrayAdapter
 
         // Update category list as needed
-        recipeListViewModel.category_list_with_headers.observe(viewLifecycleOwner, Observer {
+        recipeListViewModel.categoryListWithHeaders.observe(viewLifecycleOwner, Observer {
             it?.let {
                 spinnerArrayAdapter.clear()
                 spinnerArrayAdapter.addAll(it)
@@ -100,7 +100,7 @@ class RecipeListFragment : Fragment() {
             }
         })
 
-        recipeListViewModel.category_selected_tracker.observe(viewLifecycleOwner, Observer {
+        recipeListViewModel.categorySelectedTracker.observe(viewLifecycleOwner, Observer {
             it?.let {
                 spinner2.setSelection(it)
             }
@@ -118,7 +118,7 @@ class RecipeListFragment : Fragment() {
                     val selectedText = p0.getItemAtPosition(p2).toString()
                     Timber.d("Spinner text: %s", selectedText)
                     recipeListViewModel.updateRecipeView(selectedText)
-                    recipeListViewModel.category_selected_tracker.value = p2
+                    recipeListViewModel.categorySelectedTracker.value = p2
                 }
             }
 

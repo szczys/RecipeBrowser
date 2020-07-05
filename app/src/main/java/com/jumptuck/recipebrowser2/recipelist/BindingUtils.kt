@@ -10,10 +10,3 @@ fun TextView.setRecipeListTitle(item: Recipe?){
         text = item.title
     }
 }
-
-@BindingAdapter("singleRecipeBody")
-fun TextView.setSingleRecipeBody(item: Recipe?){
-    item?.let {
-        text = item.body
-    }
-}
