@@ -12,7 +12,6 @@ import kotlinx.coroutines.*
 import timber.log.Timber
 
 class RecipeListViewModel(
-    val databaseDao: RecipeDatabaseDao,
     application: Application
 ) : AndroidViewModel(application) {
 
@@ -51,7 +50,7 @@ class RecipeListViewModel(
                 "Recipe Body for Number: " + (fakeItemCounter++).toString().padStart(2, '0')
             newRecipe.category = getApplication<RecipeBrowserApplication>().resources.getString(R.string.category_uncategorized)
             Timber.i("New menu item: %s", newRecipe.title)
-            val newID = databaseDao.insert(newRecipe)
+            val newID = repository.insert(newRecipe)
             Timber.i("InsertID: %s", newID)
         }
     }
@@ -63,9 +62,10 @@ class RecipeListViewModel(
         }
     }
 
+    /** This function is only used in testing routines **/
     private suspend fun resetCounterFromDb() {
         withContext(Dispatchers.IO) {
-            fakeItemCounter = databaseDao.recipeCount() + 1
+            fakeItemCounter = repository.recipeCount() + 1
         }
     }
 

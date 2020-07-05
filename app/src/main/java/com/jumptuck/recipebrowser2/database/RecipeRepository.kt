@@ -116,4 +116,12 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
         }
         return buildStringList
     }
+
+    fun recipeCount(): Int {
+        return database.recipeDatabaseDao.recipeCount()
+    }
+
+    fun insert(recipe: Recipe): Long {
+        return database.recipeDatabaseDao.insert(recipe)
+    }
 }

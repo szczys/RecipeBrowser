@@ -13,7 +13,7 @@ class RecipeListViewModelFactory(
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(RecipeListViewModel::class.java)) {
-            return RecipeListViewModel(dataSource, application) as T
+            return RecipeListViewModel(application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
