@@ -38,8 +38,7 @@ class RecipeListFragment : Fragment() {
         )
 
         val application = requireNotNull(this.activity).application
-        val datasource = RecipeDatabase.getInstance(application).recipeDatabaseDao
-        val viewModelFactory = RecipeListViewModelFactory(datasource, application)
+        val viewModelFactory = RecipeListViewModelFactory(application)
 
         recipeListViewModel =
             ViewModelProvider(this, viewModelFactory).get(RecipeListViewModel::class.java)

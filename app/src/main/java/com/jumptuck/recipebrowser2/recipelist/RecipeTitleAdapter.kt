@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jumptuck.recipebrowser2.database.Recipe
 import com.jumptuck.recipebrowser2.databinding.ListviewItemBinding
 
-class RecipeTitleAdapter(val clickListener: RecipeTitleListener): ListAdapter<Recipe, RecipeTitleAdapter.ViewHolder>(RecipeListDiffCallback()){
+class RecipeTitleAdapter(private val clickListener: RecipeTitleListener): ListAdapter<Recipe, RecipeTitleAdapter.ViewHolder>(RecipeListDiffCallback()){
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position)!!, clickListener)

@@ -6,7 +6,6 @@ import android.content.res.Resources
 import androidx.appcompat.app.AlertDialog
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeRepository
-import com.jumptuck.recipebrowser2.recipelist.RecipeListViewModel
 import timber.log.Timber
 
 class RecipeDeleteAllDialogBuilder(
@@ -21,7 +20,7 @@ class RecipeDeleteAllDialogBuilder(
             .setPositiveButton(
                 resources.getString(R.string.yes),
                 DialogInterface.OnClickListener
-                { dialog, id ->
+                { _, _ ->
                     Timber.i("Yep")
                     repository.deleteAllRecipes()
                 }
@@ -29,7 +28,7 @@ class RecipeDeleteAllDialogBuilder(
             .setNegativeButton(
                 resources.getString(R.string.no),
                 DialogInterface.OnClickListener
-                { dialog, id -> Timber.i("Nope") }
+                { _, _ -> Timber.i("Nope") }
             )
     }
     override fun show(): AlertDialog? {
