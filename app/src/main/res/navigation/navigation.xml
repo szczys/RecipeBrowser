@@ -34,7 +34,7 @@
         tools:layout="@layout/fragment_about" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.jumptuck.recipebrowser2.SettingsFragment"
+        android:name="com.jumptuck.recipebrowser2.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>

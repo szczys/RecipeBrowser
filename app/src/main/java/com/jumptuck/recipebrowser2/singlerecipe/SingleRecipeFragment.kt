@@ -13,12 +13,6 @@ import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeDatabase
 import com.jumptuck.recipebrowser2.databinding.FragmentSingleRecipeBinding
 
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SingleRecipeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SingleRecipeFragment : Fragment() {
 
     private lateinit var viewModel: SingleRecipeViewModel
@@ -28,9 +22,9 @@ class SingleRecipeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var binding: FragmentSingleRecipeBinding = DataBindingUtil.inflate(inflater,
+        val binding: FragmentSingleRecipeBinding = DataBindingUtil.inflate(inflater,
             R.layout.fragment_single_recipe, container, false)
-        var args =
+        val args =
             SingleRecipeFragmentArgs.fromBundle(
                 requireArguments()
             )
@@ -47,11 +41,11 @@ class SingleRecipeFragment : Fragment() {
             .get(SingleRecipeViewModel::class.java)
 
         binding.singleRecipeViewModel = viewModel
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
 
-        var actionBar = (activity as AppCompatActivity?)!!.supportActionBar
+        val actionBar = (activity as AppCompatActivity?)!!.supportActionBar
         viewModel.curRecipe.observe(viewLifecycleOwner, Observer {
-            actionBar?.setTitle(it?.title)
+            actionBar?.title = it?.title
 
         })
 
@@ -65,9 +59,8 @@ class SingleRecipeFragment : Fragment() {
         inflater.inflate(R.menu.single_recipe_menu, menu)
 
         viewModel.curRecipe.observe(viewLifecycleOwner, Observer {
-            val favIconDrawable: Int
-            if (it!!.favorite) favIconDrawable = R.drawable.ic_baseline_star_filled_24
-            else favIconDrawable = R.drawable.ic_baseline_star_border_24
+            val favIconDrawable: Int = if (it!!.favorite) R.drawable.ic_baseline_star_filled_24
+            else R.drawable.ic_baseline_star_border_24
             menu.findItem(R.id.favorite).setIcon(favIconDrawable)
         })
     }

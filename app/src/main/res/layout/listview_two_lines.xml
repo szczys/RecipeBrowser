@@ -19,14 +19,13 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Title LIne" />
+        tools:text="Title Line" />
 
     <TextView
         android:id="@+id/text2"
         android:layout_width="0dp"
         android:layout_height="19dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:textColor="#000000"
         android:textSize="14dp"

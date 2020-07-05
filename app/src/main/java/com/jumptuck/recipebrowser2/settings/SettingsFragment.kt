@@ -1,16 +1,18 @@
-package com.jumptuck.recipebrowser2
+package com.jumptuck.recipebrowser2.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeRepository
 import com.jumptuck.recipebrowser2.databinding.FragmentSettingsBinding
-import com.jumptuck.recipebrowser2.settings.RecipeDeleteAllDialogBuilder
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 import kotlinx.android.synthetic.main.listview_two_lines.view.*
 import timber.log.Timber
@@ -20,17 +22,32 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentSettingsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_settings, container, false)
+        val binding: FragmentSettingsBinding = DataBindingUtil.inflate(inflater,
+            R.layout.fragment_settings, container, false)
 
         val application = requireNotNull(this.activity).application
-        //val fragmentView: View = inflater.inflate(R.layout.fragment_settings, container, false)
+
+        val actionBar = (activity as AppCompatActivity?)!!.supportActionBar
+        actionBar?.title = resources.getString(R.string.settings_fragment_title)
 
         val listView = binding.settingsList.settings_list
         val settingsActionLabels = ArrayList<List<Int>>()
-        settingsActionLabels.add(listOf(R.string.dialog_credentials_title, R.string.dialog_credentials_summary))
-        settingsActionLabels.add(listOf(R.string.prefs_frequency_option_title, R.string.prefs_frequency_option_summary))
-        settingsActionLabels.add(listOf(R.string.prefs_wifi_only_title, R.string.prefs_wifi_only_summary))
-        settingsActionLabels.add(listOf(R.string.delete_all_recipes_confirm, R.string.delete_all_recipes_summary))
+        settingsActionLabels.add(listOf(
+            R.string.dialog_credentials_title,
+            R.string.dialog_credentials_summary
+        ))
+        settingsActionLabels.add(listOf(
+            R.string.prefs_frequency_option_title,
+            R.string.prefs_frequency_option_summary
+        ))
+        settingsActionLabels.add(listOf(
+            R.string.prefs_wifi_only_title,
+            R.string.prefs_wifi_only_summary
+        ))
+        settingsActionLabels.add(listOf(
+            R.string.delete_all_recipes_confirm,
+            R.string.delete_all_recipes_summary
+        ))
 
         val adapter: ArrayAdapter<*> = object : ArrayAdapter<Any?>(
             application,
@@ -49,6 +66,11 @@ class SettingsFragment : Fragment() {
                 val text2 =
                     adapterView.findViewById<View>(R.id.text2) as TextView
 
+                if (settingsActionLabels[position][0] == R.string.prefs_wifi_only_title) {
+                    val cb =
+                        adapterView.findViewById<View>(R.id.checkBox) as CheckBox
+                    cb.visibility = View.VISIBLE
+                }
                 /** Use tag to lookup in onItemClick Listener **/
                 text1.tag = Integer.valueOf(settingsActionLabels[position][0])
                 text1.text = resources.getString(settingsActionLabels[position][0])
