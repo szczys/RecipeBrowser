@@ -14,8 +14,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
+import androidx.recyclerview.widget.RecyclerView
 import com.jumptuck.recipebrowser2.R
-import com.jumptuck.recipebrowser2.database.RecipeDatabase
 import com.jumptuck.recipebrowser2.database.RecipeRepository
 import com.jumptuck.recipebrowser2.databinding.FragmentRecipeListBinding
 import com.jumptuck.recipebrowser2.settings.RecipeDeleteAllDialogBuilder
@@ -28,6 +28,8 @@ class RecipeListFragment : Fragment() {
     private lateinit var ab: ActionBar
     private lateinit var spinner2: Spinner
     private lateinit var sView: View
+    private var lastSpinnerValue  = ""
+    private var needScrollToTop = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -68,6 +70,21 @@ class RecipeListFragment : Fragment() {
         })
 
         binding.lifecycleOwner = this
+
+        /** Scroll to top of list when new category is selected **/
+        adapter.registerAdapterDataObserver( object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(
+                positionStart: Int,
+                itemCount: Int
+            ) {
+                Timber.d("RecyclerView.AdapterDataObserver called")
+                scrollToTop(binding.recipeList)
+            }
+
+            override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+                scrollToTop(binding.recipeList)
+            }
+        })
 
         /** Buttons used only for testing **/
         binding.button.setOnClickListener {
@@ -116,6 +133,16 @@ class RecipeListFragment : Fragment() {
                 if (p0 != null) {
                     val selectedText = p0.getItemAtPosition(p2).toString()
                     Timber.d("Spinner text: %s", selectedText)
+
+                    /**
+                     * Tell RecyclerView to go to first entry
+                     * but only if the category is actually different
+                     **/
+                    if (lastSpinnerValue != selectedText) {
+                        Timber.d("Category changed, scroll up needed.")
+                        lastSpinnerValue = selectedText
+                        needScrollToTop = true
+                    }
                     recipeListViewModel.updateRecipeView(selectedText)
                     recipeListViewModel.categorySelectedTracker.value = p2
                 }
@@ -164,5 +191,13 @@ class RecipeListFragment : Fragment() {
         }
         return NavigationUI.onNavDestinationSelected(item, requireView().findNavController())
                 || super.onOptionsItemSelected(item)
+    }
+
+    private fun scrollToTop(rv: RecyclerView) {
+        if (needScrollToTop) {
+            Timber.d("Scrolling to top")
+            needScrollToTop = false /** only scroll if category spinner changed **/
+            rv.smoothScrollToPosition(0)
+        }
     }
 }
