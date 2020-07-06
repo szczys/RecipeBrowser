@@ -84,7 +84,11 @@ class SettingsFragment : Fragment() {
             Timber.d("OnClicked: %s", itemView.text1.tag)
             when (itemView.text1.tag) {
                 R.string.dialog_credentials_title -> {
-
+                    CredentialsDialogBuilder(
+                        requireActivity(),
+                        resources,
+                        repository
+                    ).show()
                 }
                 R.string.prefs_frequency_option_title -> {
 
