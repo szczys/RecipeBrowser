@@ -1,7 +1,8 @@
 package com.jumptuck.recipebrowser2.database
 
 import android.app.Application
-import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.content.res.Resources
 import androidx.lifecycle.*
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.network.WebScraper
@@ -13,9 +14,15 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
     val database = RecipeDatabase.getInstance(application)
     //Livedata sources for recipe list
     val allRecipes = database.recipeDatabaseDao.getAll()
-    val status = MutableLiveData<String>()
+    private val status = MutableLiveData<String>()
     val favorites = database.recipeDatabaseDao.getFavorites()
-    val resources = application.resources
+    val resources: Resources = application.resources
+
+    //Shared Preferences variables
+    private val prefsFile = "com.jumptuck.recipebrowser2"
+    private var savedPreferences = application.getSharedPreferences(prefsFile, MODE_PRIVATE)
+    private var wifiOnly = true
+
 
     //Coroutines setup
     private var repositoryJob = Job()
@@ -31,32 +38,30 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
 
     fun recipesToDisplay(): LiveData<List<Recipe>> {
         val recipeListMediator = MediatorLiveData<List<Recipe>>()
-        recipeListMediator.addSource(status, object : Observer<String> {
-            override fun onChanged(t: String?) {
-                recipeListMediator.removeSource(allRecipes)
-                recipeListMediator.removeSource(favorites)
-                when (t) {
-                     resources.getString(R.string.spinner_category_all) -> {
-                        recipeListMediator.addSource(allRecipes) { value ->
-                            recipeListMediator.value = value
-                        }
+        recipeListMediator.addSource(status) { t ->
+            recipeListMediator.removeSource(allRecipes)
+            recipeListMediator.removeSource(favorites)
+            when (t) {
+                resources.getString(R.string.spinner_category_all) -> {
+                    recipeListMediator.addSource(allRecipes) { value ->
+                        recipeListMediator.value = value
                     }
-                    resources.getString(R.string.spinner_category_favorites) -> {
-                        recipeListMediator.addSource(favorites) { value ->
-                            recipeListMediator.value = value
-                        }
+                }
+                resources.getString(R.string.spinner_category_favorites) -> {
+                    recipeListMediator.addSource(favorites) { value ->
+                        recipeListMediator.value = value
                     }
-                    else -> {
-                        Timber.i("LookupString: %s", t)
-                        recipeListMediator.addSource(
-                            database.recipeDatabaseDao.getRecipesFromCategory(t!!)
-                        ) { value ->
-                            recipeListMediator.value = value
-                        }
+                }
+                else -> {
+                    Timber.i("LookupString: %s", t)
+                    recipeListMediator.addSource(
+                        database.recipeDatabaseDao.getRecipesFromCategory(t!!)
+                    ) { value ->
+                        recipeListMediator.value = value
                     }
                 }
             }
-        })
+        }
         return recipeListMediator
     }
 
@@ -85,33 +90,27 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
         }
     }
 
-    val category_list = database.recipeDatabaseDao.getCategoryList()
-    var favorite_count = database.recipeDatabaseDao.favoriteCount()
+    private val categoryList = database.recipeDatabaseDao.getCategoryList()
+    private var favoriteCount = database.recipeDatabaseDao.favoriteCount()
 
     fun categoryListWithHeaders(): LiveData<List<String>> {
         val categoryListMediator = MediatorLiveData<List<String>>()
-        categoryListMediator.addSource(favorite_count, object : Observer<Int> {
-            override fun onChanged(t: Int?) {
-                categoryListMediator.value = updateCategoryList()
-            }
-        })
-        categoryListMediator.addSource(category_list, object : Observer<List<String>> {
-            override fun onChanged(t: List<String>?) {
-                categoryListMediator.value = updateCategoryList()
-            }
-        })
+        categoryListMediator.addSource(favoriteCount
+        ) { categoryListMediator.value = updateCategoryList() }
+        categoryListMediator.addSource(categoryList
+        ) { categoryListMediator.value = updateCategoryList() }
         return categoryListMediator
     }
 
-    fun updateCategoryList(): List<String> {
+    private fun updateCategoryList(): List<String> {
 
-        var buildStringList: ArrayList<String> = ArrayList()
+        val buildStringList: ArrayList<String> = ArrayList()
         buildStringList.add("All Recipes")
 
-        if ((favorite_count.value != null) && (favorite_count.value!! > 0)) {
+        if ((favoriteCount.value != null) && (favoriteCount.value!! > 0)) {
             buildStringList.add("Favorites")
         }
-        category_list.value?.iterator()?.forEach {
+        categoryList.value?.iterator()?.forEach {
             buildStringList.add(it)
         }
         return buildStringList
@@ -125,13 +124,10 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
         return database.recipeDatabaseDao.insert(recipe)
     }
 
-    companion object UserPrefs {
-        private var wifiOnly = true
-        fun getWifiOnlyPref(): Boolean {
-            return wifiOnly
-        }
-        fun setWifiOnlyPref(state: Boolean) {
-            wifiOnly = state
-        }
+    fun getWifiOnlyPref(): Boolean {
+        return wifiOnly
+    }
+    fun setWifiOnlyPref(state: Boolean) {
+        wifiOnly = state
     }
 }

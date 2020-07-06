@@ -1,6 +1,5 @@
 package com.jumptuck.recipebrowser2.settings
 
-import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,11 +7,9 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.jumptuck.recipebrowser2.R
-import com.jumptuck.recipebrowser2.RecipeBrowserApplication
 import com.jumptuck.recipebrowser2.database.RecipeRepository
 import com.jumptuck.recipebrowser2.databinding.FragmentSettingsBinding
 import kotlinx.android.synthetic.main.fragment_settings.view.*
@@ -20,7 +17,8 @@ import kotlinx.android.synthetic.main.listview_two_lines.view.*
 import timber.log.Timber
 
 class SettingsFragment : Fragment() {
-    private val prefsObj = RecipeRepository.UserPrefs
+    private lateinit var repository: RecipeRepository
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,11 +27,11 @@ class SettingsFragment : Fragment() {
             R.layout.fragment_settings, container, false)
 
         val application = requireNotNull(this.activity).application
+        repository = RecipeRepository(application)
 
-        Timber.i("PrefsWifi: %b", prefsObj.getWifiOnlyPref())
-        prefsObj.setWifiOnlyPref(false)
-        Timber.i("PrefsWifi: %b", prefsObj.getWifiOnlyPref())
-
+        Timber.i("PrefsWifi: %b", repository.getWifiOnlyPref())
+        repository.setWifiOnlyPref(false)
+        Timber.i("PrefsWifi: %b", repository.getWifiOnlyPref())
 
         val listView = binding.settingsList.settings_list
         val settingsActionLabels = ArrayList<List<Int>>()
@@ -101,7 +99,7 @@ class SettingsFragment : Fragment() {
                     RecipeDeleteAllDialogBuilder(
                         requireActivity(),
                         resources,
-                        RecipeRepository(application)
+                        repository
                     ).show()
                 }
             }
