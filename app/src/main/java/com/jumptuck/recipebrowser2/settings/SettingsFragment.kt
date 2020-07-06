@@ -69,7 +69,7 @@ class SettingsFragment : Fragment() {
                     val cb =
                         adapterView.findViewById<View>(R.id.checkBox) as CheckBox
                     cb.visibility = View.VISIBLE
-                    cb.setChecked(repository.wifiOnly)
+                    cb.setChecked(repository.prefsWifiOnly)
                 }
                 /** Use tag to lookup in onItemClick Listener **/
                 text1.tag = Integer.valueOf(settingsActionLabels[position][0])
@@ -98,7 +98,7 @@ class SettingsFragment : Fragment() {
                     val cb = itemView.checkBox
                     var newState = !cb.isChecked
                     repository.setWifiOnlyPref(newState)
-                    cb.setChecked(repository.wifiOnly)
+                    cb.setChecked(repository.prefsWifiOnly)
                 }
                 R.string.delete_all_recipes_confirm -> {
                     RecipeDeleteAllDialogBuilder(

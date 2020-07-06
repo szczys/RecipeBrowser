@@ -16,13 +16,17 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
     val allRecipes = database.recipeDatabaseDao.getAll()
     private val status = MutableLiveData<String>()
     val favorites = database.recipeDatabaseDao.getFavorites()
-    val resources: Resources = application.resources
+    private val resources: Resources = application.resources
 
     //Shared Preferences variables
     private val prefsFile = "com.jumptuck.recipebrowser2"
     private var savedPreferences = application.getSharedPreferences(prefsFile, MODE_PRIVATE)
-    private var _wifiOnly = false
+    private val prefsEditor = savedPreferences.edit()
 
+    private var _prefsWifiOnly = false
+    private var _prefsHost: String?
+    private var _prefsUsername: String?
+    private var _prefsPassword: String?
 
     //Coroutines setup
     private var repositoryJob = Job()
@@ -30,7 +34,12 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
 
     init {
         status.value = ""
-        _wifiOnly = savedPreferences.getBoolean("wifiOnly",true)
+        _prefsWifiOnly = savedPreferences.getBoolean("wifiOnly",true)
+        _prefsHost = savedPreferences.getString("host", "")
+        _prefsUsername = savedPreferences.getString("user", "")
+        _prefsPassword = savedPreferences.getString("pass", "")
+
+
     }
 
     fun setStatus(value: String) {
@@ -125,12 +134,25 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
         return database.recipeDatabaseDao.insert(recipe)
     }
 
-    val wifiOnly
-        get() = _wifiOnly
+    /** Protected prefs data **/
+    val prefsWifiOnly   get() = _prefsWifiOnly
+    val prefsHost       get() = _prefsHost
+    val prefsUsername   get() = _prefsUsername
+    val prefsPassword   get() = _prefsPassword
+
+    /** Prefs data setters will write to SharedPreferences **/
     fun setWifiOnlyPref(state: Boolean) {
-        _wifiOnly = state
-        val prefsEditor = savedPreferences.edit()
-        prefsEditor.putBoolean("wifiOnly", wifiOnly)
+        _prefsWifiOnly = state
+        prefsEditor.putBoolean("wifiOnly", prefsWifiOnly)
+        prefsEditor.apply()
+    }
+    fun setServerCredentials(host: String, user: String, pass: String) {
+        _prefsHost = host
+        _prefsUsername = user
+        _prefsPassword = pass
+        prefsEditor.putString("host", prefsHost)
+        prefsEditor.putString("user", prefsUsername)
+        prefsEditor.putString("pass", prefsPassword)
         prefsEditor.apply()
     }
 }
