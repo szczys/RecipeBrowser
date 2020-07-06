@@ -29,10 +29,6 @@ class SettingsFragment : Fragment() {
         val application = requireNotNull(this.activity).application
         repository = RecipeRepository(application)
 
-        Timber.i("PrefsWifi: %b", repository.getWifiOnlyPref())
-        repository.setWifiOnlyPref(false)
-        Timber.i("PrefsWifi: %b", repository.getWifiOnlyPref())
-
         val listView = binding.settingsList.settings_list
         val settingsActionLabels = ArrayList<List<Int>>()
         settingsActionLabels.add(listOf(
@@ -73,6 +69,7 @@ class SettingsFragment : Fragment() {
                     val cb =
                         adapterView.findViewById<View>(R.id.checkBox) as CheckBox
                     cb.visibility = View.VISIBLE
+                    cb.setChecked(repository.wifiOnly)
                 }
                 /** Use tag to lookup in onItemClick Listener **/
                 text1.tag = Integer.valueOf(settingsActionLabels[position][0])
@@ -84,7 +81,7 @@ class SettingsFragment : Fragment() {
         listView.adapter = adapter
 
         listView.setOnItemClickListener { _, itemView, _, _ ->
-            Timber.i("OnClicked: %s", itemView.text1.tag)
+            Timber.d("OnClicked: %s", itemView.text1.tag)
             when (itemView.text1.tag) {
                 R.string.dialog_credentials_title -> {
 
@@ -93,7 +90,11 @@ class SettingsFragment : Fragment() {
 
                 }
                 R.string.prefs_wifi_only_title -> {
-
+                    //repository.setWifiOnlyPref(repository.getWifiOnlyPref())
+                    val cb = itemView.checkBox
+                    var newState = !cb.isChecked
+                    repository.setWifiOnlyPref(newState)
+                    cb.setChecked(repository.wifiOnly)
                 }
                 R.string.delete_all_recipes_confirm -> {
                     RecipeDeleteAllDialogBuilder(

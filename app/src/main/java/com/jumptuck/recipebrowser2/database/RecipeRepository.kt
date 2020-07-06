@@ -21,7 +21,7 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
     //Shared Preferences variables
     private val prefsFile = "com.jumptuck.recipebrowser2"
     private var savedPreferences = application.getSharedPreferences(prefsFile, MODE_PRIVATE)
-    private var wifiOnly = true
+    private var _wifiOnly = false
 
 
     //Coroutines setup
@@ -30,6 +30,7 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
 
     init {
         status.value = ""
+        _wifiOnly = savedPreferences.getBoolean("wifiOnly",true)
     }
 
     fun setStatus(value: String) {
@@ -124,10 +125,12 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
         return database.recipeDatabaseDao.insert(recipe)
     }
 
-    fun getWifiOnlyPref(): Boolean {
-        return wifiOnly
-    }
+    val wifiOnly
+        get() = _wifiOnly
     fun setWifiOnlyPref(state: Boolean) {
-        wifiOnly = state
+        _wifiOnly = state
+        val prefsEditor = savedPreferences.edit()
+        prefsEditor.putBoolean("wifiOnly", wifiOnly)
+        prefsEditor.apply()
     }
 }
