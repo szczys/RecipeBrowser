@@ -2,14 +2,11 @@ package com.jumptuck.recipebrowser2.settings
 
 import android.app.Activity
 import android.content.Context
-import android.content.DialogInterface
 import android.content.res.Resources
-import android.text.Editable
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeRepository
-import timber.log.Timber
 
 class CredentialsDialogBuilder(
     context: Context,
@@ -34,11 +31,9 @@ class CredentialsDialogBuilder(
                     passEdit.text.toString()
                 )
             }
-            .setNegativeButton(R.string.dialog_button_cancel,
-                DialogInterface.OnClickListener { dialog, id ->
-                    //getDialog().cancel()
-                })
-            //.create()
+            .setNegativeButton(R.string.dialog_button_cancel) { dialog, id ->
+                //getDialog().cancel()
+            }
     }
 
     override fun show(): AlertDialog? {
