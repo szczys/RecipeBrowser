@@ -7,8 +7,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Url
 
-//private const val BASE_URL = "https://mars.udacity.com/"
-private const val BASE_URL = "http://192.168.1.105/recipes/"
+private const val BASE_URL = "http://localhost/"
 
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(ScalarsConverterFactory.create())

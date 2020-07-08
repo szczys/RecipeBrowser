@@ -19,7 +19,7 @@ class CredentialsDialogBuilder(
         val hostEdit = dialogView.findViewById<EditText>(R.id.host)
         val userEdit = dialogView.findViewById<EditText>(R.id.username)
         val passEdit = dialogView.findViewById<EditText>(R.id.password)
-        hostEdit.append(repository.prefsHost)
+        hostEdit.append(RecipeRepository.prefsHost)
 
         setView(dialogView)
             .setCancelable(false)
