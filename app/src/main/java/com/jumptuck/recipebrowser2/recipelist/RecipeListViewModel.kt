@@ -6,10 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.RecipeBrowserApplication
 import com.jumptuck.recipebrowser2.database.Recipe
-import com.jumptuck.recipebrowser2.database.RecipeDatabaseDao
 import com.jumptuck.recipebrowser2.database.RecipeRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
+
+enum class ScrapeStatus { LOADING, ERROR, DONE }
 
 class RecipeListViewModel(
     application: Application
@@ -31,7 +32,7 @@ class RecipeListViewModel(
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
     
     fun updateRecipeView(selectedCategory: String) {
-        repository.setStatus(selectedCategory)
+        repository.setSelectedCategory(selectedCategory)
     }
 
     fun addMenuItem() {

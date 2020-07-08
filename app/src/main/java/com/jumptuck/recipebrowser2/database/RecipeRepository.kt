@@ -14,7 +14,7 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
     val database = RecipeDatabase.getInstance(application)
     //Livedata sources for recipe list
     val allRecipes = database.recipeDatabaseDao.getAll()
-    private val status = MutableLiveData<String>()
+    private val selectedCategory = MutableLiveData<String>()
     val favorites = database.recipeDatabaseDao.getFavorites()
     private val resources: Resources = application.resources
 
@@ -28,7 +28,7 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
     private val uiScope = CoroutineScope(Dispatchers.Main + repositoryJob)
 
     init {
-        status.value = ""
+        selectedCategory.value = ""
         prefsWifiOnly = savedPreferences.getBoolean("wifiOnly",true)
         prefsHost = savedPreferences.getString("host", "")
         prefsUsername = savedPreferences.getString("user", "")
@@ -36,13 +36,13 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
 
     }
 
-    fun setStatus(value: String) {
-        status.value = value
+    fun setSelectedCategory(value: String) {
+        selectedCategory.value = value
     }
 
     fun recipesToDisplay(): LiveData<List<Recipe>> {
         val recipeListMediator = MediatorLiveData<List<Recipe>>()
-        recipeListMediator.addSource(status) { t ->
+        recipeListMediator.addSource(selectedCategory) { t ->
             recipeListMediator.removeSource(allRecipes)
             recipeListMediator.removeSource(favorites)
             when (t) {
