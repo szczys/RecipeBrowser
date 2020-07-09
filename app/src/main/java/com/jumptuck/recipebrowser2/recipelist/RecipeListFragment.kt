@@ -155,6 +155,12 @@ class RecipeListFragment : Fragment() {
         ab.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         ab.customView = sView
 
+        /** Listener to hide or show progressBar in the Toolbar **/
+        recipeListViewModel.scrapeStatus.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                sView.progressBar.visibility = it
+            }
+        })
 
         setHasOptionsMenu(true)
 

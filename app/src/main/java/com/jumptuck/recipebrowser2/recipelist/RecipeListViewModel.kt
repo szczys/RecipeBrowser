@@ -1,7 +1,9 @@
 package com.jumptuck.recipebrowser2.recipelist
 
 import android.app.Application
+import android.view.View
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.RecipeBrowserApplication
@@ -9,8 +11,6 @@ import com.jumptuck.recipebrowser2.database.Recipe
 import com.jumptuck.recipebrowser2.database.RecipeRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
-
-enum class ScrapeStatus { LOADING, ERROR, DONE }
 
 class RecipeListViewModel(
     application: Application
@@ -20,6 +20,10 @@ class RecipeListViewModel(
     private var fakeItemCounter: Int = 0
 
     val recipesToDisplay = repository.recipesToDisplay()
+
+    private val _scrapeStatus = MutableLiveData<Int>()
+    val scrapeStatus: LiveData<Int>
+        get() = _scrapeStatus
 
     //Coroutines setup
     private var viewModelJob = Job()
@@ -86,8 +90,13 @@ class RecipeListViewModel(
     fun scrapeRecipes() {
         uiScope.launch {
             Timber.i("Scraping for recipes...")
-            repository.scrapeRecipes()
-
+            try {
+                _scrapeStatus.value = View.VISIBLE
+                repository.scrapeRecipes()
+                _scrapeStatus.value = View.GONE
+            } catch (e: Exception) {
+                //_scrapeStatus.value = ScrapeStatus.ERROR
+            }
         }
     }
 
