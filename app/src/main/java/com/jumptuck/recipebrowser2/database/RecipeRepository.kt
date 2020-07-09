@@ -85,6 +85,9 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
         else if (prefsWifiOnly && internetStatus[1] == false) {
             throw NetworkErrorException(resources.getString(R.string.toast_wifi_not_connected))
         }
+        else if (prefsHost == null || prefsHost == "") {
+            throw Exception(resources.getString(R.string.toast_empty_host_during_refresh))
+        }
         withContext(Dispatchers.IO) {
             val scraper = WebScraper(database)
             scraper.crawlDirectory(prefsHost ?: "")

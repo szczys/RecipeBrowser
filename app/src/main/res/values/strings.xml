@@ -25,7 +25,7 @@
     <string name="no">No</string>
 
     <string name="toast_empty_host_url">Web Host address cannot be blank\n\n (Click cancel to exit this dialog)</string>
-    <string name="toast_empty_host_during_refresh">Web Host address must be set in the Preferences</string>
+    <string name="toast_empty_host_during_refresh">Cannot refresh. Host address is blank.\nPlease review app settings</string>
     <string name="toast_internet_not_connected">No Internet Connection Available</string>
     <string name="toast_wifi_not_connected">Cannot refresh. \"WiFi Only\" is\nselected in settings but no\nWiFi network is available</string>
     <string name="web_error_401">Incorrect username or password for:\n</string>
