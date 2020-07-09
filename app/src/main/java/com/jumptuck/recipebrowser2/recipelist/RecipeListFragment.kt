@@ -169,6 +169,7 @@ class RecipeListFragment : Fragment() {
                 val toast = Toast.makeText(activity, it, Toast.LENGTH_LONG)
                 toast.setGravity(Gravity.CENTER_VERTICAL,0,0)
                 toast.show()
+                recipeListViewModel.clearStatusMessage()
             }
         })
 

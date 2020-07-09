@@ -1,5 +1,6 @@
 package com.jumptuck.recipebrowser2.network
 
+import android.accounts.NetworkErrorException
 import com.jumptuck.recipebrowser2.database.Recipe
 import com.jumptuck.recipebrowser2.database.RecipeDatabase
 
@@ -20,7 +21,7 @@ class WebScraper(database: RecipeDatabase) {
         try {
             listResult = getPropertiesDeferred.await()
         } catch (t: Throwable) {
-            Timber.i(t)
+            throw NetworkErrorException(t.message)
         }
         return listResult
     }

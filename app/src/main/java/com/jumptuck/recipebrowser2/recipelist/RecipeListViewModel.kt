@@ -101,9 +101,13 @@ class RecipeListViewModel(
         }
     }
 
-    val _statusMessages = MutableLiveData<String>()
-    val statusMessages: LiveData<String>
+    val _statusMessages = MutableLiveData<String?>()
+    val statusMessages: LiveData<String?>
         get() = _statusMessages
+
+    fun clearStatusMessage() {
+        _statusMessages.value = null
+    }
 
     val categoryListWithHeaders = repository.categoryListWithHeaders()
     val categorySelectedTracker = MutableLiveData<Int>()
