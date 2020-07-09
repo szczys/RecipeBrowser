@@ -96,6 +96,7 @@ class RecipeListViewModel(
                 _scrapeStatus.value = View.GONE
             } catch (e: Exception) {
                 //_scrapeStatus.value = ScrapeStatus.ERROR
+                Timber.i("Exception: %s", e.message)
             }
         }
     }

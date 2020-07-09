@@ -1,9 +1,16 @@
 package com.jumptuck.recipebrowser2.database
 
+import android.accounts.NetworkErrorException
 import android.app.Application
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.res.Resources
-import androidx.lifecycle.*
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.network.WebScraper
 import kotlinx.coroutines.*
@@ -17,6 +24,7 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
     private val selectedCategory = MutableLiveData<String>()
     val favorites = database.recipeDatabaseDao.getFavorites()
     private val resources: Resources = application.resources
+    private val myApplication = application
 
     //Shared Preferences variables
     private val prefsFile = "com.jumptuck.recipebrowser2"
@@ -70,10 +78,19 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
     }
 
     suspend fun scrapeRecipes() {
+        if (hasInternetConnection() == false) {
+            throw NetworkErrorException("Cannot connect to Internet")
+        }
         withContext(Dispatchers.IO) {
             val scraper = WebScraper(database)
             scraper.crawlDirectory(prefsHost ?: "")
         }
+    }
+
+    fun hasInternetConnection(): Boolean {
+        val connectivityManager = myApplication.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capability = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        return capability?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
     }
 
     fun deleteAllRecipes() {
