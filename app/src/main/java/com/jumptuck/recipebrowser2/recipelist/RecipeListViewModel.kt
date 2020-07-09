@@ -96,10 +96,14 @@ class RecipeListViewModel(
                 _scrapeStatus.value = View.GONE
             } catch (e: Exception) {
                 _scrapeStatus.value = View.GONE
-                Timber.i("Exception: %s", e.message)
+                _statusMessages.postValue(e.message)
             }
         }
     }
+
+    val _statusMessages = MutableLiveData<String>()
+    val statusMessages: LiveData<String>
+        get() = _statusMessages
 
     val categoryListWithHeaders = repository.categoryListWithHeaders()
     val categorySelectedTracker = MutableLiveData<Int>()

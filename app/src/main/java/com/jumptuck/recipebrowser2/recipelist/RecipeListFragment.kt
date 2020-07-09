@@ -5,6 +5,7 @@ import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -159,6 +160,15 @@ class RecipeListFragment : Fragment() {
         recipeListViewModel.scrapeStatus.observe(viewLifecycleOwner, Observer {
             it?.let {
                 sView.progressBar.visibility = it
+            }
+        })
+
+        /** Show toasts for network status updates **/
+        recipeListViewModel.statusMessages.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                val toast = Toast.makeText(activity, it, Toast.LENGTH_LONG)
+                toast.setGravity(Gravity.CENTER_VERTICAL,0,0)
+                toast.show()
             }
         })
 
