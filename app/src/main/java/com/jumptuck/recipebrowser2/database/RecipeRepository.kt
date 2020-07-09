@@ -78,8 +78,12 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
     }
 
     suspend fun scrapeRecipes() {
-        if (hasInternetConnection() == false) {
-            throw NetworkErrorException("Cannot connect to Internet")
+        val internetStatus = hasInternetConnection()
+        if (internetStatus[0] == false) {
+            throw NetworkErrorException(resources.getString(R.string.toast_internet_not_connected))
+        }
+        else if (prefsWifiOnly && internetStatus[1] == false) {
+            throw NetworkErrorException(resources.getString(R.string.toast_wifi_not_connected))
         }
         withContext(Dispatchers.IO) {
             val scraper = WebScraper(database)
@@ -87,10 +91,12 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
         }
     }
 
-    fun hasInternetConnection(): Boolean {
+    fun hasInternetConnection(): List<Boolean> {
         val connectivityManager = myApplication.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val capability = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-        return capability?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
+        val hasConnection = capability?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
+        val hasWifi = capability?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ?: false
+        return listOf(hasConnection, hasWifi)
     }
 
     fun deleteAllRecipes() {

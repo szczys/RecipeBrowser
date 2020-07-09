@@ -95,7 +95,7 @@ class RecipeListViewModel(
                 repository.scrapeRecipes()
                 _scrapeStatus.value = View.GONE
             } catch (e: Exception) {
-                //_scrapeStatus.value = ScrapeStatus.ERROR
+                _scrapeStatus.value = View.GONE
                 Timber.i("Exception: %s", e.message)
             }
         }
