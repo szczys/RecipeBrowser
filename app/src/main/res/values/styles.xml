@@ -2,9 +2,18 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">#01579b</item>
+        <item name="colorPrimaryVariant">#4f83cc</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#757575</item>
+        <item name="colorSecondaryVariant">#a4a4a4</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorError">#F44336</item>
+        <item name="colorOnError">#FFFFFF</item>
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#212121</item>
+        <item name="android:colorBackground">#e1e2e1</item>
+        <item name="colorOnBackground">#f5f5f6</item>
+        <item name="android:statusBarColor">#002f6c</item>
     </style>
-
 </resources>
