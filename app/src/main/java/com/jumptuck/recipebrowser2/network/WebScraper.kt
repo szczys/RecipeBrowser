@@ -29,32 +29,33 @@ class WebScraper(database: RecipeDatabase) {
     suspend fun crawlDirectory(startingUrl: String) {
         val recipeObjects = ArrayList<Recipe>()
         val scraped = ParsedPage()
-        val dirList = ArrayList<String>()
-        dirList.add("")
+        val dirList = mutableMapOf<String,String>()
+        dirList.put("","Uncategorized")
         var dirDepth = 0
 
         while (dirList.size > 0) {
+            val workingSubDir = dirList.keys.toTypedArray()[0]
             val scrapeDir = StringBuilder(startingUrl)
-                .append(dirList[0]).toString()
+                .append(workingSubDir).toString()
             Timber.i("Dir to scrape: %s", scrapeDir)
             scraped.parse(
                 getHTML(scrapeDir),
-                dirList[0]
+                workingSubDir,
+                dirList.get(workingSubDir) ?: "Uncategorized"
             )
             val foundRecipes: Iterator<*> = scraped.scrapedRecipes.iterator()
             while (foundRecipes.hasNext()) {
                 recipeObjects.add(foundRecipes.next() as Recipe)
             }
-            dirList.removeAt(0)
+            dirList.remove(workingSubDir)
             Timber.i(dirList.toString())
 
             /** Limit directory crawling to just one level **/
             if (dirDepth < 1 && scraped.subDirectories.size > 0) {
                 ++dirDepth
                 Timber.i("Scraped subdirs list: %s", scraped.subDirectories.toString())
-                val subdirs: Iterator<*> = scraped.subDirectories.iterator()
-                while (subdirs.hasNext()) {
-                    dirList.add(subdirs.next() as String)
+                scraped.subDirectories.forEach { (subD, niceName) ->
+                    dirList.put(subD, niceName)
                 }
             }
         }
@@ -68,18 +69,13 @@ class WebScraper(database: RecipeDatabase) {
                 Timber.i("Recipe date same as already in db: %s", current_recipe.title)
             }
             else {
+                Timber.i("Adding to db: %s", current_recipe.toString())
                 //Format recipe for insert or update to DB
                 val curUrl = StringBuilder(startingUrl)
-                    .append(current_recipe.category)
                     .append(current_recipe.link).toString()
                 current_recipe.link = curUrl
                 current_recipe.body = getHTML(curUrl)
 
-                if (current_recipe.category == "") {
-                    current_recipe.category = "Uncategorized"
-                } else if (current_recipe.category.last() == '/') {
-                    current_recipe.category = current_recipe.category.dropLast(1)
-                }
                 if (existingRecipe == null) {
                     databaseDao.insert(current_recipe)
                 }
@@ -94,9 +90,13 @@ class WebScraper(database: RecipeDatabase) {
 
     private class ParsedPage {
         var scrapedRecipes = ArrayList<Recipe>()
-        var subDirectories = ArrayList<String>()
+        var subDirectories = mutableMapOf<String,String>()
 
-        fun parse(html: String, current_directory: String) {
+        fun parse(
+            html: String,
+            current_directory: String,
+            category_name: String
+        ) {
             scrapedRecipes.clear()
             subDirectories.clear()
             var workingRecipe: Recipe
@@ -133,9 +133,9 @@ class WebScraper(database: RecipeDatabase) {
                     if (title.isNotEmpty()) {
                         if (title.substring(title.length - 1) == "/") {
                             Timber.d("Directory: $title | $link")
-                            subDirectories.add(link)
+                            subDirectories.put(link, title.dropLast(1))
                         }
-                        if (title.length >= 5 && title.substring(title.length - 4)
+                        else if (title.length >= 5 && title.substring(title.length - 4)
                                 .equals(".txt", ignoreCase = true)
                         ) {
                             Timber.d(
@@ -143,8 +143,8 @@ class WebScraper(database: RecipeDatabase) {
                             )
                             workingRecipe = Recipe()
                             workingRecipe.title = title.substring(0, title.length - 4)
-                            workingRecipe.link = link
-                            workingRecipe.category = current_directory
+                            workingRecipe.link = StringBuilder(current_directory).append(link).toString()
+                            workingRecipe.category = category_name
                             workingRecipe.date = date
                             scrapedRecipes.add(workingRecipe)
                         }
@@ -159,15 +159,16 @@ class WebScraper(database: RecipeDatabase) {
                     if (curTitle.isNotEmpty()) {
                         if (curTitle.substring(curTitle.length - 1) == "/") {
                             Timber.d("Directory: $curTitle")
-                            subDirectories.add(l.attr("href"))
+                            subDirectories.put(l.attr("href"), curTitle.dropLast(1))
                         } else if (curTitle.length >= 4 && curTitle.substring(curTitle.length - 4)
                                 .equals(".txt", ignoreCase = true)
                         ) {
                             Timber.d("Text File: %s", curTitle)
                             workingRecipe = Recipe()
                             workingRecipe.title = curTitle.substring(0, curTitle.length - 4)
-                            workingRecipe.link = l.select("a").attr("href")
-                            workingRecipe.category = current_directory
+                            workingRecipe.link =
+                                StringBuilder(current_directory).append(l.select("a").attr("href")).toString()
+                            workingRecipe.category = category_name
                             workingRecipe.date = ""
                             scrapedRecipes.add(workingRecipe)
                         }
