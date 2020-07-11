@@ -13,11 +13,12 @@ class AboutFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val v = inflater.inflate(R.layout.fragment_about, container, false)
+        return inflater.inflate(R.layout.fragment_about, container, false)
+    }
 
+    override fun onResume() {
+        super.onResume()
         /** Show fragment title in toolbar **/
         (requireActivity() as MainActivity).toolbar.title = getString(R.string.about_fragment_title)
-
-        return v
     }
 }

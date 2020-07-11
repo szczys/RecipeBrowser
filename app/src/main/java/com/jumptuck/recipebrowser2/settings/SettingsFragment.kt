@@ -71,7 +71,7 @@ class SettingsFragment : Fragment() {
                     val cb =
                         adapterView.findViewById<View>(R.id.checkBox) as CheckBox
                     cb.visibility = View.VISIBLE
-                    cb.setChecked(RecipeRepository.prefsWifiOnly)
+                    cb.isChecked = RecipeRepository.prefsWifiOnly
                 }
                 /** Use tag to lookup in onItemClick Listener **/
                 text1.tag = Integer.valueOf(settingsActionLabels[position][0])
@@ -98,9 +98,9 @@ class SettingsFragment : Fragment() {
                 R.string.prefs_wifi_only_title -> {
                     //repository.setWifiOnlyPref(repository.getWifiOnlyPref())
                     val cb = itemView.checkBox
-                    var newState = !cb.isChecked
+                    val newState = !cb.isChecked
                     repository.setWifiOnlyPref(newState)
-                    cb.setChecked(RecipeRepository.prefsWifiOnly)
+                    cb.isChecked = RecipeRepository.prefsWifiOnly
                 }
                 R.string.delete_all_recipes_confirm -> {
                     RecipeDeleteAllDialogBuilder(
@@ -111,10 +111,12 @@ class SettingsFragment : Fragment() {
                 }
             }
         }
+        return binding.root
+    }
 
+    override fun onResume() {
+        super.onResume()
         /** Show fragment title in toolbar **/
         (requireActivity() as MainActivity).toolbar.title = getString(R.string.settings_fragment_title)
-
-        return binding.root
     }
 }
