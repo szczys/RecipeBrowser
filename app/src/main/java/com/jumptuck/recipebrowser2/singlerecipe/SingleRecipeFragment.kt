@@ -3,15 +3,16 @@ package com.jumptuck.recipebrowser2.singlerecipe
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.jumptuck.recipebrowser2.MainActivity
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeDatabase
 import com.jumptuck.recipebrowser2.databinding.FragmentSingleRecipeBinding
+import kotlinx.android.synthetic.main.activity_main.*
 
 class SingleRecipeFragment : Fragment() {
 
@@ -43,10 +44,8 @@ class SingleRecipeFragment : Fragment() {
         binding.singleRecipeViewModel = viewModel
         binding.lifecycleOwner = this
 
-        val actionBar = (activity as AppCompatActivity?)!!.supportActionBar
         viewModel.curRecipe.observe(viewLifecycleOwner, Observer {
-            actionBar?.title = it?.title
-
+            (requireActivity() as MainActivity).toolbar.title = it?.title
         })
 
         //Toast.makeText(context, "Recipe Number: ${args.recipeIndex}",Toast.LENGTH_LONG).show()

@@ -11,7 +11,6 @@ import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.navigation.NavigationView
-import com.jumptuck.recipebrowser2.database.RecipeRepository
 import com.jumptuck.recipebrowser2.databinding.ActivityMainBinding
 import timber.log.Timber
 
@@ -34,25 +33,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         /** Only allow the Nav Drawer in Recipe List View **/
         navController.addOnDestinationChangedListener { nc: NavController, nd: NavDestination, _: Bundle? ->
-
             /** Lock Nav Drawer **/
             if (nd.id == nc.graph.startDestination) {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             } else {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
-
-            /**
-             *  Use nice titles for fragments
-             *    android:label must be removed from these framents in navigation.xml for this to work
-             *  **/
-            title = when (nd.id) {
-                R.id.settingsFragment -> getString(R.string.settings_fragment_title)
-                R.id.aboutFragment -> getString(R.string.about_fragment_title)
-                /** Recipe List and Single Recipe will take care of themselves **/
-                else -> null
-            }
-            supportActionBar?.title = title
         }
 
         NavigationUI.setupWithNavController(binding.navView, navController)

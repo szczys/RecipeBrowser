@@ -187,8 +187,6 @@ class RecipeListFragment : Fragment() {
         super.onStop()
         /** Restore default ActionBar view for next frament **/
         ab.setDisplayShowCustomEnabled(false)
-        ab.setDisplayShowTitleEnabled(true)
-        ab.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onResume() {

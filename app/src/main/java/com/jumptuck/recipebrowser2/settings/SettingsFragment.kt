@@ -9,9 +9,11 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import com.jumptuck.recipebrowser2.MainActivity
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeRepository
 import com.jumptuck.recipebrowser2.databinding.FragmentSettingsBinding
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 import kotlinx.android.synthetic.main.listview_two_lines.view.*
 import timber.log.Timber
@@ -109,6 +111,10 @@ class SettingsFragment : Fragment() {
                 }
             }
         }
+
+        /** Show fragment title in toolbar **/
+        (requireActivity() as MainActivity).toolbar.title = getString(R.string.settings_fragment_title)
+
         return binding.root
     }
 }
