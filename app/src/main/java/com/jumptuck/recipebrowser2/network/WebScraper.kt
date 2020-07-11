@@ -1,10 +1,9 @@
 package com.jumptuck.recipebrowser2.network
 
 import android.accounts.NetworkErrorException
-import android.content.res.Resources
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.Recipe
-import com.jumptuck.recipebrowser2.database.RecipeDatabase
+import com.jumptuck.recipebrowser2.database.RecipeRepository
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -12,9 +11,7 @@ import org.jsoup.select.Elements
 import timber.log.Timber
 import java.util.*
 
-class WebScraper(database: RecipeDatabase) {
-    private val databaseDao = database.recipeDatabaseDao
-    private val resources = Resources.getSystem()
+class WebScraper(private val repository: RecipeRepository) {
 
     private suspend fun getHTML(getUrl: String): String {
         val getPropertiesDeferred =
@@ -32,7 +29,7 @@ class WebScraper(database: RecipeDatabase) {
         val recipeObjects = ArrayList<Recipe>()
         val scraped = ParsedPage()
         val dirList = mutableMapOf<String,String>()
-        dirList[""] = resources.getString(R.string.category_uncategorized)
+        dirList[""] = repository.resources.getString(R.string.category_uncategorized)
         var dirDepth = 0
 
         while (dirList.isNotEmpty()) {
@@ -43,7 +40,7 @@ class WebScraper(database: RecipeDatabase) {
             scraped.parse(
                 getHTML(scrapeDir),
                 workingSubDir,
-                dirList[workingSubDir] ?: resources.getString(R.string.category_uncategorized)
+                dirList[workingSubDir] ?: repository.resources.getString(R.string.category_uncategorized)
             )
             val foundRecipes: Iterator<*> = scraped.scrapedRecipes.iterator()
             while (foundRecipes.hasNext()) {
@@ -74,7 +71,7 @@ class WebScraper(database: RecipeDatabase) {
         startingUrl: String
     ) {
         //Check for existing
-        val existingRecipe = databaseDao.findRecipeByTitle(current_recipe.title)
+        val existingRecipe = repository.findRecipeByTitle(current_recipe.title)
         if (existingRecipe?.date == current_recipe.date) {
             Timber.i("Recipe date same as already in db: %s", current_recipe.title)
         } else {
@@ -86,10 +83,10 @@ class WebScraper(database: RecipeDatabase) {
             current_recipe.body = getHTML(curUrl)
 
             if (existingRecipe == null) {
-                databaseDao.insert(current_recipe)
+                repository.insert(current_recipe)
             } else {
                 current_recipe.recipeID = existingRecipe.recipeID
-                databaseDao.update(current_recipe)
+                repository.update(current_recipe)
             }
         }
     }
@@ -105,7 +102,6 @@ class WebScraper(database: RecipeDatabase) {
         ) {
             scrapedRecipes.clear()
             subDirectories.clear()
-            var workingRecipe: Recipe
             val doc: Document = Jsoup.parse(html)
             var titleIndex: Int? = null
             var dateIndex: Int? = null
@@ -136,52 +132,63 @@ class WebScraper(database: RecipeDatabase) {
                     val title: String = row.getElementsByIndexEquals(titleIndex!!).text()
                     val link: String = row.getElementsByIndexEquals(titleIndex).select("a").attr("href")
                     val date: String = row.getElementsByIndexEquals(dateIndex).text()
-                    if (title.isNotEmpty()) {
-                        if (title.substring(title.length - 1) == "/") {
-                            Timber.d("Directory: $title | $link")
-                            subDirectories[link] = title.dropLast(1)
-                        }
-                        else if (title.length >= 5 && title.substring(title.length - 4)
-                                .equals(".txt", ignoreCase = true)
-                        ) {
-                            Timber.d(
-                                "Text file: $title | $link | $date"
-                            )
-                            workingRecipe = Recipe()
-                            workingRecipe.title = title.substring(0, title.length - 4)
-                            workingRecipe.link = StringBuilder(current_directory).append(link).toString()
-                            workingRecipe.category = category_name
-                            workingRecipe.date = date
-                            scrapedRecipes.add(workingRecipe)
-                        }
-                    }
+                    val workingRecipe: Recipe? = formatToRecipe(
+                        title,
+                        link,
+                        date,
+                        current_directory,
+                        category_name
+                    )
+                    if (workingRecipe != null) scrapedRecipes.add(workingRecipe)
                 }
             } else {
                 val links: Iterator<*> = doc.select("a").iterator()
                 while (links.hasNext()) {
                     val l: Element = links.next() as Element
                     val curTitle: String = l.text()
-                    Timber.d(curTitle)
-                    if (curTitle.isNotEmpty()) {
-                        if (curTitle.substring(curTitle.length - 1) == "/") {
-                            Timber.d("Directory: $curTitle")
-                            subDirectories[l.attr("href")] = curTitle.dropLast(1)
-                        } else if (curTitle.length >= 4 && curTitle.substring(curTitle.length - 4)
-                                .equals(".txt", ignoreCase = true)
-                        ) {
-                            Timber.d("Text File: %s", curTitle)
-                            workingRecipe = Recipe()
-                            workingRecipe.title = curTitle.substring(0, curTitle.length - 4)
-                            workingRecipe.link =
-                                StringBuilder(current_directory).append(l.select("a").attr("href")).toString()
-                            workingRecipe.category = category_name
-                            workingRecipe.date = ""
-                            scrapedRecipes.add(workingRecipe)
-                        }
-                    }
+                    val title = curTitle.substring(0, curTitle.length - 4)
+                    val link = StringBuilder(current_directory).append(l.select("a").attr("href")).toString()
+                    val date = ""
+                    val workingRecipe: Recipe? = formatToRecipe(
+                        title,
+                        link,
+                        date,
+                        current_directory,
+                        category_name
+                    )
+                    if (workingRecipe != null) scrapedRecipes.add(workingRecipe)
                 }
             }
             Timber.d("ParsedPage.parse() completed")
+        }
+
+        private fun formatToRecipe(
+            title: String,
+            link: String,
+            date: String,
+            current_directory: String,
+            category_name: String
+        ): Recipe? {
+            val workingRecipe: Recipe
+            if (title.isNotEmpty()) {
+                if (title.substring(title.length - 1) == "/") {
+                    Timber.d("Directory: $title | $link")
+                    subDirectories[link] = title.dropLast(1)
+                } else if (title.length >= 5 && title.substring(title.length - 4)
+                        .equals(".txt", ignoreCase = true)
+                ) {
+                    Timber.d(
+                        "Text file: $title | $link | $date"
+                    )
+                    workingRecipe = Recipe()
+                    workingRecipe.title = title.substring(0, title.length - 4)
+                    workingRecipe.link = StringBuilder(current_directory).append(link).toString()
+                    workingRecipe.category = category_name
+                    workingRecipe.date = date
+                    return workingRecipe
+                }
+            }
+            return null
         }
     }
 }

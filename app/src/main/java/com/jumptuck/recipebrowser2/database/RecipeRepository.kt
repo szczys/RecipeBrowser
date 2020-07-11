@@ -23,7 +23,7 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
     val allRecipes = database.recipeDatabaseDao.getAll()
     private val selectedCategory = MutableLiveData<String>()
     val favorites = database.recipeDatabaseDao.getFavorites()
-    private val resources: Resources = application.resources
+    val resources: Resources = application.resources
     private val myApplication = application
 
     //Shared Preferences variables
@@ -51,6 +51,14 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
 
     fun setSelectedCategory(value: String) {
         selectedCategory.value = value
+    }
+
+    fun findRecipeByTitle(title: String): Recipe? {
+        return database.recipeDatabaseDao.findRecipeByTitle(title)
+    }
+
+    fun update(recipe: Recipe) {
+        database.recipeDatabaseDao.update(recipe)
     }
 
     fun recipesToDisplay(): LiveData<List<Recipe>> {
@@ -102,7 +110,7 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
             throw Exception(resources.getString(R.string.toast_empty_host_during_refresh))
         }
         withContext(Dispatchers.IO) {
-            val scraper = WebScraper(database)
+            val scraper = WebScraper(this@RecipeRepository)
             scraper.crawlDirectory(prefsHost ?: "")
         }
     }
