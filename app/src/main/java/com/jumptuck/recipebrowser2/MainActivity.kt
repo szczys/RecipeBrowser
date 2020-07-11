@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         NavigationUI.setupWithNavController(binding.navView, navController)
+        setSupportActionBar(toolbar)
 
         /** Handle clicks in Nav Drawer **/
         val navigationView = findViewById<NavigationView>(R.id.navView)

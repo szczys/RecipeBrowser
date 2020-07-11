@@ -39,13 +39,16 @@ class SingleRecipeFragment : Fragment() {
         binding.singleRecipeViewModel = viewModel
         binding.lifecycleOwner = this
 
-        viewModel.curRecipe.observe(viewLifecycleOwner, Observer {
-            (requireActivity() as MainActivity).toolbar.title = it?.title
-        })
-
         //Toast.makeText(context, "Recipe Number: ${args.recipeIndex}",Toast.LENGTH_LONG).show()
         setHasOptionsMenu(true)
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.curRecipe.observe(viewLifecycleOwner, Observer {
+            (requireActivity() as MainActivity).toolbar.title = it?.title
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
