@@ -1,23 +1,25 @@
 package com.jumptuck.recipebrowser2.network
 
 import android.accounts.NetworkErrorException
+import android.content.res.Resources
+import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.Recipe
 import com.jumptuck.recipebrowser2.database.RecipeDatabase
-
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import timber.log.Timber
-import java.util.ArrayList
+import java.util.*
 
 class WebScraper(database: RecipeDatabase) {
     private val databaseDao = database.recipeDatabaseDao
+    private val resources = Resources.getSystem()
 
     private suspend fun getHTML(getUrl: String): String {
         val getPropertiesDeferred =
             Network.retrofitService.getHtmlAsync(getUrl)
-        var listResult = ""
+        val listResult: String
         try {
             listResult = getPropertiesDeferred.await()
         } catch (t: Throwable) {
@@ -30,10 +32,10 @@ class WebScraper(database: RecipeDatabase) {
         val recipeObjects = ArrayList<Recipe>()
         val scraped = ParsedPage()
         val dirList = mutableMapOf<String,String>()
-        dirList.put("","Uncategorized")
+        dirList[""] = resources.getString(R.string.category_uncategorized)
         var dirDepth = 0
 
-        while (dirList.size > 0) {
+        while (dirList.isNotEmpty()) {
             val workingSubDir = dirList.keys.toTypedArray()[0]
             val scrapeDir = StringBuilder(startingUrl)
                 .append(workingSubDir).toString()
@@ -41,7 +43,7 @@ class WebScraper(database: RecipeDatabase) {
             scraped.parse(
                 getHTML(scrapeDir),
                 workingSubDir,
-                dirList.get(workingSubDir) ?: "Uncategorized"
+                dirList[workingSubDir] ?: resources.getString(R.string.category_uncategorized)
             )
             val foundRecipes: Iterator<*> = scraped.scrapedRecipes.iterator()
             while (foundRecipes.hasNext()) {
@@ -51,11 +53,11 @@ class WebScraper(database: RecipeDatabase) {
             Timber.i(dirList.toString())
 
             /** Limit directory crawling to just one level **/
-            if (dirDepth < 1 && scraped.subDirectories.size > 0) {
+            if (dirDepth < 1 && scraped.subDirectories.isNotEmpty()) {
                 ++dirDepth
                 Timber.i("Scraped subdirs list: %s", scraped.subDirectories.toString())
                 scraped.subDirectories.forEach { (subD, niceName) ->
-                    dirList.put(subD, niceName)
+                    dirList[subD] = niceName
                 }
             }
         }
@@ -63,30 +65,34 @@ class WebScraper(database: RecipeDatabase) {
         //Post-process the recipes
         val recipeIterator = recipeObjects.iterator()
         recipeIterator.forEach { current_recipe ->
-            //Check for existing
-            val existingRecipe = databaseDao.findRecipeByTitle(current_recipe.title)
-            if (existingRecipe?.date == current_recipe.date) {
-                Timber.i("Recipe date same as already in db: %s", current_recipe.title)
-            }
-            else {
-                Timber.i("Adding to db: %s", current_recipe.toString())
-                //Format recipe for insert or update to DB
-                val curUrl = StringBuilder(startingUrl)
-                    .append(current_recipe.link).toString()
-                current_recipe.link = curUrl
-                current_recipe.body = getHTML(curUrl)
-
-                if (existingRecipe == null) {
-                    databaseDao.insert(current_recipe)
-                }
-                else {
-                    current_recipe.recipeID = existingRecipe.recipeID
-                    databaseDao.update(current_recipe)
-                }
-            }
+            addRecipeToDb(current_recipe, startingUrl)
         }
     }
 
+    private suspend fun addRecipeToDb(
+        current_recipe: Recipe,
+        startingUrl: String
+    ) {
+        //Check for existing
+        val existingRecipe = databaseDao.findRecipeByTitle(current_recipe.title)
+        if (existingRecipe?.date == current_recipe.date) {
+            Timber.i("Recipe date same as already in db: %s", current_recipe.title)
+        } else {
+            Timber.i("Adding to db: %s", current_recipe.toString())
+            //Format recipe for insert or update to DB
+            val curUrl = StringBuilder(startingUrl)
+                .append(current_recipe.link).toString()
+            current_recipe.link = curUrl
+            current_recipe.body = getHTML(curUrl)
+
+            if (existingRecipe == null) {
+                databaseDao.insert(current_recipe)
+            } else {
+                current_recipe.recipeID = existingRecipe.recipeID
+                databaseDao.update(current_recipe)
+            }
+        }
+    }
 
     private class ParsedPage {
         var scrapedRecipes = ArrayList<Recipe>()
@@ -133,7 +139,7 @@ class WebScraper(database: RecipeDatabase) {
                     if (title.isNotEmpty()) {
                         if (title.substring(title.length - 1) == "/") {
                             Timber.d("Directory: $title | $link")
-                            subDirectories.put(link, title.dropLast(1))
+                            subDirectories[link] = title.dropLast(1)
                         }
                         else if (title.length >= 5 && title.substring(title.length - 4)
                                 .equals(".txt", ignoreCase = true)
@@ -159,7 +165,7 @@ class WebScraper(database: RecipeDatabase) {
                     if (curTitle.isNotEmpty()) {
                         if (curTitle.substring(curTitle.length - 1) == "/") {
                             Timber.d("Directory: $curTitle")
-                            subDirectories.put(l.attr("href"), curTitle.dropLast(1))
+                            subDirectories[l.attr("href")] = curTitle.dropLast(1)
                         } else if (curTitle.length >= 4 && curTitle.substring(curTitle.length - 4)
                                 .equals(".txt", ignoreCase = true)
                         ) {
