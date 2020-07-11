@@ -93,7 +93,11 @@ class SettingsFragment : Fragment() {
                     ).show()
                 }
                 R.string.prefs_frequency_option_title -> {
-
+                    UpdateFrequencyDialogBuilder(
+                        requireActivity(),
+                        resources,
+                        repository
+                    ).show()
                 }
                 R.string.prefs_wifi_only_title -> {
                     //repository.setWifiOnlyPref(repository.getWifiOnlyPref())
