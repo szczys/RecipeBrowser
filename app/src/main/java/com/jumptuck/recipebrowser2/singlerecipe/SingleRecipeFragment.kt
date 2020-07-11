@@ -1,16 +1,13 @@
 package com.jumptuck.recipebrowser2.singlerecipe
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import androidx.core.app.ShareCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.jumptuck.recipebrowser2.MainActivity
 import com.jumptuck.recipebrowser2.R
-import com.jumptuck.recipebrowser2.database.RecipeDatabase
 import com.jumptuck.recipebrowser2.databinding.FragmentSingleRecipeBinding
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -31,8 +28,6 @@ class SingleRecipeFragment : Fragment() {
             )
 
         val application = requireNotNull(this.activity).application
-
-        //val datasource = RecipeDatabase.getInstance(application).recipeDatabaseDao
 
         viewModelFactory =
             SingleRecipeViewModelFactory(
@@ -64,25 +59,9 @@ class SingleRecipeFragment : Fragment() {
         })
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    private fun getShareIntent(): Intent {
-        return ShareCompat.IntentBuilder.from(this.requireActivity())
-            .setText(viewModel.curRecipe.value?.body ?: getString(R.string.empty_recipe_body))
-            .setSubject("Recipe: " + (viewModel.curRecipe.value?.title ?: getString(R.string.empty_recipe_title)))
-            .setType("text/plain")
-            .createChooserIntent()
-    }
-
-    private fun shareSuccess() {
-        startActivity(getShareIntent())
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.share -> shareSuccess()
+            R.id.share -> viewModel.shareSuccess(this.requireActivity())
             R.id.favorite -> viewModel.toggleFavorite()
         }
         return super.onOptionsItemSelected(item)
