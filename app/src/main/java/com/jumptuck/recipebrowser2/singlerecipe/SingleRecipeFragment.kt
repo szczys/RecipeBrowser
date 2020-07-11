@@ -32,11 +32,11 @@ class SingleRecipeFragment : Fragment() {
 
         val application = requireNotNull(this.activity).application
 
-        val datasource = RecipeDatabase.getInstance(application).recipeDatabaseDao
+        //val datasource = RecipeDatabase.getInstance(application).recipeDatabaseDao
 
         viewModelFactory =
             SingleRecipeViewModelFactory(
-                args.recipeIndex, datasource
+                args.recipeIndex, application
             )
         viewModel = ViewModelProvider(this,viewModelFactory)
             .get(SingleRecipeViewModel::class.java)
@@ -64,6 +64,10 @@ class SingleRecipeFragment : Fragment() {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
+
     private fun getShareIntent(): Intent {
         return ShareCompat.IntentBuilder.from(this.requireActivity())
             .setText(viewModel.curRecipe.value?.body ?: getString(R.string.empty_recipe_body))
@@ -79,9 +83,7 @@ class SingleRecipeFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.share -> shareSuccess()
-            R.id.favorite -> {
-                viewModel.toggleFavorite()
-            }
+            R.id.favorite -> viewModel.toggleFavorite()
         }
         return super.onOptionsItemSelected(item)
     }

@@ -77,6 +77,14 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
         return recipeListMediator
     }
 
+    fun getRecipe(recipeId: Long): LiveData<Recipe> {
+        return database.recipeDatabaseDao.getRecipe(recipeId)
+    }
+
+    fun setFavorite(recipeId: Long, state: Boolean) {
+        database.recipeDatabaseDao.setFavorite(recipeId, state)
+    }
+
     suspend fun scrapeRecipes() {
         val internetStatus = hasInternetConnection()
         if (internetStatus[0] == false) {
