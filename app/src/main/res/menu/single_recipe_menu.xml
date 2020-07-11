@@ -2,17 +2,29 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/share"
-        android:enabled="true"
-        android:icon="@drawable/ic_baseline_share_24"
-        android:title="Share"
-        android:visible="true"
-        app:showAsAction="ifRoom" />
-    <item
         android:id="@+id/favorite"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_star_border_24"
-        android:title="Share"
+        android:title="@string/favorite"
         android:visible="true"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/share"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_share_24"
+        android:title="@string/share"
+        android:visible="true"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/refreshSingleRecipe"
+        android:enabled="true"
+        android:title="@string/refresh_action_title"
+        android:visible="true"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/deleteSingleRecipe"
+        android:enabled="true"
+        android:title="@string/delete_single_recipe_title"
+        android:visible="true"
+        app:showAsAction="never" />
 </menu>

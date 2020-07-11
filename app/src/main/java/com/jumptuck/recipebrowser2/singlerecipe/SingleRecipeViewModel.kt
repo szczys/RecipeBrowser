@@ -13,7 +13,7 @@ import timber.log.Timber
 
 class SingleRecipeViewModel(recipeID: Long, application: Application) : ViewModel() {
 
-    private val repository = RecipeRepository(application)
+    val repository = RecipeRepository(application)
     private var viewModelJob = Job()
 
     override fun onCleared() {

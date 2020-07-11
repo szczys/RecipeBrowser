@@ -39,7 +39,12 @@
     <string name="delete_all_recipes_confirm">Remove All Recipes</string>
     <string name="delete_all_recipes_summary">Deletes recipes stored on this device</string>
     <string name="delete_all_recipes_details">Are you sure you want to remove all recipes from your device\'s local database?</string>
+    <string name="delete_single_recipe_title">Delete This Recipe</string>
+    <string name="delete_single_recipe_details">Are you sure you want to remove this recipe from your device\'s local database?</string>
     <string name="about_body"> Recipe Browser\n\nCopyright 2020 Mike Szczys\n MIT License\n\nPumpkin Pie icon adapted from photo By Evan-Amos CC-BY-SA-3.0</string>
     <string name="dialog_optional">(optional)</string>
     <string name="dialog_example_host">https://jumptuck.com/recipes</string>
+    <string name="share">Share</string>
+    <string name="favorite">Favorite</string>
+    <string name="error_delete_single_recipe">Error: This recipe has an invalid ID and can\'t be deleted for some reason</string>
 </resources>

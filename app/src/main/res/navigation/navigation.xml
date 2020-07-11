@@ -8,8 +8,7 @@
     <fragment
         android:id="@+id/recipeList"
         android:name="com.jumptuck.recipebrowser2.recipelist.RecipeListFragment"
-        android:label="fragment_recipe_list"
-        tools:layout="@layout/fragment_recipe_list" >
+        tools:layout="@layout/fragment_recipe_list">
         <action
             android:id="@+id/action_recipeList_to_singleRecipeFragment"
             app:destination="@id/singleRecipeFragment"

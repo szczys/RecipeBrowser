@@ -44,6 +44,9 @@ interface RecipeDatabaseDao {
     @Query("SELECT * from recipe_table WHERE fav = 1 ORDER BY title ASC")
     fun getFavorites(): LiveData<List<Recipe>>
 
+    @Query("DELETE from recipe_table WHERE recipeID = :id")
+    fun deleteSingleRecipe(id: Long)
+
     @Query("DELETE from recipe_table")
     fun deleteAllRecipes()
 }

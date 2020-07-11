@@ -35,6 +35,11 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
     private var repositoryJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + repositoryJob)
 
+    override fun onCleared() {
+        super.onCleared()
+        repositoryJob.cancel()
+    }
+
     init {
         selectedCategory.value = ""
         prefsWifiOnly = savedPreferences.getBoolean("wifiOnly",true)
@@ -110,17 +115,24 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
         return listOf(hasConnection, hasWifi)
     }
 
+    fun deleteSingleRecipe(recipeId: Long)
+    {
+        uiScope.launch {
+            deleteSingleRecipeFromDb(recipeId)
+        }
+    }
+
+    private suspend fun deleteSingleRecipeFromDb(recipeId: Long) {
+        withContext(Dispatchers.IO) {
+            database.recipeDatabaseDao.deleteSingleRecipe(recipeId)
+        }
+    }
+
     fun deleteAllRecipes() {
         uiScope.launch {
             deleteAllRecipesFromDb()
         }
     }
-
-    override fun onCleared() {
-        super.onCleared()
-        repositoryJob.cancel()
-    }
-
 
     private suspend fun deleteAllRecipesFromDb() {
         withContext(Dispatchers.IO) {
