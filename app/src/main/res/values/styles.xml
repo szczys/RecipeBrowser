@@ -1,10 +1,20 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimaryAccent</item>
         <item name="android:colorBackground">@color/colorOnBackground</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+
+        <!-- OptionsMenu styling       -->
+        <item name="android:itemBackground">@color/colorOnBackground</item>
+        <item name="android:itemTextAppearance">@style/MyToolbar</item>
+
+
+    </style>
+
+    <style name="MyToolbar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textColor">@color/colorOnSurface</item>
     </style>
 </resources>
