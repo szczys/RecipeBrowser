@@ -2,12 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/refreshRecipes"
+        android:title="@string/refresh_action_title"
+        android:icon="@drawable/ic_refresh_black_24dp"/>
+    <item
         android:id="@+id/settingsFragment"
-        android:title="@string/settings_fragment_title" />
+        android:title="@string/settings_fragment_title"
+        android:icon="@drawable/ic_settings_black_24dp"
+        />
     <item
         android:id="@+id/aboutFragment"
-        android:title="@string/about_fragment_title" />
-    <item
-        android:id="@+id/refreshRecipes"
-        android:title="@string/refresh_action_title" />
+        android:title="@string/about_fragment_title"
+        android:icon="@drawable/ic_description_black_24dp" />
 </menu>
