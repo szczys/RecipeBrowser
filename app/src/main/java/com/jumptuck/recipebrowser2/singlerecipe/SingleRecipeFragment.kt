@@ -40,7 +40,16 @@ class SingleRecipeFragment : Fragment() {
         binding.singleRecipeViewModel = viewModel
         binding.lifecycleOwner = this
 
-        //Toast.makeText(context, "Recipe Number: ${args.recipeIndex}",Toast.LENGTH_LONG).show()
+        /** Show toasts for network status updates **/
+        viewModel.refreshMessages.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                val toast = Toast.makeText(activity, it, Toast.LENGTH_LONG)
+                toast.setGravity(Gravity.CENTER_VERTICAL,0,0)
+                toast.show()
+                viewModel.clearRefreshMessage()
+            }
+        })
+
         setHasOptionsMenu(true)
         return binding.root
     }

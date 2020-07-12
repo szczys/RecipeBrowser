@@ -44,6 +44,10 @@ class SingleRecipeViewModel(recipeID: Long, application: Application) : ViewMode
     val refreshMessages: LiveData<String?>
         get() = _refreshMessages
 
+    fun clearRefreshMessage() {
+        _refreshMessages.value = null
+    }
+
     fun refreshRecipe() {
         uiScope.launch {
             Timber.i("Scraping for recipes...")
