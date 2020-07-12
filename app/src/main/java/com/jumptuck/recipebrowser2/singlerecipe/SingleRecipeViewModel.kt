@@ -3,6 +3,7 @@ package com.jumptuck.recipebrowser2.singlerecipe
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
+import android.view.View
 import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
@@ -30,6 +31,20 @@ class SingleRecipeViewModel(recipeID: Long, application: Application) : ViewMode
     fun toggleFavorite() {
         uiScope.launch {
             recordFavoriteInDb()
+        }
+    }
+
+    fun refreshRecipe() {
+        uiScope.launch {
+            Timber.i("Scraping for recipes...")
+            try {
+                //_scrapeStatus.value = View.VISIBLE
+                if (curRecipe.value != null) repository.refreshSingleRecipe(curRecipe.value!!)
+                //_scrapeStatus.value = View.GONE
+            } catch (e: Exception) {
+                //_scrapeStatus.value = View.GONE
+                //_statusMessages.postValue(e.message)
+            }
         }
     }
 

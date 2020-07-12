@@ -62,17 +62,18 @@ class WebScraper(private val repository: RecipeRepository) {
         //Post-process the recipes
         val recipeIterator = recipeObjects.iterator()
         recipeIterator.forEach { current_recipe ->
-            addRecipeToDb(current_recipe, startingUrl)
+            addRecipeToDb(current_recipe, startingUrl, false)
         }
     }
 
-    private suspend fun addRecipeToDb(
+    suspend fun addRecipeToDb(
         current_recipe: Recipe,
-        startingUrl: String
+        startingUrl: String,
+        force: Boolean
     ) {
         //Check for existing
         val existingRecipe = repository.findRecipeByTitle(current_recipe.title)
-        if (existingRecipe?.date == current_recipe.date) {
+        if (existingRecipe?.date == current_recipe.date && !force) {
             Timber.i("Recipe date same as already in db: %s", current_recipe.title)
         } else {
             Timber.i("Adding to db: %s", current_recipe.toString())

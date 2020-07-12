@@ -99,19 +99,30 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
     }
 
     suspend fun scrapeRecipes() {
-        val internetStatus = hasInternetConnection()
-        if (internetStatus[0] == false) {
-            throw NetworkErrorException(resources.getString(R.string.toast_internet_not_connected))
-        }
-        else if (prefsWifiOnly && internetStatus[1] == false) {
-            throw NetworkErrorException(resources.getString(R.string.toast_wifi_not_connected))
-        }
-        else if (prefsHost == null || prefsHost == "") {
-            throw Exception(resources.getString(R.string.toast_empty_host_during_refresh))
-        }
+        checkConnection()
         withContext(Dispatchers.IO) {
             val scraper = WebScraper(this@RecipeRepository)
             scraper.crawlDirectory(prefsHost ?: "")
+        }
+    }
+
+    suspend fun refreshSingleRecipe(workingRecipe: Recipe) {
+        checkConnection()
+        /** Set date to something nonsensicle to force a refresh **/
+        withContext(Dispatchers.IO) {
+            val scraper = WebScraper(this@RecipeRepository)
+            scraper.addRecipeToDb(workingRecipe, "", true)
+        }
+    }
+
+    private fun checkConnection() {
+        val internetStatus = hasInternetConnection()
+        if (internetStatus[0] == false) {
+            throw NetworkErrorException(resources.getString(R.string.toast_internet_not_connected))
+        } else if (prefsWifiOnly && internetStatus[1] == false) {
+            throw NetworkErrorException(resources.getString(R.string.toast_wifi_not_connected))
+        } else if (prefsHost == null || prefsHost == "") {
+            throw Exception(resources.getString(R.string.toast_empty_host_during_refresh))
         }
     }
 

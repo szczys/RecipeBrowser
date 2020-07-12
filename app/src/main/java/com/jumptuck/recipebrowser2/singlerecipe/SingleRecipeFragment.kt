@@ -72,6 +72,7 @@ class SingleRecipeFragment : Fragment() {
         when (item.itemId) {
             R.id.share -> viewModel.shareSuccess(this.requireActivity())
             R.id.favorite -> viewModel.toggleFavorite()
+            R.id.refreshSingleRecipe -> viewModel.refreshRecipe()
             R.id.deleteSingleRecipe -> {
                 val recipeId = viewModel.curRecipe.value?.recipeID
                 if (recipeId == null) {
