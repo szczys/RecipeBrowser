@@ -6,6 +6,8 @@ import android.content.Intent
 import android.view.View
 import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeRepository
@@ -34,16 +36,24 @@ class SingleRecipeViewModel(recipeID: Long, application: Application) : ViewMode
         }
     }
 
+    private val _refreshStatus = MutableLiveData<Boolean>()
+    val refreshStatus: LiveData<Boolean>
+        get() = _refreshStatus
+
+    val _refreshMessages = MutableLiveData<String?>()
+    val refreshMessages: LiveData<String?>
+        get() = _refreshMessages
+
     fun refreshRecipe() {
         uiScope.launch {
             Timber.i("Scraping for recipes...")
             try {
-                //_scrapeStatus.value = View.VISIBLE
+                _refreshStatus.value = true
                 if (curRecipe.value != null) repository.refreshSingleRecipe(curRecipe.value!!)
-                //_scrapeStatus.value = View.GONE
+                _refreshStatus.value = false
             } catch (e: Exception) {
-                //_scrapeStatus.value = View.GONE
-                //_statusMessages.postValue(e.message)
+                _refreshStatus.value = false
+                _refreshMessages.postValue(e.message)
             }
         }
     }

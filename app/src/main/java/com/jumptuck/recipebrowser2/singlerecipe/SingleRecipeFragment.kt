@@ -66,6 +66,10 @@ class SingleRecipeFragment : Fragment() {
             else R.drawable.ic_baseline_star_border_24
             menu.findItem(R.id.favorite).setIcon(favIconDrawable)
         })
+
+        viewModel.refreshStatus.observe(viewLifecycleOwner, Observer {
+            menu.findItem(R.id.refresh_progress).isVisible = it
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
