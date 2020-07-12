@@ -23,13 +23,6 @@
             android:layout_height="match_parent"
             android:backgroundTint="@color/cardview_light_background" />
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:padding="18dp"
-            android:visibility="gone" />
     </LinearLayout>
 </layout>
 

@@ -3,12 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/settingsFragment"
-        android:title="@string/settings_fragment_title" />
-    <item
-        android:id="@+id/aboutFragment"
-        android:title="@string/about_fragment_title" />
-    <item
-        android:id="@+id/refreshRecipes"
-        android:title="Refresh DB" />
+        android:id="@+id/refresh_progress"
+        android:enabled="true"
+        app:actionLayout="@layout/progress_bar"
+        android:title="@string/refresh_action_title"
+        android:visible="false"
+        app:showAsAction="always" />
 </menu>

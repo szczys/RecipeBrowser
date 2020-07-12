@@ -156,13 +156,6 @@ class RecipeListFragment : Fragment() {
         ab.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         ab.customView = sView
 
-        /** Listener to hide or show progressBar in the Toolbar **/
-        recipeListViewModel.scrapeStatus.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                sView.progressBar.visibility = it
-            }
-        })
-
         /** Show toasts for network status updates **/
         recipeListViewModel.statusMessages.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -181,6 +174,13 @@ class RecipeListFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.overflow_menu, menu)
+
+        /** Listener to hide or show progressBar in the Toolbar **/
+        recipeListViewModel.scrapeStatus.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                menu.findItem(R.id.refresh_progress).isVisible = it
+            }
+        })
     }
 
     override fun onStop() {
