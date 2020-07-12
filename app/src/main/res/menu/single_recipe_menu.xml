@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/refresh_progress"
+        android:enabled="true"
+        app:actionLayout="@layout/progress_bar"
+        android:title="@string/refresh_action_title"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/favorite"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_star_border_24"
         android:title="@string/favorite"
         android:visible="true"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/refresh_progress"
-        android:enabled="true"
-        android:icon="@drawable/ic_baseline_star_border_24"
-        android:title="@string/favorite"
-        android:visible="false"
         app:showAsAction="always" />
     <item
         android:id="@+id/share"
