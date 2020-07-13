@@ -12,9 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.RecyclerView
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeRepository
@@ -196,16 +194,6 @@ class RecipeListFragment : Fragment() {
         ab.setDisplayShowCustomEnabled(true)
         ab.setDisplayShowTitleEnabled(false)
         ab.setDisplayHomeAsUpEnabled(true)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-                R.id.refreshRecipes -> {
-                recipeListViewModel.scrapeRecipes()
-            }
-        }
-        return NavigationUI.onNavDestinationSelected(item, requireView().findNavController())
-                || super.onOptionsItemSelected(item)
     }
 
     private fun scrollToTop(rv: RecyclerView) {

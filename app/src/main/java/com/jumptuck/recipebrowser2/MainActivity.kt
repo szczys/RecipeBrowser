@@ -12,6 +12,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.navigation.NavigationView
 import com.jumptuck.recipebrowser2.databinding.ActivityMainBinding
+import com.jumptuck.recipebrowser2.recipelist.RecipeListFragmentDirections
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -50,10 +51,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             Timber.d("Nav Drawer Item Clicked: %s", menuItem.title)
             when (menuItem.itemId) {
                 R.id.settingsFragment -> {
-                    navController.navigate(R.id.settingsFragment)
+                    navController.navigate(
+                        RecipeListFragmentDirections
+                        .actionRecipeListToSettingsFragment()
+                    )
                 }
                 R.id.aboutFragment -> {
-                    navController.navigate(R.id.aboutFragment)
+                    navController.navigate(
+                        RecipeListFragmentDirections
+                            .actionRecipeListToAboutFragment()
+                    )
                 }
                 R.id.refreshRecipes -> {
                     Timber.i("TODO: Implement repository refresh method call")
