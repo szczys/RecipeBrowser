@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
@@ -101,8 +100,8 @@ class RecipeListFragment : Fragment() {
             it?.let {
                 val navigationView = requireActivity().findViewById<NavigationView>(R.id.navView)
                 navigationView.getHeaderView(0)
-                    .findViewById<TextView>(R.id.recipe_count)
-                    .setText(it.toString() + " Recipes")
+                    .findViewById<TextView>(R.id.recipe_count).text =
+                    resources.getQuantityString(R.plurals.numberOfRecipes, it, it)
             }
         })
 
@@ -111,8 +110,8 @@ class RecipeListFragment : Fragment() {
             it?.let {
                 val navigationView = requireActivity().findViewById<NavigationView>(R.id.navView)
                 navigationView.getHeaderView(0)
-                    .findViewById<TextView>(R.id.favorite_count)
-                    .setText(it.toString() + " Favorites")
+                    .findViewById<TextView>(R.id.favorite_count).text =
+                    resources.getQuantityString(R.plurals.numberOfFavorites, it, it)
             }
         })
 
