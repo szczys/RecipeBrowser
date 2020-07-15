@@ -49,6 +49,7 @@
     <string name="error_delete_single_recipe">Error: This recipe has an invalid ID and can\'t be deleted for some reason</string>
     <string name="nav_header_icon_description">Pie slice icon</string>
     <string name="nav_header_title">Recipe\nBrowser</string>
+    <string name="refresh_action_force">Force Refresh</string>
 
     <plurals name="numberOfRecipes">
         <item quantity="one">%d Recipe</item>

@@ -19,13 +19,13 @@
         android:id="@+id/share"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_share_24"
-        android:title="@string/share"
+        android:title="@string/share_icon_title"
         android:visible="true"
         app:showAsAction="never" />
     <item
         android:id="@+id/refreshSingleRecipe"
         android:enabled="true"
-        android:title="@string/refresh_action_title"
+        android:title="@string/refresh_action_force"
         android:visible="true"
         app:showAsAction="never" />
     <item
