@@ -13,6 +13,7 @@ import androidx.navigation.ui.NavigationUI
 import com.google.android.material.navigation.NavigationView
 import com.jumptuck.recipebrowser2.databinding.ActivityMainBinding
 import com.jumptuck.recipebrowser2.recipelist.RecipeListFragmentDirections
+import com.jumptuck.recipebrowser2.recipelist.RecipeListViewModel
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -63,7 +64,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     )
                 }
                 R.id.refreshRecipes -> {
-                    Timber.i("TODO: Implement repository refresh method call")
+                    //Fixme: ProgressBar and error messages are not being shown
+                    drawerLayout.closeDrawers()
+                    val vm = RecipeListViewModel(application)
+                    vm.scrapeRecipes()
                 }
             }
 
