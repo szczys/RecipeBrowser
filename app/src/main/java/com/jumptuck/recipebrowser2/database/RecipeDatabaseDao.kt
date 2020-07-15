@@ -18,7 +18,7 @@ interface RecipeDatabaseDao {
     fun setFavorite(key: Long, fav: Boolean)
 
     @Query("SELECT count() from recipe_table")
-    fun recipeCount(): Int
+    fun recipeCount(): LiveData<Int>
 
     @Query("SELECT count() FROM recipe_table WHERE fav=1")
     fun favoriteCount(): LiveData<Int>

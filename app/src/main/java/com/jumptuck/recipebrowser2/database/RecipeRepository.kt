@@ -20,9 +20,9 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
 
     val database = RecipeDatabase.getInstance(application)
     //Livedata sources for recipe list
-    val allRecipes = database.recipeDatabaseDao.getAll()
+    private val allRecipes = database.recipeDatabaseDao.getAll()
     private val selectedCategory = MutableLiveData<String>()
-    val favorites = database.recipeDatabaseDao.getFavorites()
+    private val favorites = database.recipeDatabaseDao.getFavorites()
     val resources: Resources = application.resources
     private val myApplication = application
 
@@ -117,16 +117,16 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
 
     private fun checkConnection() {
         val internetStatus = hasInternetConnection()
-        if (internetStatus[0] == false) {
+        if (!internetStatus[0]) {
             throw NetworkErrorException(resources.getString(R.string.toast_internet_not_connected))
-        } else if (prefsWifiOnly && internetStatus[1] == false) {
+        } else if (prefsWifiOnly && !internetStatus[1]) {
             throw NetworkErrorException(resources.getString(R.string.toast_wifi_not_connected))
         } else if (prefsHost == null || prefsHost == "") {
             throw Exception(resources.getString(R.string.toast_empty_host_during_refresh))
         }
     }
 
-    fun hasInternetConnection(): List<Boolean> {
+    private fun hasInternetConnection(): List<Boolean> {
         val connectivityManager = myApplication.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val capability = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         val hasConnection = capability?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
@@ -185,8 +185,12 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
         return buildStringList
     }
 
-    fun recipeCount(): Int {
+    fun recipeCount(): LiveData<Int> {
         return database.recipeDatabaseDao.recipeCount()
+    }
+
+    fun favoriteCount(): LiveData<Int> {
+        return favoriteCount
     }
 
     fun insert(recipe: Recipe): Long {
@@ -209,7 +213,7 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
         prefsEditor.apply()
     }
 
-    companion object prefs {
+    companion object Prefs {
         var prefsWifiOnly = false
         var prefsHost: String? = null
         var prefsUsername: String? = null

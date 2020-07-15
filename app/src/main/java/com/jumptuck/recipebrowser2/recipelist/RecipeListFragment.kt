@@ -2,18 +2,17 @@ package com.jumptuck.recipebrowser2.recipelist
 
 import android.os.Bundle
 import android.view.*
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.navigation.NavigationView
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeRepository
 import com.jumptuck.recipebrowser2.databinding.FragmentRecipeListBinding
@@ -97,6 +96,26 @@ class RecipeListFragment : Fragment() {
             recipeListViewModel.addMenuItem()
         }
 
+        /** Set recipe counts in nav drawer header **/
+        recipeListViewModel.recipeCount.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                val navigationView = requireActivity().findViewById<NavigationView>(R.id.navView)
+                navigationView.getHeaderView(0)
+                    .findViewById<TextView>(R.id.recipe_count)
+                    .setText(it.toString() + " Recipes")
+            }
+        })
+
+        /** Set recipe counts in nav drawer header **/
+        recipeListViewModel.favoriteCount.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                val navigationView = requireActivity().findViewById<NavigationView>(R.id.navView)
+                navigationView.getHeaderView(0)
+                    .findViewById<TextView>(R.id.favorite_count)
+                    .setText(it.toString() + " Favorites")
+            }
+        })
+
         /** ActionBar spinner used to select categories **/
         sView = layoutInflater.inflate(R.layout.custom_action_bar_layout, null)
         spinner2 = sView.spinner2
@@ -165,6 +184,8 @@ class RecipeListFragment : Fragment() {
         })
 
         setHasOptionsMenu(true)
+
+
 
         return binding.root
     }

@@ -24,6 +24,9 @@ class RecipeListViewModel(
     val scrapeStatus: LiveData<Boolean>
         get() = _scrapeStatus
 
+    val recipeCount = repository.recipeCount()
+    val favoriteCount = repository.favoriteCount()
+
     //Coroutines setup
     private var viewModelJob = Job()
 
@@ -69,7 +72,7 @@ class RecipeListViewModel(
     /** This function is only used in testing routines **/
     private suspend fun resetCounterFromDb() {
         withContext(Dispatchers.IO) {
-            fakeItemCounter = repository.recipeCount() + 1
+            fakeItemCounter = (repository.recipeCount().value ?: 0) + 1
         }
     }
 
