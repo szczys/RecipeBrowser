@@ -194,7 +194,7 @@ class RecipeListFragment : Fragment() {
         inflater.inflate(R.menu.overflow_menu, menu)
 
         /** Listener to hide or show progressBar in the Toolbar **/
-        recipeListViewModel.scrapeStatus.observe(viewLifecycleOwner, Observer {
+        RecipeListViewModel.scrapeStatus.observe(viewLifecycleOwner, Observer {
             it?.let {
                 menu.findItem(R.id.refresh_progress).isVisible = it
             }

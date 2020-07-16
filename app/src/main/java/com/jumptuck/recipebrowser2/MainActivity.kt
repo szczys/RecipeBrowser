@@ -64,7 +64,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     )
                 }
                 R.id.refreshRecipes -> {
-                    //Fixme: ProgressBar and error messages are not being shown
                     drawerLayout.closeDrawers()
                     val vm = RecipeListViewModel(application)
                     vm.scrapeRecipes()

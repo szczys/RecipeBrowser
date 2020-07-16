@@ -20,10 +20,6 @@ class RecipeListViewModel(
 
     val recipesToDisplay = repository.recipesToDisplay()
 
-    private val _scrapeStatus = MutableLiveData<Boolean>()
-    val scrapeStatus: LiveData<Boolean>
-        get() = _scrapeStatus
-
     val recipeCount = repository.recipeCount()
     val favoriteCount = repository.favoriteCount()
 
@@ -93,11 +89,11 @@ class RecipeListViewModel(
         uiScope.launch {
             Timber.i("Scraping for recipes...")
             try {
-                _scrapeStatus.value = true
+                scrapeStatus.value = true
                 repository.scrapeRecipes()
-                _scrapeStatus.value = false
+                scrapeStatus.value = false
             } catch (e: Exception) {
-                _scrapeStatus.value = false
+                scrapeStatus.value = false
                 _statusMessages.postValue(e.message)
             }
         }
@@ -118,5 +114,13 @@ class RecipeListViewModel(
         Timber.i("RecipeViewModel created")
         resetCounter()
         categorySelectedTracker.value = 0
+    }
+
+    companion object StatusData {
+        val scrapeStatus = MutableLiveData<Boolean>()
+
+        init {
+            scrapeStatus.value = true
+        }
     }
 }
