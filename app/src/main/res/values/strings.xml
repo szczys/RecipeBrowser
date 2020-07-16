@@ -41,7 +41,7 @@
     <string name="delete_all_recipes_details">Are you sure you want to remove all recipes from your device\'s local database?</string>
     <string name="delete_single_recipe_title">Delete This Recipe</string>
     <string name="delete_single_recipe_details">Are you sure you want to remove this recipe from your device\'s local database?</string>
-    <string name="about_body"> Recipe Browser\n\nCopyright 2020 Mike Szczys\n MIT License\n\nPumpkin Pie icon adapted from photo By Evan-Amos CC-BY-SA-3.0</string>
+    <string name="about_body"> Recipe Browser\n\nCopyright 2020 Mike Szczys\n MIT License</string>
     <string name="dialog_optional">(optional)</string>
     <string name="dialog_example_host">https://jumptuck.com/recipes</string>
     <string name="share">Share</string>

@@ -2,7 +2,6 @@ package com.jumptuck.recipebrowser2.recipelist
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.RecipeBrowserApplication
