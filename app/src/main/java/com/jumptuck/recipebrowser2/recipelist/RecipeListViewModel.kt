@@ -94,17 +94,13 @@ class RecipeListViewModel(
                 scrapeStatus.value = false
             } catch (e: Exception) {
                 scrapeStatus.value = false
-                _statusMessages.postValue(e.message)
+                statusMessages.postValue(e.message)
             }
         }
     }
 
-    val _statusMessages = MutableLiveData<String?>()
-    val statusMessages: LiveData<String?>
-        get() = _statusMessages
-
     fun clearStatusMessage() {
-        _statusMessages.value = null
+        statusMessages.value = null
     }
 
     val categoryListWithHeaders = repository.categoryListWithHeaders()
@@ -118,9 +114,11 @@ class RecipeListViewModel(
 
     companion object StatusData {
         val scrapeStatus = MutableLiveData<Boolean>()
+        val statusMessages = MutableLiveData<String?>()
 
         init {
-            scrapeStatus.value = true
+            scrapeStatus.value = false
+            statusMessages.value = null
         }
     }
 }
