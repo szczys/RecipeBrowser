@@ -15,25 +15,16 @@
             type="com.jumptuck.recipebrowser2.recipelist.RecipeTitleListener" />
     </data>
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardUseCompatPadding="true"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="2dp">
-
     <TextView
         android:id="@+id/recipe_list_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="16sp"
-        android:paddingRight="16sp"
         android:paddingTop="10sp"
         android:paddingBottom="10sp"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:background="?android:attr/selectableItemBackground"
         app:recipeListTitle="@{recipe}"
         android:onClick="@{() -> clickListener.onClick(recipe)}"
         tools:text="List Item" />
-    </androidx.cardview.widget.CardView>
 </layout>

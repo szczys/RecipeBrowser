@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.jumptuck.recipebrowser2.R
@@ -48,6 +49,9 @@ class RecipeListFragment : Fragment() {
             recipeListViewModel.onRecipeClicked(recipeID)
         })
         binding.recipeList.adapter = adapter
+
+        val decoration = DividerItemDecoration(application, DividerItemDecoration.VERTICAL)
+        binding.recipeList.addItemDecoration(decoration)
 
         recipeListViewModel.navigateToSingleRecipe.observe(viewLifecycleOwner, Observer { recipe ->
             recipe?.let {

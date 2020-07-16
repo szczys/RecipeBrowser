@@ -19,6 +19,8 @@
             android:id="@+id/recipe_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:paddingRight="16dp"
+            android:paddingLeft="16dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/button3"
             app:layout_constraintEnd_toEndOf="parent"
