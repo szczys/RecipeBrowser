@@ -197,7 +197,7 @@ class RecipeListFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-
+        recipeListViewModel.refreshIfDue()
 
         return binding.root
     }

@@ -226,6 +226,19 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
         prefsEditor.apply()
     }
 
+    fun refreshDue(): Boolean {
+        var delay: Long = 0
+        when (prefsFrequency) {
+            0 -> return false           //Never
+            1 -> return true            //EveryLaunch
+            2 -> delay = 86400000L       //Daily
+            3 -> delay = 86400000L * 7   //Weekly
+            4 -> delay = 86400000L * 30  //Monthly
+            5 -> delay = 86400000L * 365 //Yearly
+        }
+        return System.currentTimeMillis() > ((lastRefresh.value ?: 0) + delay)
+    }
+
     companion object Prefs {
         var prefsWifiOnly = false
         var prefsHost: String? = null

@@ -99,6 +99,16 @@ class RecipeListViewModel(
         }
     }
 
+    fun refreshIfDue() {
+        if (firstRunRefreshFlag) {
+            //Singleton value makes sure this only runs once per app-load
+            firstRunRefreshFlag = false
+            if (repository.refreshDue()) {
+                scrapeRecipes()
+            }
+        }
+    }
+
     fun clearStatusMessage() {
         statusMessages.value = null
     }
@@ -115,6 +125,7 @@ class RecipeListViewModel(
     companion object StatusData {
         val scrapeStatus = MutableLiveData<Boolean>()
         val statusMessages = MutableLiveData<String?>()
+        var firstRunRefreshFlag = true
 
         init {
             scrapeStatus.value = false
