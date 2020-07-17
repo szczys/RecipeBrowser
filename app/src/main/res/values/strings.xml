@@ -50,6 +50,8 @@
     <string name="nav_header_icon_description">Pie slice icon</string>
     <string name="nav_header_title">Recipe\nBrowser</string>
     <string name="refresh_action_force">Force Refresh</string>
+    <string name="nav_drawer_footer_last_refresh">Last Refresh:</string>
+    <string name="last_refresh_never">Never</string>
 
     <plurals name="numberOfRecipes">
         <item quantity="one">%d Recipe</item>

@@ -20,6 +20,9 @@ import com.jumptuck.recipebrowser2.settings.RecipeDeleteAllDialogBuilder
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.custom_action_bar_layout.view.*
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class RecipeListFragment : Fragment() {
     lateinit var recipeListViewModel: RecipeListViewModel
@@ -122,9 +125,17 @@ class RecipeListFragment : Fragment() {
         /** Set last_refresh date in nav drawer header **/
         RecipeRepository.lastRefresh.observe(viewLifecycleOwner, Observer {
             it?.let {
+                val timestamp = RecipeRepository.lastRefresh.value
+                val stringTime: String
+                if (timestamp == 0L) { stringTime = getString(R.string.last_refresh_never) }
+                else {
+                    stringTime =
+                        SimpleDateFormat("MM/dd/yy hh:mma")
+                            .format(timestamp)
+                }
                 val navigationView = requireActivity().findViewById<NavigationView>(R.id.navView)
                 navigationView
-                    .findViewById<TextView>(R.id.last_refresh).text = RecipeRepository.lastRefresh.value.toString()
+                    .findViewById<TextView>(R.id.last_refresh_value).text = stringTime
             }
         })
 
