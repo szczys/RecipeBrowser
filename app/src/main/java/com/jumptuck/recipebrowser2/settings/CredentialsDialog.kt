@@ -22,19 +22,21 @@ class CredentialsDialogBuilder(
         val userEdit = dialogView.findViewById<EditText>(R.id.username)
         val passEdit = dialogView.findViewById<EditText>(R.id.password)
         hostEdit.append(RecipeRepository.prefsHost)
+        userEdit.append(RecipeRepository.prefsUsername)
+        passEdit.append(RecipeRepository.prefsPassword)
 
         setView(dialogView)
             .setCancelable(false)
             // Add action buttons
-            .setPositiveButton(R.string.dialog_button_save) { dialog, id ->
+            .setPositiveButton(R.string.dialog_button_save) { _, _ ->
                 Timber.i("URL length: %d", hostEdit.text.toString().length)
                 var hostname = ""
-                var testHost = hostEdit.text.toString()
-                if (testHost.length > 0) {
-                    if (URLUtil.isHttpUrl(testHost) || URLUtil.isHttpsUrl(testHost)) {
-                        hostname = testHost
+                val testHost = hostEdit.text.toString()
+                if (testHost.isNotEmpty()) {
+                    hostname = if (URLUtil.isHttpUrl(testHost) || URLUtil.isHttpsUrl(testHost)) {
+                        testHost
                     } else {
-                        hostname = "https://" + testHost
+                        "https://$testHost"
                     }
                     if (testHost.last() != '/') {
                         hostname += '/'
@@ -46,7 +48,7 @@ class CredentialsDialogBuilder(
                     passEdit.text.toString()
                 )
             }
-            .setNegativeButton(R.string.dialog_button_cancel) { dialog, id ->
+            .setNegativeButton(R.string.dialog_button_cancel) { _, _ ->
                 //getDialog().cancel()
             }
     }
