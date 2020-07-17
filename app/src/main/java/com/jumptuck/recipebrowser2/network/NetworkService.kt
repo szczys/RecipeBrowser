@@ -6,6 +6,7 @@ import com.burgstaller.okhttp.digest.CachingAuthenticator
 import com.burgstaller.okhttp.digest.Credentials
 import com.burgstaller.okhttp.digest.DigestAuthenticator
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.jumptuck.recipebrowser2.database.RecipeRepository
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -17,7 +18,11 @@ import java.util.concurrent.ConcurrentHashMap
 private const val BASE_URL = "http://localhost/"
 
 //Fixme: these credentials need to be passed in from Prefs
-val authenticator: DigestAuthenticator? = DigestAuthenticator(Credentials("someUsername", "somePassword"))
+val authenticator: DigestAuthenticator? =
+    DigestAuthenticator(Credentials(
+        RecipeRepository.Prefs.prefsUsername,
+        RecipeRepository.Prefs.prefsPassword
+        ))
 
 val authCache: Map<String, CachingAuthenticator> = ConcurrentHashMap()
 val httpClient = OkHttpClient.Builder()
