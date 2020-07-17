@@ -25,13 +25,12 @@ class UpdateFrequencyDialogBuilder(
             .setPositiveButton(
                 resources.getString(R.string.dialog_button_save)
             ) { _, _ ->
-                Timber.i("Yep: %d", curSelection)
                 repository.setFrequency(curSelection)
                 RecipeListViewModel.firstRunRefreshFlag = true
             }
             .setNegativeButton(
                 resources.getString(R.string.dialog_button_cancel)
-            ) { _, _ -> Timber.i("Nope") }
+            ) { _, _ ->  }
     }
     override fun show(): AlertDialog? {
         val alert = this.create()
