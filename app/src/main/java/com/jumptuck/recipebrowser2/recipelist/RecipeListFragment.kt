@@ -109,13 +109,22 @@ class RecipeListFragment : Fragment() {
             }
         })
 
-        /** Set recipe counts in nav drawer header **/
+        /** Set favorite counts in nav drawer header **/
         recipeListViewModel.favoriteCount.observe(viewLifecycleOwner, Observer {
             it?.let {
                 val navigationView = requireActivity().findViewById<NavigationView>(R.id.navView)
                 navigationView.getHeaderView(0)
                     .findViewById<TextView>(R.id.favorite_count).text =
                     resources.getQuantityString(R.plurals.numberOfFavorites, it, it)
+            }
+        })
+
+        /** Set last_refresh date in nav drawer header **/
+        RecipeRepository.lastRefresh.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                val navigationView = requireActivity().findViewById<NavigationView>(R.id.navView)
+                navigationView
+                    .findViewById<TextView>(R.id.last_refresh).text = RecipeRepository.lastRefresh.value.toString()
             }
         })
 

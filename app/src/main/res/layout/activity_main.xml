@@ -21,8 +21,7 @@
                 android:background="?attr/colorPrimary"
                 android:elevation="4dp"
                 android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
-                app:popupTheme="@style/ThemeOverlay.MaterialComponents.Dark">
-            </androidx.appcompat.widget.Toolbar>
+                app:popupTheme="@style/ThemeOverlay.MaterialComponents.Dark"></androidx.appcompat.widget.Toolbar>
 
             <fragment
                 android:id="@+id/myNavHostFragment"
@@ -39,8 +38,24 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            app:menu="@menu/navdrawer_menu"
-            app:headerLayout="@layout/nav_header_layout"/>
+            app:headerLayout="@layout/nav_header_layout"
+            app:menu="@menu/navdrawer_menu">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:clickable="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/last_refresh"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:text="Last Refresh" />
+            </LinearLayout>
+        </com.google.android.material.navigation.NavigationView>
 
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

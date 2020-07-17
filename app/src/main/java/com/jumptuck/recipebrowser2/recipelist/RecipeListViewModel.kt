@@ -91,6 +91,7 @@ class RecipeListViewModel(
                 scrapeStatus.value = true
                 repository.scrapeRecipes()
                 scrapeStatus.value = false
+                repository.setLastRefresh()
             } catch (e: Exception) {
                 scrapeStatus.value = false
                 statusMessages.postValue(e.message)

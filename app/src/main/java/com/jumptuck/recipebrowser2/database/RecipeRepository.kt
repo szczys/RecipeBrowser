@@ -47,7 +47,7 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
         prefsUsername = savedPreferences.getString("user", "")
         prefsPassword = savedPreferences.getString("pass", "")
         prefsFrequency = savedPreferences.getInt("frequency", 0)
-        lastRefresh = savedPreferences.getLong("lastRefresh", 0)
+        lastRefresh.value = savedPreferences.getLong("lastRefresh", 0)
     }
 
     fun setSelectedCategory(value: String) {
@@ -220,9 +220,9 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
         prefsEditor.apply()
     }
 
-    fun setLastRefresh(timestamp: Long) {
-        lastRefresh = timestamp
-        prefsEditor.putLong("lastRefresh", lastRefresh)
+    fun setLastRefresh() {
+        lastRefresh.value = System.currentTimeMillis()
+        prefsEditor.putLong("lastRefresh", lastRefresh.value ?: 0)
         prefsEditor.apply()
     }
 
@@ -232,6 +232,10 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
         var prefsUsername: String? = null
         var prefsPassword: String? = null
         var prefsFrequency: Int = 0
-        var lastRefresh: Long = 0
+        val lastRefresh = MutableLiveData<Long>()
+
+        init {
+            lastRefresh.value = 0
+        }
     }
 }
