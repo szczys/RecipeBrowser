@@ -5,6 +5,7 @@ import android.content.res.Resources
 import androidx.appcompat.app.AlertDialog
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeRepository
+import com.jumptuck.recipebrowser2.recipelist.RecipeListViewModel
 import timber.log.Timber
 
 class UpdateFrequencyDialogBuilder(
@@ -26,6 +27,7 @@ class UpdateFrequencyDialogBuilder(
             ) { _, _ ->
                 Timber.i("Yep: %d", curSelection)
                 repository.setFrequency(curSelection)
+                RecipeListViewModel.firstRunRefreshFlag = true
             }
             .setNegativeButton(
                 resources.getString(R.string.dialog_button_cancel)
