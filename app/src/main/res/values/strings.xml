@@ -31,7 +31,7 @@
     <string name="web_error_401">Incorrect username or password for:\n</string>
     <string name="web_error_404">Webpage not found (error 404)</string>
     <string name="web_error_default">Problem loading webpage. Error</string>
-    <string name="prefs_frequency_option_title">Frequency</string>
+    <string name="prefs_frequency_option_title">Auto-Refresh Frequency</string>
     <string name="prefs_frequency_option_summary">How often to check for recipe updates</string>
     <string name="prefs_wifi_only_title">WiFi Only:</string>
     <string name="prefs_wifi_only_summary">Do not refresh over cell network</string>

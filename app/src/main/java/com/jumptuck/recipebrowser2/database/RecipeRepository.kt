@@ -46,7 +46,8 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
         prefsHost = savedPreferences.getString("host", "")
         prefsUsername = savedPreferences.getString("user", "")
         prefsPassword = savedPreferences.getString("pass", "")
-
+        prefsFrequency = savedPreferences.getInt("frequency", 0)
+        lastRefresh = savedPreferences.getLong("lastRefresh", 0)
     }
 
     fun setSelectedCategory(value: String) {
@@ -213,10 +214,24 @@ class RecipeRepository(application: Application): AndroidViewModel(application) 
         prefsEditor.apply()
     }
 
+    fun setFrequency(freqIdx: Int) {
+        prefsFrequency = freqIdx
+        prefsEditor.putInt("frequency", freqIdx)
+        prefsEditor.apply()
+    }
+
+    fun setLastRefresh(timestamp: Long) {
+        lastRefresh = timestamp
+        prefsEditor.putLong("lastRefresh", lastRefresh)
+        prefsEditor.apply()
+    }
+
     companion object Prefs {
         var prefsWifiOnly = false
         var prefsHost: String? = null
         var prefsUsername: String? = null
         var prefsPassword: String? = null
+        var prefsFrequency: Int = 0
+        var lastRefresh: Long = 0
     }
 }

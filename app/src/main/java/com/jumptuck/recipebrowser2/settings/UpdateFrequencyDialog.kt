@@ -1,7 +1,6 @@
 package com.jumptuck.recipebrowser2.settings
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.res.Resources
 import androidx.appcompat.app.AlertDialog
 import com.jumptuck.recipebrowser2.R
@@ -14,31 +13,27 @@ class UpdateFrequencyDialogBuilder(
     repository: RecipeRepository
 ) : AlertDialog.Builder(context) {
     private val appResources = resources
+    private var curSelection = 0
     init {
-        this.setTitle(appResources.getString(R.string.delete_all_recipes_details))
-            .setSingleChoiceItems(
+        this.setSingleChoiceItems(
                 R.array.prefs_frequency_entries,
-                0,
-                DialogInterface.OnClickListener { dialog, which ->
-                Timber.i(which.toString())
-            } )
+                RecipeRepository.prefsFrequency
+            ) { _, which ->
+                curSelection = which
+            }
             .setPositiveButton(
-                resources.getString(R.string.dialog_button_save),
-                DialogInterface.OnClickListener
-                { _, _ ->
-                    Timber.i("Yep")
-                    //repository.deleteAllRecipes()
-                }
-            )
+                resources.getString(R.string.dialog_button_save)
+            ) { _, _ ->
+                Timber.i("Yep: %d", curSelection)
+                repository.setFrequency(curSelection)
+            }
             .setNegativeButton(
-                resources.getString(R.string.dialog_button_cancel),
-                DialogInterface.OnClickListener
-                { _, _ -> Timber.i("Nope") }
-            )
+                resources.getString(R.string.dialog_button_cancel)
+            ) { _, _ -> Timber.i("Nope") }
     }
     override fun show(): AlertDialog? {
         val alert = this.create()
-        alert.setTitle(appResources.getString(R.string.delete_all_recipes_confirm))
+        alert.setTitle(appResources.getString(R.string.prefs_frequency_option_title))
         alert.show()
         return null
     }

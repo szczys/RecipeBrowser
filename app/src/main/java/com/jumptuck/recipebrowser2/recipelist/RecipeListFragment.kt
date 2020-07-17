@@ -214,7 +214,6 @@ class RecipeListFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         /** Setup custom ActionBar view for this fragment **/
-
         ab.setDisplayShowCustomEnabled(true)
         ab.setDisplayShowTitleEnabled(false)
         ab.setDisplayHomeAsUpEnabled(true)
