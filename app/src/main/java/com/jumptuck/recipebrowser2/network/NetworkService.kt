@@ -15,28 +15,33 @@ import retrofit2.http.GET
 import retrofit2.http.Url
 import java.util.concurrent.ConcurrentHashMap
 
+
 private const val BASE_URL = "http://localhost/"
 
 //Fixme: these credentials need to be passed in from Prefs
-val authenticator: DigestAuthenticator? =
-    DigestAuthenticator(Credentials(
-        RecipeRepository.Prefs.prefsUsername,
-        RecipeRepository.Prefs.prefsPassword
-        ))
+private fun getRetrofit(): Retrofit {
+    val authenticator: DigestAuthenticator? =
+        DigestAuthenticator(
+            Credentials(
+                RecipeRepository.prefsUsername,
+                RecipeRepository.prefsPassword
+            )
+        )
 
-val authCache: Map<String, CachingAuthenticator> = ConcurrentHashMap()
-val httpClient = OkHttpClient.Builder()
-    .authenticator(CachingAuthenticatorDecorator(authenticator, authCache))
-    .addInterceptor(AuthenticationCacheInterceptor(authCache))
-    .build()
+    val authCache: Map<String, CachingAuthenticator> = ConcurrentHashMap()
+    val httpClient = OkHttpClient.Builder()
+        .authenticator(CachingAuthenticatorDecorator(authenticator, authCache))
+        .addInterceptor(AuthenticationCacheInterceptor(authCache))
+        .build()
 
-private var builder = Retrofit.Builder()
-    .addConverterFactory(ScalarsConverterFactory.create())
-    .addCallAdapterFactory(CoroutineCallAdapterFactory())
-    .client(httpClient)
-    .baseUrl(BASE_URL)
+    val builder = Retrofit.Builder()
+        .addConverterFactory(ScalarsConverterFactory.create())
+        .addCallAdapterFactory(CoroutineCallAdapterFactory())
+        .client(httpClient)
+        .baseUrl(BASE_URL)
 
-private var retrofit: Retrofit = builder.build()
+    return builder.build()
+}
 
 interface NetworkService {
     @GET
@@ -44,8 +49,29 @@ interface NetworkService {
             Deferred<String>
 }
 
-object Network {
-    val retrofitService: NetworkService by lazy {
-        retrofit.create(NetworkService::class.java)
+
+class Network private constructor() {
+    /** This is what we need from the Network singleton **/
+    private val retrofit: Retrofit = getRetrofit()
+    val retrofitService: NetworkService = retrofit.create(NetworkService::class.java)
+
+    /** Destroy/recreate when credentials change **/
+    fun clearInstance() {
+        instance = null
+    }
+
+    companion object {
+        /** This ensures network access is a singleton **/
+        @Volatile
+        private var instance: Network? = Network()
+
+        fun getInstance(): Network {
+            synchronized(Network::class.java) {
+                if (instance == null) {
+                    instance = Network()
+                }
+                return instance!!
+            }
+        }
     }
 }

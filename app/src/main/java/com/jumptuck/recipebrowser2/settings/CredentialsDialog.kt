@@ -8,6 +8,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeRepository
+import com.jumptuck.recipebrowser2.network.Network
 import timber.log.Timber
 
 class CredentialsDialogBuilder(
@@ -47,6 +48,8 @@ class CredentialsDialogBuilder(
                     userEdit.text.toString(),
                     passEdit.text.toString()
                 )
+                val network = Network.getInstance()
+                network.clearInstance()
             }
             .setNegativeButton(R.string.dialog_button_cancel) { _, _ ->
                 //getDialog().cancel()

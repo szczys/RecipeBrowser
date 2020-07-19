@@ -14,8 +14,9 @@ import java.util.*
 class WebScraper(private val repository: RecipeRepository) {
 
     private suspend fun getHTML(getUrl: String): String {
+        val network = Network.getInstance()
         val getPropertiesDeferred =
-            Network.retrofitService.getHtmlAsync(getUrl)
+            network.retrofitService.getHtmlAsync(getUrl)
         val listResult: String
         try {
             listResult = getPropertiesDeferred.await()
