@@ -9,6 +9,7 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import timber.log.Timber
+import java.net.URLDecoder
 import java.util.*
 
 class WebScraper(private val repository: RecipeRepository) {
@@ -143,14 +144,11 @@ class WebScraper(private val repository: RecipeRepository) {
                 val links: Iterator<*> = doc.select("a").iterator()
                 while (links.hasNext()) {
                     val l: Element = links.next() as Element
-                    val curTitle: String = l.text()
-                    val title = curTitle.substring(0, curTitle.length - 4)
-                    val link = StringBuilder(current_directory).append(l.select("a").attr("href")).toString()
-                    val date = ""
+                    val rawLink = l.attr("href")
                     val workingRecipe: Recipe? = formatToRecipe(
-                        title,
-                        link,
-                        date,
+                        l.text(),
+                        rawLink,
+                        "",
                         current_directory,
                         category_name
                     )
@@ -168,18 +166,22 @@ class WebScraper(private val repository: RecipeRepository) {
             category_name: String
         ): Recipe? {
             val workingRecipe: Recipe
-            if (title.isNotEmpty()) {
-                if (title.substring(title.length - 1) == "/") {
+            if (link.isNotEmpty()) {
+                if (link.endsWith("/")) {
                     Timber.d("Directory: $title | $link")
                     subDirectories[link] = title.dropLast(1)
-                } else if (title.length >= 5 && title.substring(title.length - 4)
+                } else if (link.length >= 5 && link.substring(link.length - 4)
                         .equals(".txt", ignoreCase = true)
                 ) {
+                    // Derive display title from the URL-decoded href (not the
+                    // display text, which Apache may truncate for long names)
+                    val decodedLink = URLDecoder.decode(link, "UTF-8")
+                    val displayName = decodedLink.substring(0, decodedLink.length - 4)
                     Timber.d(
-                        "Text file: $title | $link | $date"
+                        "Text file: $displayName | $link | $date"
                     )
                     workingRecipe = Recipe()
-                    workingRecipe.title = title.substring(0, title.length - 4)
+                    workingRecipe.title = displayName
                     workingRecipe.link = StringBuilder(current_directory).append(link).toString()
                     workingRecipe.category = category_name
                     workingRecipe.date = date
