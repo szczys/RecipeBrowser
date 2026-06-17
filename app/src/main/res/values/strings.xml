@@ -1,13 +1,10 @@
 <resources>
     <string name="app_name">Recipe Browser 2</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="empty_recipe_title">No Recipe Title Found</string>
     <string name="empty_recipe_body">No Recipe Body Found</string>
     <string name="about_fragment_title">About</string>
     <string name="refresh_action_title">Refresh</string>
     <string name="settings_fragment_title">Settings</string>
-    <string name="share_text">This is recipe#%1$d</string>
     <string name="category_uncategorized">Uncategorized</string>
     <string name="spinner_category_all">All Recipes</string>
     <string name="spinner_category_favorites">Favorites</string>
@@ -19,23 +16,17 @@
     <string name="dialog_button_cancel">Cancel</string>
     <string name="dialog_credentials_title">Server Address and Login</string>
     <string name="dialog_credentials_summary">Set Host, Username, and Password</string>
-    <string name="favorite_icon_title">Mark as a Favorite Recipe</string>
     <string name="share_icon_title">Share This Recipe</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
-    <string name="toast_empty_host_url">Web Host address cannot be blank\n\n (Click cancel to exit this dialog)</string>
     <string name="toast_empty_host_during_refresh">Cannot refresh. Host address is blank.\nPlease review app settings</string>
     <string name="toast_internet_not_connected">No Internet Connection Available</string>
     <string name="toast_wifi_not_connected">Cannot refresh. \"WiFi Only\" is\nselected in settings but no\nWiFi network is available</string>
-    <string name="web_error_401">Incorrect username or password for:\n</string>
-    <string name="web_error_404">Webpage not found (error 404)</string>
-    <string name="web_error_default">Problem loading webpage. Error</string>
     <string name="prefs_frequency_option_title">Auto-Refresh Frequency</string>
     <string name="prefs_frequency_option_summary">How often to check for recipe updates</string>
     <string name="prefs_wifi_only_title">WiFi Only:</string>
     <string name="prefs_wifi_only_summary">Do not refresh over cell network</string>
-    <string name="about_button_dismiss">Close About Window</string>
     <string name="delete_all_recipes_confirm">Remove All Recipes</string>
     <string name="delete_all_recipes_summary">Deletes recipes stored on this device</string>
     <string name="delete_all_recipes_details">Are you sure you want to remove all recipes from your device\'s local database?</string>
@@ -44,7 +35,6 @@
     <string name="about_body"> Recipe Browser\n\nCopyright 2020 Mike Szczys\n MIT License</string>
     <string name="dialog_optional">(optional)</string>
     <string name="dialog_example_host">https://jumptuck.com/recipes</string>
-    <string name="share">Share</string>
     <string name="favorite">Favorite</string>
     <string name="error_delete_single_recipe">Error: This recipe has an invalid ID and can\'t be deleted for some reason</string>
     <string name="nav_header_icon_description">Pie slice icon</string>
@@ -52,6 +42,9 @@
     <string name="refresh_action_force">Force Refresh</string>
     <string name="nav_drawer_footer_last_refresh">Last Refresh:</string>
     <string name="last_refresh_never">Never</string>
+    <string name="button_add_recipe">Add Recipe</string>
+    <string name="button_scrape">Scrape</string>
+    <string name="button_remove_all">Remove All</string>
 
     <plurals name="numberOfRecipes">
         <item quantity="one">%d Recipe</item>

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.view.View
-import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -63,11 +62,12 @@ class SingleRecipeViewModel(recipeID: Long, application: Application) : ViewMode
     }
 
     private fun getShareIntent(activity: Activity): Intent {
-        return ShareCompat.IntentBuilder.from(activity)
-            .setText(curRecipe.value?.body ?: activity.getString(R.string.empty_recipe_body))
-            .setSubject("Recipe: " + (curRecipe.value?.title ?: activity.getString(R.string.empty_recipe_title)))
-            .setType("text/plain")
-            .createChooserIntent()
+        val sendIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, curRecipe.value?.body ?: activity.getString(R.string.empty_recipe_body))
+            putExtra(Intent.EXTRA_SUBJECT, "Recipe: " + (curRecipe.value?.title ?: activity.getString(R.string.empty_recipe_title)))
+        }
+        return Intent.createChooser(sendIntent, null)
     }
 
     fun shareSuccess(activity: Activity) {

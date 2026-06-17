@@ -3,6 +3,7 @@ package com.jumptuck.recipebrowser2.singlerecipe
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
+import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AlertDialog
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeRepository
@@ -22,7 +23,7 @@ class SingleRecipeDeleteDialogBuilder(
             ) { _, _ ->
                     Timber.i("Yep")
                     repository.deleteSingleRecipe(recipeId)
-                    (context as Activity).onBackPressed()
+                    (context as? ComponentActivity)?.onBackPressedDispatcher?.onBackPressed()
                 }
             .setNegativeButton(
                 resources.getString(R.string.no)

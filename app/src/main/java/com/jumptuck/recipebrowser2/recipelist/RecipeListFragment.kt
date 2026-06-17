@@ -6,8 +6,10 @@ import android.widget.*
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -129,7 +131,7 @@ class RecipeListFragment : Fragment() {
                 if (timestamp == 0L) { stringTime = getString(R.string.last_refresh_never) }
                 else {
                     stringTime =
-                        SimpleDateFormat("MM/dd/yy hh:mma")
+                        SimpleDateFormat("MM/dd/yy hh:mma", Locale.getDefault())
                             .format(timestamp)
                 }
                 val navigationView = requireActivity().findViewById<NavigationView>(R.id.navView)
@@ -200,23 +202,33 @@ class RecipeListFragment : Fragment() {
             }
         })
 
-        setHasOptionsMenu(true)
+        /** Register overflow menu via MenuHost (replaces deprecated setHasOptionsMenu) **/
+        val menuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.overflow_menu, menu)
+            }
+
+            override fun onPrepareMenu(menu: Menu) {
+                /** Show or hide progressBar in the Toolbar based on scrape status **/
+                RecipeListViewModel.scrapeStatus.value?.let {
+                    menu.findItem(R.id.refresh_progress).isVisible = it
+                }
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean = false
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+        /** Observe scrape status to update the progress menu item visibility **/
+        RecipeListViewModel.scrapeStatus.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                activity?.invalidateOptionsMenu()
+            }
+        })
 
         recipeListViewModel.refreshIfDue()
 
         return binding.root
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.overflow_menu, menu)
-
-        /** Listener to hide or show progressBar in the Toolbar **/
-        RecipeListViewModel.scrapeStatus.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                menu.findItem(R.id.refresh_progress).isVisible = it
-            }
-        })
     }
 
     override fun onStart() {
