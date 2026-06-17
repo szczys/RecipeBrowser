@@ -32,7 +32,9 @@
     <string name="delete_all_recipes_details">Are you sure you want to remove all recipes from your device\'s local database?</string>
     <string name="delete_single_recipe_title">Delete This Recipe</string>
     <string name="delete_single_recipe_details">Are you sure you want to remove this recipe from your device\'s local database?</string>
-    <string name="about_body"> Recipe Browser\n\nCopyright 2020 Mike Szczys\n MIT License</string>
+    <string name="about_body">Copyright 2026 Mike Szczys\nMIT License</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_repo_url">https://github.com/szczys/RecipeBrowser</string>
     <string name="dialog_optional">(optional)</string>
     <string name="dialog_example_host">https://jumptuck.com/recipes</string>
     <string name="favorite">Favorite</string>
