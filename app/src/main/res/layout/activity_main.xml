@@ -24,7 +24,7 @@
                 android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
                 app:popupTheme="@style/ThemeOverlay.MaterialComponents.Dark"></androidx.appcompat.widget.Toolbar>
 
-            <fragment
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/myNavHostFragment"
                 android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
@@ -47,6 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:paddingBottom="16dp"
                 android:orientation="vertical">
 

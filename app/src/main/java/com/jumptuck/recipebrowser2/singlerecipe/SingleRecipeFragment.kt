@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.jumptuck.recipebrowser2.MainActivity
@@ -50,7 +52,75 @@ class SingleRecipeFragment : Fragment() {
             }
         })
 
-        setHasOptionsMenu(true)
+        /** Register menu via MenuHost (replaces deprecated setHasOptionsMenu) **/
+        val menuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.single_recipe_menu, menu)
+            }
+
+            override fun onPrepareMenu(menu: Menu) {
+                /** Update favorite icon based on current recipe state **/
+                var isFavorite = false
+                try { viewModel.curRecipe.value?.let { isFavorite = it.favorite }
+                } catch (e: Exception) {
+                    /** Catch null value here so deleting a single recipe doesn't crash the fragment **/
+                }
+                val favIconDrawable: Int = if (isFavorite) R.drawable.ic_baseline_star_filled_24
+                else R.drawable.ic_baseline_star_border_24
+                menu.findItem(R.id.favorite).setIcon(favIconDrawable)
+
+                /** Show or hide refresh progress indicator **/
+                menu.findItem(R.id.refresh_progress).isVisible =
+                    viewModel.refreshStatus.value == true
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.share -> {
+                        viewModel.shareSuccess(this@SingleRecipeFragment.requireActivity())
+                        true
+                    }
+                    R.id.favorite -> {
+                        viewModel.toggleFavorite()
+                        true
+                    }
+                    R.id.refreshSingleRecipe -> {
+                        viewModel.refreshRecipe()
+                        true
+                    }
+                    R.id.deleteSingleRecipe -> {
+                        val recipeId = viewModel.curRecipe.value?.recipeID
+                        if (recipeId == null) {
+                            Toast.makeText(
+                                requireActivity(),
+                                resources.getString(R.string.error_delete_single_recipe),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } else {
+                            SingleRecipeDeleteDialogBuilder(
+                                recipeId,
+                                requireActivity(),
+                                resources,
+                                viewModel.repository
+                            ).show()
+                        }
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+        /** Update favorite icon and refresh progress visibility based on LiveData **/
+        viewModel.curRecipe.observe(viewLifecycleOwner, Observer {
+            activity?.invalidateOptionsMenu()
+        })
+
+        viewModel.refreshStatus.observe(viewLifecycleOwner, Observer {
+            activity?.invalidateOptionsMenu()
+        })
+
         return binding.root
     }
 
@@ -59,52 +129,5 @@ class SingleRecipeFragment : Fragment() {
         viewModel.curRecipe.observe(viewLifecycleOwner, Observer {
             (requireActivity() as MainActivity).findViewById<Toolbar>(R.id.toolbar).title = it?.title
         })
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.single_recipe_menu, menu)
-
-        viewModel.curRecipe.observe(viewLifecycleOwner, Observer {
-            var isFavorite = false
-            try { isFavorite = it.favorite
-            } catch (e: Exception) {
-                /** Catch null value here so deleting a single recipe doesn't crash the fragment **/
-            }
-            val favIconDrawable: Int = if (isFavorite) R.drawable.ic_baseline_star_filled_24
-            else R.drawable.ic_baseline_star_border_24
-            menu.findItem(R.id.favorite).setIcon(favIconDrawable)
-        })
-
-        viewModel.refreshStatus.observe(viewLifecycleOwner, Observer {
-            menu.findItem(R.id.refresh_progress).isVisible = it
-        })
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.share -> viewModel.shareSuccess(this.requireActivity())
-            R.id.favorite -> viewModel.toggleFavorite()
-            R.id.refreshSingleRecipe -> viewModel.refreshRecipe()
-            R.id.deleteSingleRecipe -> {
-                val recipeId = viewModel.curRecipe.value?.recipeID
-                if (recipeId == null) {
-                    Toast.makeText(
-                        requireActivity(),
-                        resources.getString(R.string.error_delete_single_recipe),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-                else {
-                    SingleRecipeDeleteDialogBuilder(
-                        recipeId,
-                        requireActivity(),
-                        resources,
-                        viewModel.repository
-                    ).show()
-                }
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 }

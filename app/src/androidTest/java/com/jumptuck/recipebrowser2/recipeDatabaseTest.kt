@@ -99,7 +99,9 @@ class recipeDatabaseTest {
         recipe.category = "Food"
         recipe.favorite = true
         recipeDao.insert(recipe)
-        assertEquals(recipeDao.favoriteCount(),2)
+        recipeDao.favoriteCount().observeOnce {
+            assertEquals(it, 2)
+        }
 
         //Test isIn
         assertEquals(recipeDao.isIn("Some Weird Recipe"),false)

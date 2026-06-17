@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.navigation.NavigationView
 import com.jumptuck.recipebrowser2.databinding.ActivityMainBinding
@@ -40,10 +40,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         /** Apply status-bar inset as top padding on the nav drawer header
-         *  so its content (icon, title) sits below the status bar. **/
+         *  so its content (icon, title) sits below the status bar. Also apply
+         *  bottom inset to the footer so it clears the navigation bar. **/
         val headerView = binding.navView.getHeaderView(0)
         val headerOriginalTopPadding = headerView.paddingTop
         val headerOriginalHeight = headerView.layoutParams.height
+        val footerView = binding.navView.getChildAt(1)
+        val footerOriginalBottomPadding = footerView?.paddingBottom ?: 0
         ViewCompat.setOnApplyWindowInsetsListener(binding.navView) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             headerView.setPadding(
@@ -55,6 +58,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val lp = headerView.layoutParams
             lp.height = headerOriginalHeight + systemBars.top
             headerView.layoutParams = lp
+            footerView?.setPadding(
+                footerView.paddingLeft,
+                footerView.paddingTop,
+                footerView.paddingRight,
+                footerOriginalBottomPadding + systemBars.bottom
+            )
             insets
         }
 
@@ -75,7 +84,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         })
         onBackPressedDispatcher.addCallback(this, drawerBackCallback)
 
-        val navController = this.findNavController(R.id.myNavHostFragment)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.myNavHostFragment) as NavHostFragment
+        val navController = navHostFragment.navController
         toolbar = binding.toolbar
         NavigationUI.setupWithNavController(binding.toolbar, navController, drawerLayout)
 
@@ -123,7 +133,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = this.findNavController(R.id.myNavHostFragment)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.myNavHostFragment) as NavHostFragment
+        val navController = navHostFragment.navController
         return NavigationUI.navigateUp(navController, drawerLayout)
     }
 

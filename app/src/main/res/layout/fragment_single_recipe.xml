@@ -34,7 +34,7 @@
                 android:gravity="top"
                 android:padding="20dp"
                 android:text="@{singleRecipeViewModel.curRecipe.body}"
-                android:textSize="18dp" />
+                android:textSize="18sp" />
         </androidx.cardview.widget.CardView>
     </androidx.core.widget.NestedScrollView>
 </layout>

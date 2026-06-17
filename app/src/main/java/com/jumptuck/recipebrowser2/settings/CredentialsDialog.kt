@@ -18,6 +18,7 @@ class CredentialsDialogBuilder(
 ) : AlertDialog.Builder(context) {
     private val appResources = resources
     init {
+        @Suppress("InflateParams")
         val dialogView = (context as Activity).layoutInflater.inflate(R.layout.dialog_credentials, null)
         val hostEdit = dialogView.findViewById<EditText>(R.id.host)
         val userEdit = dialogView.findViewById<EditText>(R.id.username)
