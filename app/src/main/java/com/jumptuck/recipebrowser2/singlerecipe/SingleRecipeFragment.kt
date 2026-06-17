@@ -3,6 +3,7 @@ package com.jumptuck.recipebrowser2.singlerecipe
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -10,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.jumptuck.recipebrowser2.MainActivity
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.databinding.FragmentSingleRecipeBinding
-import kotlinx.android.synthetic.main.activity_main.*
 
 class SingleRecipeFragment : Fragment() {
 
@@ -57,7 +57,7 @@ class SingleRecipeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.curRecipe.observe(viewLifecycleOwner, Observer {
-            (requireActivity() as MainActivity).toolbar.title = it?.title
+            (requireActivity() as MainActivity).findViewById<Toolbar>(R.id.toolbar).title = it?.title
         })
     }
 

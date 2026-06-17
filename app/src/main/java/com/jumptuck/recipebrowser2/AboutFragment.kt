@@ -5,7 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.activity_main.*
+import androidx.appcompat.widget.Toolbar
+import com.jumptuck.recipebrowser2.MainActivity
 
 class AboutFragment : Fragment() {
     override fun onCreateView(
@@ -19,6 +20,6 @@ class AboutFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         /** Show fragment title in toolbar **/
-        (requireActivity() as MainActivity).toolbar.title = getString(R.string.about_fragment_title)
+        (requireActivity() as MainActivity).findViewById<Toolbar>(R.id.toolbar).title = getString(R.string.about_fragment_title)
     }
 }

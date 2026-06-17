@@ -15,15 +15,11 @@ class WebScraper(private val repository: RecipeRepository) {
 
     private suspend fun getHTML(getUrl: String): String {
         val network = Network.getInstance()
-        val getPropertiesDeferred =
-            network.retrofitService.getHtmlAsync(getUrl)
-        val listResult: String
-        try {
-            listResult = getPropertiesDeferred.await()
+        return try {
+            network.retrofitService.getHtml(getUrl)
         } catch (t: Throwable) {
             throw NetworkErrorException(t.message)
         }
-        return listResult
     }
 
     suspend fun crawlDirectory(startingUrl: String) {
