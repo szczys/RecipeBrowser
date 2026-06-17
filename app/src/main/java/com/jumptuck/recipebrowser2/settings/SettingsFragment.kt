@@ -7,15 +7,13 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.jumptuck.recipebrowser2.MainActivity
 import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeRepository
 import com.jumptuck.recipebrowser2.databinding.FragmentSettingsBinding
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_settings.view.*
-import kotlinx.android.synthetic.main.listview_two_lines.view.*
 import timber.log.Timber
 
 class SettingsFragment : Fragment() {
@@ -31,7 +29,7 @@ class SettingsFragment : Fragment() {
         val application = requireNotNull(this.activity).application
         repository = RecipeRepository(application)
 
-        val listView = binding.settingsList.settings_list
+        val listView = binding.settingsList
         val settingsActionLabels = ArrayList<List<Int>>()
         settingsActionLabels.add(listOf(
             R.string.dialog_credentials_title,
@@ -83,8 +81,9 @@ class SettingsFragment : Fragment() {
         listView.adapter = adapter
 
         listView.setOnItemClickListener { _, itemView, _, _ ->
-            Timber.d("OnClicked: %s", itemView.text1.tag)
-            when (itemView.text1.tag) {
+            val text1 = itemView.findViewById<TextView>(R.id.text1)
+            Timber.d("OnClicked: %s", text1.tag)
+            when (text1.tag) {
                 R.string.dialog_credentials_title -> {
                     CredentialsDialogBuilder(
                         requireActivity(),
@@ -100,8 +99,7 @@ class SettingsFragment : Fragment() {
                     ).show()
                 }
                 R.string.prefs_wifi_only_title -> {
-                    //repository.setWifiOnlyPref(repository.getWifiOnlyPref())
-                    val cb = itemView.checkBox
+                    val cb = itemView.findViewById<CheckBox>(R.id.checkBox)
                     val newState = !cb.isChecked
                     repository.setWifiOnlyPref(newState)
                     cb.isChecked = RecipeRepository.prefsWifiOnly
@@ -121,6 +119,6 @@ class SettingsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         /** Show fragment title in toolbar **/
-        (requireActivity() as MainActivity).toolbar.title = getString(R.string.settings_fragment_title)
+        (requireActivity() as MainActivity).findViewById<Toolbar>(R.id.toolbar).title = getString(R.string.settings_fragment_title)
     }
 }

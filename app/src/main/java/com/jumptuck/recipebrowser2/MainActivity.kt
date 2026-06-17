@@ -2,8 +2,11 @@ package com.jumptuck.recipebrowser2
 
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -28,6 +31,50 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
         drawerLayout = binding.drawerLayout
 
+        /** Apply status-bar inset as top padding so toolbar content sits below
+         *  the status bar under mandatory edge-to-edge (API 35+). **/
+        ViewCompat.setOnApplyWindowInsetsListener(binding.toolbar) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(v.paddingLeft, systemBars.top, v.paddingRight, v.paddingBottom)
+            insets
+        }
+
+        /** Apply status-bar inset as top padding on the nav drawer header
+         *  so its content (icon, title) sits below the status bar. **/
+        val headerView = binding.navView.getHeaderView(0)
+        val headerOriginalTopPadding = headerView.paddingTop
+        val headerOriginalHeight = headerView.layoutParams.height
+        ViewCompat.setOnApplyWindowInsetsListener(binding.navView) { _, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            headerView.setPadding(
+                headerView.paddingLeft,
+                headerOriginalTopPadding + systemBars.top,
+                headerView.paddingRight,
+                headerView.paddingBottom
+            )
+            val lp = headerView.layoutParams
+            lp.height = headerOriginalHeight + systemBars.top
+            headerView.layoutParams = lp
+            insets
+        }
+
+        /** Handle back press: close the nav drawer if it's open, otherwise let the
+         *  system handle back (pops the back stack / exits the app). **/
+        val drawerBackCallback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                drawerLayout.closeDrawer(GravityCompat.START)
+            }
+        }
+        drawerLayout.addDrawerListener(object : DrawerLayout.SimpleDrawerListener() {
+            override fun onDrawerOpened(drawerView: android.view.View) {
+                drawerBackCallback.isEnabled = true
+            }
+            override fun onDrawerClosed(drawerView: android.view.View) {
+                drawerBackCallback.isEnabled = false
+            }
+        })
+        onBackPressedDispatcher.addCallback(this, drawerBackCallback)
+
         val navController = this.findNavController(R.id.myNavHostFragment)
         toolbar = binding.toolbar
         NavigationUI.setupWithNavController(binding.toolbar, navController, drawerLayout)
@@ -36,7 +83,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         /** Only allow the Nav Drawer in Recipe List View **/
         navController.addOnDestinationChangedListener { nc: NavController, nd: NavDestination, _: Bundle? ->
             /** Lock Nav Drawer **/
-            if (nd.id == nc.graph.startDestination) {
+            if (nd.id == nc.graph.startDestinationId) {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             } else {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
@@ -73,14 +120,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             true
         }
 
-    }
-
-    override fun onBackPressed() {
-        if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            this.drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

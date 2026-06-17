@@ -80,7 +80,7 @@ class RecipeListViewModel(
         _navigateToSingleRecipe.value = null
     }
 
-    private val _navigateToSingleRecipe = MutableLiveData<Long>()
+    private val _navigateToSingleRecipe = MutableLiveData<Long?>()
     val navigateToSingleRecipe
         get() = _navigateToSingleRecipe
 

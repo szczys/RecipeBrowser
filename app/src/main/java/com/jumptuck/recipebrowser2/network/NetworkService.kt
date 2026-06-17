@@ -5,9 +5,7 @@ import com.burgstaller.okhttp.CachingAuthenticatorDecorator
 import com.burgstaller.okhttp.digest.CachingAuthenticator
 import com.burgstaller.okhttp.digest.Credentials
 import com.burgstaller.okhttp.digest.DigestAuthenticator
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.jumptuck.recipebrowser2.database.RecipeRepository
-import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -36,7 +34,6 @@ private fun getRetrofit(): Retrofit {
 
     val builder = Retrofit.Builder()
         .addConverterFactory(ScalarsConverterFactory.create())
-        .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .client(httpClient)
         .baseUrl(BASE_URL)
 
@@ -45,8 +42,7 @@ private fun getRetrofit(): Retrofit {
 
 interface NetworkService {
     @GET
-    fun getHtmlAsync(@Url url: String):
-            Deferred<String>
+    suspend fun getHtml(@Url url: String): String
 }
 
 

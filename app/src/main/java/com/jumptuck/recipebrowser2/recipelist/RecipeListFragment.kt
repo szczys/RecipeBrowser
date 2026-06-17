@@ -5,6 +5,7 @@ import android.view.*
 import android.widget.*
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -17,8 +18,6 @@ import com.jumptuck.recipebrowser2.R
 import com.jumptuck.recipebrowser2.database.RecipeRepository
 import com.jumptuck.recipebrowser2.databinding.FragmentRecipeListBinding
 import com.jumptuck.recipebrowser2.settings.RecipeDeleteAllDialogBuilder
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.custom_action_bar_layout.view.*
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -141,7 +140,7 @@ class RecipeListFragment : Fragment() {
 
         /** ActionBar spinner used to select categories **/
         sView = layoutInflater.inflate(R.layout.custom_action_bar_layout, null)
-        spinner2 = sView.spinner2
+        spinner2 = sView.findViewById(R.id.spinner2)
 
         // Adapter to load spinner with categories
         val spinnerArrayAdapter = ArrayAdapter(application, R.layout.spinner_item, ArrayList<String>())
@@ -191,11 +190,6 @@ class RecipeListFragment : Fragment() {
 
         }
 
-        (activity as AppCompatActivity?)!!.setSupportActionBar((activity as AppCompatActivity?)!!.toolbar)
-        ab = (activity as AppCompatActivity?)!!.supportActionBar!!
-        ab.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        ab.customView = sView
-
         /** Show toasts for network status updates **/
         RecipeListViewModel.statusMessages.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -223,6 +217,16 @@ class RecipeListFragment : Fragment() {
                 menu.findItem(R.id.refresh_progress).isVisible = it
             }
         })
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val appCompat = activity as? AppCompatActivity ?: return
+        ab = appCompat.supportActionBar ?: return
+        ab.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        ab.customView = sView
+        // Clear any title set by other fragments (Settings, About, SingleRecipe)
+        appCompat.findViewById<Toolbar>(R.id.toolbar).title = ""
     }
 
     override fun onStop() {
